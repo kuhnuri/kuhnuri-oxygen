@@ -14,7 +14,7 @@ public final class BaseXQueryException extends IOException {
      * Error message pattern.
      */
     private static final Pattern MESSAGE = Pattern.compile(
-            "^.* (.*), (\\d+)/(\\d+):\r?\n\\[(.*?)\\] (.*)$", Pattern.DOTALL);
+            "^.* (.*), (\\d+)/(\\d+):\r?\n\\[(.*?)] (.*)$", Pattern.DOTALL);
 
     /**
      * File.

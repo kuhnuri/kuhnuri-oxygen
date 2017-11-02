@@ -779,12 +779,7 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
         connectionSettings.add(conn);
         File settingsPath = new File(CONNECTION_SETTING_PATH);
         if (FileUtils.directoryExists(settingsPath)) {
-            String[] fileList = settingsPath.list(new FilenameFilter() {
-                @Override
-                public boolean accept(final File dir, final String fileName) {
-                    return fileName.toLowerCase().endsWith(CONNECTION_SETTING_FILE_TYPE);
-                }
-            });
+            String[] fileList = settingsPath.list((dir, fileName) -> fileName.toLowerCase().endsWith(CONNECTION_SETTING_FILE_TYPE));
             if (fileList != null) {
                 for (String settingsFile : fileList) {
                     Properties properties = new Properties();

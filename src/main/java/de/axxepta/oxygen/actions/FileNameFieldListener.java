@@ -64,11 +64,9 @@ public class FileNameFieldListener implements DocumentListener {
     }
 
     private void resetTextField(final String name) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                textField.setText(name);
-                textFieldResetInProgress = false;
-            }
+        SwingUtilities.invokeLater(() -> {
+            textField.setText(name);
+            textFieldResetInProgress = false;
         });
     }
 

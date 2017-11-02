@@ -78,16 +78,9 @@ public class RollbackVersionAction extends AbstractAction {
             replaceWholeDocument(newDoc);
         } else {
             try {
-                SwingUtilities.invokeAndWait(new Runnable() {
-                    @Override
-                    public void run() {
-                        replaceWholeDocument(newDoc);
-                    }
-                });
-            } catch (InvocationTargetException ite) {
+                SwingUtilities.invokeAndWait(() -> replaceWholeDocument(newDoc));
+            } catch (InvocationTargetException | InterruptedException ite) {
                 logger.error(ite);
-            } catch (InterruptedException ie) {
-                logger.error(ie);
             }
         }
     }

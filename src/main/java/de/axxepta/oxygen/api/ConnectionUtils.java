@@ -126,7 +126,7 @@ public final class ConnectionUtils {
                 || "https".equals(url.getProtocol())) {
             try {
                 Constructor constructor = Class.forName("sun.net.www.protocol.http.HttpURLConnection").
-                        getConstructor(new Class[]{URL.class, Proxy.class});
+                        getConstructor(URL.class, Proxy.class);
                 return (HttpURLConnection) constructor.newInstance(new Object[]{url, null});
             } catch (InvocationTargetException ex) {
                 //Constructor threw an IO Exception
