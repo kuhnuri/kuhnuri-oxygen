@@ -2,7 +2,9 @@ package de.axxepta.oxygen.tree;
 
 import de.axxepta.oxygen.actions.ExportAction;
 import de.axxepta.oxygen.actions.RenameAction;
-import de.axxepta.oxygen.api.*;
+import de.axxepta.oxygen.api.BaseXResource;
+import de.axxepta.oxygen.api.BaseXSource;
+import de.axxepta.oxygen.api.BaseXType;
 import de.axxepta.oxygen.customprotocol.BaseXByteArrayOutputStream;
 import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
 import de.axxepta.oxygen.utils.*;
@@ -163,7 +165,7 @@ public class ArgonTreeTransferHandler extends TransferHandler {
 
     private static void copyInTree(BaseXSource source, String db_path, TreePath sourcePath, String pathURLString) throws Exception {
         List<BaseXResource> resourceList = ExportAction.getExportResourceList(source, sourcePath, db_path);
-        for (BaseXResource resource : resourceList){
+        for (BaseXResource resource : resourceList) {
             if (resource.getType().equals(BaseXType.RESOURCE)) {
                 String fullResourceName = ExportAction.getFullResource(sourcePath, source, resource);
                 String resourceURL = CustomProtocolURLHandlerExtension.protocolFromSource(source) + ":" +
@@ -184,7 +186,7 @@ public class ArgonTreeTransferHandler extends TransferHandler {
             len = is.read(buffer);
             if (len != -1) {
                 // ToDo: check content type of input resource
-                if (buffer[0] == (byte)0x3c) {
+                if (buffer[0] == (byte) 0x3c) {
                     try (ByteArrayOutputStream os = new BaseXByteArrayOutputStream(targetURL, "UTF-8")) {
                         os.write(buffer, 0, len);
                         streamCopy(is, os);
@@ -294,19 +296,18 @@ public class ArgonTreeTransferHandler extends TransferHandler {
     }
 
 
-
     private byte[] readTextFile(URL url) throws IOException {
         List<Integer> integerList = new ArrayList<>();
 
         try (Reader urlReader = workspace.getUtilAccess().createReader(url, "UTF-8")) {
-            while(urlReader.ready()) {
+            while (urlReader.ready()) {
                 integerList.add(urlReader.read());
             }
         }
         byte[] bytes = new byte[integerList.size()];
         Iterator<Integer> iterator = integerList.iterator();
         int index = 0;
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             Integer i = iterator.next();
             bytes[index] = i.byteValue();
             index++;

@@ -66,7 +66,7 @@ public class RollbackVersionAction extends AbstractAction {
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             InputStream oldRevisionStream = new ByteArrayInputStream(connection.get(BaseXSource.DATABASE,
                     CustomProtocolURLHandlerExtension.pathFromURL(url), false));
-            oldDocumentString = new Scanner(oldRevisionStream,"UTF-8").useDelimiter("\\A").next();
+            oldDocumentString = new Scanner(oldRevisionStream, "UTF-8").useDelimiter("\\A").next();
         } catch (IOException ex) {
             logger.error("Couldn't access old file revision during Reset To");
         }

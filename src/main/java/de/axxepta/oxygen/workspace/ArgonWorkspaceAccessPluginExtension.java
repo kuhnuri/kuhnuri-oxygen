@@ -3,18 +3,19 @@ package de.axxepta.oxygen.workspace;
 import de.axxepta.oxygen.actions.*;
 import de.axxepta.oxygen.customprotocol.ArgonEditorsWatchMap;
 import de.axxepta.oxygen.customprotocol.ArgonInputURLChooserCustomizer;
-import de.axxepta.oxygen.tree.*;
+import de.axxepta.oxygen.tree.TreePane;
 import de.axxepta.oxygen.utils.ImageUtils;
 import de.axxepta.oxygen.utils.Lang;
 import de.axxepta.oxygen.versioncontrol.VersionHistoryPanel;
-
 import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
 import ro.sync.exml.workspace.api.PluginWorkspace;
-import ro.sync.exml.workspace.api.standalone.*;
+import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
+import ro.sync.exml.workspace.api.standalone.ViewComponentCustomizer;
+import ro.sync.exml.workspace.api.standalone.ViewInfo;
 import ro.sync.exml.workspace.api.standalone.ui.ToolbarButton;
 
 import javax.swing.*;
-import java.util.*;
+import java.util.Locale;
 
 /**
  * Main plugin class, defining tree panel, version history panel, and toolbar

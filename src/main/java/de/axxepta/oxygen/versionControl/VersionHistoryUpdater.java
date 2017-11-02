@@ -1,6 +1,8 @@
 package de.axxepta.oxygen.versioncontrol;
 
-import de.axxepta.oxygen.api.*;
+import de.axxepta.oxygen.api.ArgonConst;
+import de.axxepta.oxygen.api.BaseXConnectionWrapper;
+import de.axxepta.oxygen.api.Connection;
 import de.axxepta.oxygen.core.ObserverInterface;
 import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
 import de.axxepta.oxygen.utils.URLUtils;
@@ -51,7 +53,7 @@ public class VersionHistoryUpdater implements ObserverInterface {
         if ((editorLocation != null) && (URLUtils.isArgon(editorLocation)))
             return editorLocation.toString();
         else
-            return  "";
+            return "";
     }
 
     private void updateVersionHistory() {

@@ -6,7 +6,10 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Markus on 03.11.2015.
@@ -35,16 +38,12 @@ public class Lang {
     }
 
     private static void loadBundle(final Locale locale) {
-        try
-        {
+        try {
             final Bundle bundle = new Bundle(PATH, locale);
             availableResourceBundles.put(locale, bundle);
-        }
-        catch (final IOException ex)
-        {
+        } catch (final IOException ex) {
             logger.warn("Failed to read resource '" + PATH + "' for locale: '" + locale + "'", ex);
-        }
-        catch (final NullPointerException ex) {
+        } catch (final NullPointerException ex) {
             logger.warn("Missing resource '" + PATH + "' for locale: '" + locale + "'", ex);
         }
     }
@@ -56,7 +55,7 @@ public class Lang {
             currentBundle = availableResourceBundles.get(Locale.UK);
     }
 
-    public static String get(Keys key){
+    public static String get(Keys key) {
         if (currentBundle != null) {
             String val = currentBundle.getString(key.name());
             if (val != null)
@@ -97,7 +96,7 @@ public class Lang {
 class Bundle {
     private Properties bundleMap;
 
-    public Bundle (String path, Locale locale) throws IOException {
+    public Bundle(String path, Locale locale) throws IOException {
         StringBuilder propFile = new StringBuilder(path);
         if (locale.equals(Locale.GERMANY))
             propFile.append("_de_DE");

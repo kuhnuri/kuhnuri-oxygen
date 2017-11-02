@@ -20,7 +20,7 @@ public class VersionHistoryEntry {
     }
 
     Object[] getDisplayVector() {
-        return new Object[] {version, revision, changeDate};
+        return new Object[]{version, revision, changeDate};
     }
 
     protected URL getURL() {

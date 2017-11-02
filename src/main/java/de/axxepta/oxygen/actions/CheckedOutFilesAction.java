@@ -85,7 +85,7 @@ public class CheckedOutFilesAction extends AbstractAction {
         }
         if (!checkedOut.equals("")) {
             final String[] results = checkedOut.split("\r?\n");
-            for(int r = 0, rl = results.length; r < rl; r += 2) {
+            for (int r = 0, rl = results.length; r < rl; r += 2) {
                 fileList.add(new BaseXResource(results[r + 1], BaseXType.RESOURCE, BaseXSource.get(results[r])));
             }
         }

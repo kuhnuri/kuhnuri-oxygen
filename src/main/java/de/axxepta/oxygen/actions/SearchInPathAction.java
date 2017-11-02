@@ -22,7 +22,8 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -42,7 +43,7 @@ public class SearchInPathAction extends AbstractAction {
     private static final int SEARCH_XQ = 8;
     public static final int SEARCH_ALL = 15;
 
-    public SearchInPathAction (String name, Icon icon, JTree tree){
+    public SearchInPathAction(String name, Icon icon, JTree tree) {
         super(name, icon);
         this.tree = tree;
         rootPath = new TreePath(((DefaultMutableTreeNode) tree.getModel().getRoot()).getPath());
@@ -150,7 +151,7 @@ public class SearchInPathAction extends AbstractAction {
         ArrayList<String> allResources = new ArrayList<>();
         WorkspaceUtils.setCursor(WorkspaceUtils.WAIT_CURSOR);
         String filterExcludeOption = ArgonOptionPage.getOption(ArgonOptionPage.KEY_BASEX_FILTER_EXCLUDE, false);
-        List<String> filterExlucdeDBs = new ArrayList(Arrays.asList(filterExcludeOption.split("\\s*(;|,|\\s)\\s*"))) ;
+        List<String> filterExlucdeDBs = new ArrayList(Arrays.asList(filterExcludeOption.split("\\s*(;|,|\\s)\\s*")));
         switch (type) {
             case SEARCH_ALL: {
                 TreePath currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_repo));
@@ -174,7 +175,7 @@ public class SearchInPathAction extends AbstractAction {
                 }
                 break;
             }
-            default : {
+            default: {
                 allResources.addAll(searchResourcesInPath(source, path, filter, caseSensitive));
             }
         }
@@ -204,11 +205,11 @@ public class SearchInPathAction extends AbstractAction {
         List<String> allResources = searchResourcesInPathString(source, basePathStr, filter, caseSensitive);
         String searchRoot;
         if (source.equals(BaseXSource.DATABASE))
-            searchRoot = TreeUtils.treeStringFromTreePath(TreeUtils.pathToDepth(path,2))+"/";
+            searchRoot = TreeUtils.treeStringFromTreePath(TreeUtils.pathToDepth(path, 2)) + "/";
         else
-            searchRoot = TreeUtils.treeStringFromTreePath(path)+"/";
-        for (int i=0; i<allResources.size(); i++) {
-            allResources.set(i, searchRoot+allResources.get(i));
+            searchRoot = TreeUtils.treeStringFromTreePath(path) + "/";
+        for (int i = 0; i < allResources.size(); i++) {
+            allResources.set(i, searchRoot + allResources.get(i));
         }
         return allResources;
     }
@@ -224,8 +225,8 @@ public class SearchInPathAction extends AbstractAction {
             if (!message.contains(ArgonConst.BXERR_PERMISSION))
                 workspace.showInformationMessage(Lang.get(Lang.Keys.warn_failedsearch) + "\n" + message);
         }
-        for (int i=0; i<allResources.size(); i++) {
-            allResources.set(i, allResources.get(i).replaceAll("\\\\","/"));
+        for (int i = 0; i < allResources.size(); i++) {
+            allResources.set(i, allResources.get(i).replaceAll("\\\\", "/"));
         }
         return allResources;
     }

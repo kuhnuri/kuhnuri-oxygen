@@ -1,7 +1,9 @@
 package de.axxepta.oxygen.customprotocol;
 
-import de.axxepta.oxygen.api.*;
 import de.axxepta.oxygen.api.BaseXConnectionWrapper;
+import de.axxepta.oxygen.api.BaseXSource;
+import de.axxepta.oxygen.api.Connection;
+import de.axxepta.oxygen.api.TopicHolder;
 import de.axxepta.oxygen.utils.IOUtils;
 import de.axxepta.oxygen.utils.URLUtils;
 import de.axxepta.oxygen.utils.XMLUtils;
@@ -80,9 +82,10 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
 
     /**
      * allows to explicitly override the global versioning (switch off only) for read-only databases
+     *
      * @param useGlobalVersioning set to false if no versioning should be used for the current data transfer
-     * @param url resource url to store to
-     * @param encoding encoding of the byte array
+     * @param url                 resource url to store to
+     * @param encoding            encoding of the byte array
      */
     public BaseXByteArrayOutputStream(boolean useGlobalVersioning, URL url, String encoding) {
         super();
@@ -94,10 +97,11 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
 
     /**
      * allows to explicitly override the global versioning (switch off only) for read-only databases
-     * @param owner file owner
+     *
+     * @param owner               file owner
      * @param useGlobalVersioning set to false if no versioning should be used for the current data transfer
-     * @param url resource url to store to
-     * @param encoding encoding of the byte array
+     * @param url                 resource url to store to
+     * @param encoding            encoding of the byte array
      */
     public BaseXByteArrayOutputStream(String owner, boolean useGlobalVersioning, URL url, String encoding) {
         super();
@@ -127,10 +131,10 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
                     encoding = "UTF-8";
             }
         }
-        if (encoding.equals("UTF-8") && (savedBytes[0] == (byte)0xEF)) {
+        if (encoding.equals("UTF-8") && (savedBytes[0] == (byte) 0xEF)) {
             savedBytes = removeBOM(savedBytes, 3);
         }
-        if (encoding.startsWith("UTF-16") && ((savedBytes[0] == (byte)0xFE) || (savedBytes[0] == (byte)0xFF))) {
+        if (encoding.startsWith("UTF-16") && ((savedBytes[0] == (byte) 0xFE) || (savedBytes[0] == (byte) 0xFF))) {
             savedBytes = removeBOM(savedBytes, 2);
         }
         String useVersioning;

@@ -71,7 +71,7 @@ public class TreeUtils {
 
     public static int isNodeAsStrChild(TreeNode parent, String child) {
         for (int i = 0; i < parent.getChildCount(); i++) {
-            if (((DefaultMutableTreeNode)parent.getChildAt(i)).getUserObject().toString().equals(child)) {
+            if (((DefaultMutableTreeNode) parent.getChildAt(i)).getUserObject().toString().equals(child)) {
                 return i;
             }
         }
@@ -80,7 +80,7 @@ public class TreeUtils {
 
     public static TreePath pathByAddingChildAsStr(TreePath currPath, String child) {
         // returns TreePath to child given by String, if child doesn't exist returns null!
-        DefaultMutableTreeNode currNode = (DefaultMutableTreeNode)currPath.getLastPathComponent();
+        DefaultMutableTreeNode currNode = (DefaultMutableTreeNode) currPath.getLastPathComponent();
         int childNodeIndex = isNodeAsStrChild(currNode, child);
         if (childNodeIndex != -1)
             return new TreePath(((DefaultMutableTreeNode) currNode.getChildAt(childNodeIndex)).getPath());
@@ -91,14 +91,19 @@ public class TreeUtils {
         TreePath path = new TreePath(model.getRoot());
         BaseXSource source = CustomProtocolURLHandlerExtension.sourceFromURLString(urlString);
         switch (source) {
-            case REPO: path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_repo)); break;
-            case RESTXQ: path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_restxq)); break;
-            default: path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_DB));
+            case REPO:
+                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_repo));
+                break;
+            case RESTXQ:
+                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_restxq));
+                break;
+            default:
+                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_DB));
         }
         String[] protocolResource = urlString.split(":/*");
         if (protocolResource.length > 1) {
             String[] pathParts = protocolResource[1].split("/");
-            for (String res: pathParts) {
+            for (String res : pathParts) {
                 path = pathByAddingChildAsStr(path, res);
             }
         }
@@ -139,7 +144,7 @@ public class TreeUtils {
         StringBuilder resource = new StringBuilder("");
         if (path.getPathCount() > 1) {
             for (int i = 2; i < path.getPathCount(); i++) {
-                if (i>2) {
+                if (i > 2) {
                     resource.append('/');
                 }
                 resource.append(path.getPathComponent(i).toString());
@@ -195,7 +200,7 @@ public class TreeUtils {
             return "";
         } else {
             String[] nodes = path.split("\\\\|/");
-            return nodes[nodes.length-1];
+            return nodes[nodes.length - 1];
         }
     }
 
@@ -204,7 +209,7 @@ public class TreeUtils {
         if (path.getPathCount() < depth)
             return new TreePath(new Object[0]);
         else {
-            for (int i=path.getPathCount(); i>(depth+1); i--) {
+            for (int i = path.getPathCount(); i > (depth + 1); i--) {
                 returnPath = returnPath.getParentPath();
             }
         }
@@ -220,10 +225,10 @@ public class TreeUtils {
         DefaultMutableTreeNode clickedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         int pathCount = path.getPathCount();
         return (clickedNode.getAllowsChildren() &&
-                ( ((pathCount > 3) &&
+                (((pathCount > 3) &&
                         (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_DB)))) ||
                         ((pathCount > 2) &&
-                                (!path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_DB)))) ) );
+                                (!path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_DB))))));
     }
 
     public static boolean isDB(TreePath path) {
@@ -273,8 +278,8 @@ public class TreeUtils {
         DefaultMutableTreeNode clickedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         int pathCount = path.getPathCount();
         return (TreeUtils.isDir(path) && clickedNode.getUserObject().toString().equals("WEB-INF") &&
-                ( (pathCount == 3) && (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)))
-                    || ((pathCount == 5) && (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_DB))))));
+                ((pathCount == 3) && (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)))
+                        || ((pathCount == 5) && (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_DB))))));
     }
 
 }

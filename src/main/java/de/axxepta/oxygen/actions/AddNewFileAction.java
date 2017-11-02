@@ -1,6 +1,6 @@
 package de.axxepta.oxygen.actions;
 
-import de.axxepta.oxygen.api.*;
+import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.tree.ArgonTree;
 import de.axxepta.oxygen.tree.ArgonTreeNode;
 import de.axxepta.oxygen.tree.TreeListener;
@@ -38,12 +38,12 @@ public class AddNewFileAction extends AbstractAction {
     private JTextField newFileNameTextField;
     private JComboBox<String> newFileTypeComboBox;
 
-    public AddNewFileAction(String name, Icon icon, ArgonTree tree){
+    public AddNewFileAction(String name, Icon icon, ArgonTree tree) {
         super(name, icon);
         this.tree = tree;
     }
 
-    public AddNewFileAction(ArgonTree tree){
+    public AddNewFileAction(ArgonTree tree) {
         super();
         this.tree = tree;
     }
@@ -62,7 +62,7 @@ public class AddNewFileAction extends AbstractAction {
 
             AddNewSpecFileAction addFile = new AddNewSpecFileAction(Lang.get(Lang.Keys.cm_addfile), path, db_path);
 
-            JPanel content = new JPanel(new BorderLayout(10,10));
+            JPanel content = new JPanel(new BorderLayout(10, 10));
             JPanel namePanel = new JPanel(new GridLayout());
             JLabel nameLabel = new JLabel(Lang.get(Lang.Keys.lbl_filename), JLabel.LEFT);
             namePanel.add(nameLabel);
@@ -107,7 +107,7 @@ public class AddNewFileAction extends AbstractAction {
         }
 
         @Override
-        public void actionPerformed (ActionEvent e){
+        public void actionPerformed(ActionEvent e) {
 
             String name = newFileNameTextField.getText();
             if (!name.equals("")) {

@@ -12,15 +12,17 @@ import org.apache.logging.log4j.Logger;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 
 import javax.swing.*;
-import javax.swing.Timer;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -31,7 +33,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
 
     private static final Logger logger = LogManager.getLogger(ArgonChooserDialog.class);
 
-    private boolean singleClick  = true;
+    private boolean singleClick = true;
     private Timer timer;
 
     private Type type;
@@ -44,7 +46,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
 
     private JButton newDirButton;
     private JTextField pathTextField;
-    private boolean userChangedPathTextField =  false;
+    private boolean userChangedPathTextField = false;
     private JList resourceList;
     private ArgonChooserListModel model;
     private JTextField selectedFileTextField;
@@ -74,7 +76,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
     }
 
     private JPanel createTopPanel() {
-        JPanel panel = new JPanel(new BorderLayout(5,5));
+        JPanel panel = new JPanel(new BorderLayout(5, 5));
         pathTextField = new JTextField();
         pathTextField.setText("");
         pathTextField.getDocument().addDocumentListener(this);
@@ -108,7 +110,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
 
     private JPanel createBottomPanel() {
         JPanel panel = new JPanel(new FlowLayout());
-        JLabel fileNameLabel = new JLabel(Lang.get(Lang.Keys.lbl_filename) +":");
+        JLabel fileNameLabel = new JLabel(Lang.get(Lang.Keys.lbl_filename) + ":");
         selectedFileTextField = new JTextField();
         selectedFileTextField.setEditable(false);
         selectedFileTextField.setColumns(25);
@@ -127,14 +129,14 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
                         selectionAction.actionPerformed(null);
                     }
                 });
-                buttons[2].addActionListener( e ->  this.dispose() );
+                buttons[2].addActionListener(e -> this.dispose());
                 break;
             }
             default: {
                 buttonNames = new String[]{Lang.get(Lang.Keys.cm_save), Lang.get(Lang.Keys.cm_cancel)};
                 buttons = createButtons(buttonNames);
                 buttons[0].addActionListener(selectionAction);
-                buttons[1].addActionListener( e -> this.dispose() );
+                buttons[1].addActionListener(e -> this.dispose());
             }
         }
         panel.add(fileNameLabel);
@@ -205,9 +207,16 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
         }
         BaseXSource source;
         switch (rootEntity) {
-            case XQ: { source = BaseXSource.RESTXQ; break; }
-            case REPO: { source = BaseXSource.REPO; break; }
-            default: source = BaseXSource.DATABASE;
+            case XQ: {
+                source = BaseXSource.RESTXQ;
+                break;
+            }
+            case REPO: {
+                source = BaseXSource.REPO;
+                break;
+            }
+            default:
+                source = BaseXSource.DATABASE;
         }
         return source;
     }
@@ -325,16 +334,20 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {}
+    public void mousePressed(MouseEvent e) {
+    }
 
     @Override
-    public void mouseReleased(MouseEvent e) {}
+    public void mouseReleased(MouseEvent e) {
+    }
 
     @Override
-    public void mouseEntered(MouseEvent e) {}
+    public void mouseEntered(MouseEvent e) {
+    }
 
     @Override
-    public void mouseExited(MouseEvent e) {}
+    public void mouseExited(MouseEvent e) {
+    }
 
 
     private class SelectionAction extends AbstractAction {

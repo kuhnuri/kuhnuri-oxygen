@@ -1,6 +1,6 @@
 package de.axxepta.oxygen.api;
 
-import java.util.*;
+import java.util.Locale;
 
 /**
  * Resource types.
@@ -8,13 +8,18 @@ import java.util.*;
  * @author Christian Gruen, BaseX GmbH 2015, BSD License
  */
 public enum BaseXType {
-    /** Directory. */
+    /**
+     * Directory.
+     */
     DIRECTORY,
-    /** Resource. */
+    /**
+     * Resource.
+     */
     RESOURCE;
 
     /**
      * Returns a resource.
+     *
      * @param string string representation
      * @return enumeration
      */

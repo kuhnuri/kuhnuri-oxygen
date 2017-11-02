@@ -8,7 +8,6 @@ import ro.sync.ui.Icons;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import javax.swing.Icon;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -143,9 +142,8 @@ public class ImageUtils {
     public static Image createImage(String path) {
         Icon icon = createImageIcon(path);
         if (icon instanceof ImageIcon) {
-            return ((ImageIcon)icon).getImage();
-        }
-        else {
+            return ((ImageIcon) icon).getImage();
+        } else {
             int w = icon.getIconWidth();
             int h = icon.getIconHeight();
             GraphicsEnvironment ge =

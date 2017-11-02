@@ -15,7 +15,10 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +32,8 @@ public final class ConnectionWrapper {
 
     private static final Logger logger = LogManager.getLogger(ConnectionWrapper.class);
 
-    private ConnectionWrapper() {}
+    private ConnectionWrapper() {
+    }
 
     public static void init() {
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
@@ -166,8 +170,9 @@ public final class ConnectionWrapper {
 
     /**
      * lists all resources in the path, including directories
+     *
      * @param source source in which path resides
-     * @param path path to list
+     * @param path   path to list
      * @return list of all resources in path, entries contain full path as name, for databases without the database name
      * @throws IOException throws exception if connection returns an exception/error code
      */
@@ -298,9 +303,9 @@ public final class ConnectionWrapper {
         String result = sendQuery(query, parameter);
         String db_name = (path.split("/"))[0];
         final ArrayList<String> list = new ArrayList<>();
-        if(!result.isEmpty()) {
+        if (!result.isEmpty()) {
             final String[] results = result.split("\r?\n");
-            for(String res : results) {
+            for (String res : results) {
                 list.add("argon:" + db_name + "/" + res);
             }
         }
@@ -371,8 +376,9 @@ public final class ConnectionWrapper {
     /**
      * Adds new directory. Side effect: for databases an empty file .empty.xml will be added in the new directory to make
      * the new directory persistent in the database.
+     *
      * @param source BaseXSource in which new directory shall be added
-     * @param path path of new directory
+     * @param path   path of new directory
      */
     public static void newDir(BaseXSource source, String path) {
         if (source.equals(BaseXSource.DATABASE)) {

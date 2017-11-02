@@ -68,7 +68,7 @@ class ArgonTreeTransferable implements Transferable {
         String mimeType = DataFlavor.javaJVMLocalObjectMimeType + ";class=\"" +
                 TreePath.class.getName() + "\"";
         try {
-        return new DataFlavor(mimeType);
+            return new DataFlavor(mimeType);
         } catch (ClassNotFoundException cn) {
             logger.debug("Class not found creating DataFlavor");
             return new DataFlavor();

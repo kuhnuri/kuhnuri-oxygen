@@ -21,7 +21,8 @@ public final class FileUtils {
 
     private static final Logger logger = LogManager.getLogger(FileUtils.class);
 
-    private FileUtils() {}
+    private FileUtils() {
+    }
 
     public static boolean directoryExists(File dir) {
         if (dir == null)
@@ -42,8 +43,7 @@ public final class FileUtils {
         BaseXSource source = CustomProtocolURLHandlerExtension.sourceFromURLString(fileToCopy);
         String path = CustomProtocolURLHandlerExtension.pathFromURLString(fileToCopy);
 
-        try (Connection connection = BaseXConnectionWrapper.getConnection())
-        {
+        try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             byte[] bytesToCopy = connection.get(source, path, true);
             try (FileOutputStream fos = new FileOutputStream(destinationFile)) {
                 fos.write(bytesToCopy);

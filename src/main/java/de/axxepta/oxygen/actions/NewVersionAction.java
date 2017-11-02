@@ -28,7 +28,7 @@ public class NewVersionAction extends AbstractAction {
 
     private static final PluginWorkspace workspace = PluginWorkspaceProvider.getPluginWorkspace();
 
-    public NewVersionAction(String name, Icon icon){
+    public NewVersionAction(String name, Icon icon) {
         super(name, icon);
     }
 
@@ -48,8 +48,8 @@ public class NewVersionAction extends AbstractAction {
                 updateFile(url, outputArray, encoding);
                 WorkspaceUtils.setCursor(WorkspaceUtils.DEFAULT_CURSOR);
             } else {
-                 workspace.showInformationMessage(Lang.get(Lang.Keys.msg_noupdate1) + " " + url.toString() + ".\n" +
-                         Lang.get(Lang.Keys.msg_noupdate2));
+                workspace.showInformationMessage(Lang.get(Lang.Keys.msg_noupdate1) + " " + url.toString() + ".\n" +
+                        Lang.get(Lang.Keys.msg_noupdate2));
             }
         }
     }

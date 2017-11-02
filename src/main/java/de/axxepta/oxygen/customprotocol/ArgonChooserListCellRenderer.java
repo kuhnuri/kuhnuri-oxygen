@@ -29,11 +29,13 @@ public class ArgonChooserListCellRenderer implements ListCellRenderer {
                 renderer.setIcon(ImageUtils.getIcon(ImageUtils.DB_CATALOG));
                 break;
             }
-            case REPO:case XQ: {
+            case REPO:
+            case XQ: {
                 renderer.setIcon(ImageUtils.getIcon(ImageUtils.DB_FOLDER));
                 break;
             }
-            case DIR: case ROOT: {
+            case DIR:
+            case ROOT: {
                 renderer.setIcon(ImageUtils.getIcon(ImageUtils.FOLDER));
                 break;
             }

@@ -1,16 +1,6 @@
 package de.axxepta.oxygen.workspace;
 
 
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
-import java.io.*;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Properties;
-
-import javax.swing.*;
-
 import de.axxepta.oxygen.actions.CloseDialogAction;
 import de.axxepta.oxygen.actions.FileNameFieldListener;
 import de.axxepta.oxygen.utils.DialogTools;
@@ -23,6 +13,15 @@ import ro.sync.exml.plugin.option.OptionPagePluginExtension;
 import ro.sync.exml.workspace.api.PluginWorkspace;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
 import ro.sync.exml.workspace.api.options.WSOptionsStorage;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import java.io.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Plugin option page extension Custom Workspace Access Plugin Extension.
@@ -60,7 +59,7 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
     private static final String DEF_BASEX_VERSIONING = "true";
     private static final String DEF_BASEX_FILTER_EXCLUDE = "";
     private static final String DEF_BASEX_LOGFILE = System.getProperty("user.home") + "/argon.log";
-            //"/tmp/argon.log";
+    //"/tmp/argon.log";
     private static final String DEF_BASEX_DB_CREATE_CHOP = "false";
     private static final String DEF_BASEX_DB_CREATE_FTINDEX = "false";
     private static final String DEF_BASEX_DB_CREATE_TEXTINDEX = "false";
@@ -256,7 +255,7 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
         baseXConnectionSettingsComboBox = new JComboBox(connectionSettingNames.toArray());
         baseXConnectionSettingsComboBox.setEditable(true);
         baseXConnectionSettingsComboBox.addActionListener(e -> {
-            int newSelection = ((JComboBox)e.getSource()).getSelectedIndex();
+            int newSelection = ((JComboBox) e.getSource()).getSelectedIndex();
             if (newSelection != -1) {  // one of the old entries was selected
                 try {
                     baseXHostTextField.setText(connectionSettings.get(newSelection)[1]);
@@ -269,7 +268,8 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
                     baseXDBCreateAttrIndexCheckBox.setSelected(connectionSettings.get(newSelection)[8].equals("true"));
                     baseXDBCreateTokenIndexCheckBox.setSelected(connectionSettings.get(newSelection)[9].equals("true"));
                     baseXFilterExcludeTextField.setText(connectionSettings.get(newSelection)[10]);
-                } catch (NullPointerException | IndexOutOfBoundsException ex) {}
+                } catch (NullPointerException | IndexOutOfBoundsException ex) {
+                }
             }
         });
         c.gridx++;
@@ -597,22 +597,53 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
     public static String getOption(String key, boolean defaults) {
         String defaultValue;
         switch (key) {
-            case KEY_BASEX_CONNECTION_SETTING: defaultValue = DEF_BASEX_CONNECTION_SETTING; break;
-            case KEY_BASEX_HOST: defaultValue = DEF_BASEX_HOST; break;
-            case KEY_BASEX_HTTP_PORT: defaultValue = DEF_BASEX_HTTP_PORT; break;
-            case KEY_BASEX_TCP_PORT: defaultValue = DEF_BASEX_TCP_PORT; break;
-            case KEY_BASEX_USERNAME: defaultValue = DEF_BASEX_USERNAME; break;
-            case KEY_BASEX_PASSWORD: defaultValue = DEF_BASEX_PASSWORD; break;
-            case KEY_BASEX_CONNECTION: defaultValue = DEF_BASEX_CONNECTION; break;
-            case KEY_BASEX_VERSIONING: defaultValue = DEF_BASEX_VERSIONING; break;
-            case KEY_BASEX_FILTER_EXCLUDE: defaultValue = DEF_BASEX_FILTER_EXCLUDE; break;
-            case KEY_BASEX_LOGFILE: defaultValue = DEF_BASEX_LOGFILE; break;
-            case KEY_BASEX_DB_CREATE_CHOP: defaultValue = DEF_BASEX_DB_CREATE_CHOP; break;
-            case KEY_BASEX_DB_CREATE_FTINDEX: defaultValue = DEF_BASEX_DB_CREATE_FTINDEX; break;
-            case KEY_BASEX_DB_CREATE_TEXTINDEX: defaultValue = DEF_BASEX_DB_CREATE_TEXTINDEX; break;
-            case KEY_BASEX_DB_CREATE_ATTRINDEX: defaultValue = DEF_BASEX_DB_CREATE_ATTRINDEX; break;
-            case KEY_BASEX_DB_CREATE_TOKENINDEX: defaultValue = DEF_BASEX_DB_CREATE_TOKENINDEX; break;
-            default: defaultValue = "empty option";
+            case KEY_BASEX_CONNECTION_SETTING:
+                defaultValue = DEF_BASEX_CONNECTION_SETTING;
+                break;
+            case KEY_BASEX_HOST:
+                defaultValue = DEF_BASEX_HOST;
+                break;
+            case KEY_BASEX_HTTP_PORT:
+                defaultValue = DEF_BASEX_HTTP_PORT;
+                break;
+            case KEY_BASEX_TCP_PORT:
+                defaultValue = DEF_BASEX_TCP_PORT;
+                break;
+            case KEY_BASEX_USERNAME:
+                defaultValue = DEF_BASEX_USERNAME;
+                break;
+            case KEY_BASEX_PASSWORD:
+                defaultValue = DEF_BASEX_PASSWORD;
+                break;
+            case KEY_BASEX_CONNECTION:
+                defaultValue = DEF_BASEX_CONNECTION;
+                break;
+            case KEY_BASEX_VERSIONING:
+                defaultValue = DEF_BASEX_VERSIONING;
+                break;
+            case KEY_BASEX_FILTER_EXCLUDE:
+                defaultValue = DEF_BASEX_FILTER_EXCLUDE;
+                break;
+            case KEY_BASEX_LOGFILE:
+                defaultValue = DEF_BASEX_LOGFILE;
+                break;
+            case KEY_BASEX_DB_CREATE_CHOP:
+                defaultValue = DEF_BASEX_DB_CREATE_CHOP;
+                break;
+            case KEY_BASEX_DB_CREATE_FTINDEX:
+                defaultValue = DEF_BASEX_DB_CREATE_FTINDEX;
+                break;
+            case KEY_BASEX_DB_CREATE_TEXTINDEX:
+                defaultValue = DEF_BASEX_DB_CREATE_TEXTINDEX;
+                break;
+            case KEY_BASEX_DB_CREATE_ATTRINDEX:
+                defaultValue = DEF_BASEX_DB_CREATE_ATTRINDEX;
+                break;
+            case KEY_BASEX_DB_CREATE_TOKENINDEX:
+                defaultValue = DEF_BASEX_DB_CREATE_TOKENINDEX;
+                break;
+            default:
+                defaultValue = "empty option";
         }
         if (defaults) {
             return defaultValue;
@@ -649,8 +680,7 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
                         !Boolean.toString(baseXDBCreateTextIndexCheckBox.isSelected()).equals(connectionSettings.get(index)[7]) ||
                         !Boolean.toString(baseXDBCreateAttrIndexCheckBox.isSelected()).equals(connectionSettings.get(index)[8]) ||
                         !Boolean.toString(baseXDBCreateTokenIndexCheckBox.isSelected()).equals(connectionSettings.get(index)[9]) ||
-                        !baseXFilterExcludeTextField.getText().equals(connectionSettings.get(index)[10]))
-                {
+                        !baseXFilterExcludeTextField.getText().equals(connectionSettings.get(index)[10])) {
                     int overwrite;
                     if (index == 0) {
                         overwrite = 1;
@@ -666,7 +696,7 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
                     } else {
                         JFrame parentFrame = (JFrame) ((new AuthorComponentFactory()).getWorkspaceUtilities().getParentFrame());
                         JDialog renameDialog = DialogTools.getOxygenDialog(parentFrame, Lang.get(Lang.Keys.dlg_newsetting));
-                        JPanel content = new JPanel(new BorderLayout(10,10));
+                        JPanel content = new JPanel(new BorderLayout(10, 10));
                         content.add(new JLabel(Lang.get(Lang.Keys.lbl_fixdefault)));
                         JTextField settingNameTextField = new JTextField();
                         settingNameTextField.getDocument().addDocumentListener(new FileNameFieldListener(settingNameTextField, true));
@@ -743,9 +773,9 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
 
     private static List loadConnectionSettings() {
         List<String[]> connectionSettings = new ArrayList<>();
-        String[] conn = {"default" , DEF_BASEX_HOST, DEF_BASEX_USERNAME, DEF_BASEX_PASSWORD, DEF_BASEX_VERSIONING,
-                        DEF_BASEX_DB_CREATE_CHOP, DEF_BASEX_DB_CREATE_FTINDEX, DEF_BASEX_DB_CREATE_TEXTINDEX,
-                        DEF_BASEX_DB_CREATE_ATTRINDEX, DEF_BASEX_DB_CREATE_TOKENINDEX, DEF_BASEX_FILTER_EXCLUDE};
+        String[] conn = {"default", DEF_BASEX_HOST, DEF_BASEX_USERNAME, DEF_BASEX_PASSWORD, DEF_BASEX_VERSIONING,
+                DEF_BASEX_DB_CREATE_CHOP, DEF_BASEX_DB_CREATE_FTINDEX, DEF_BASEX_DB_CREATE_TEXTINDEX,
+                DEF_BASEX_DB_CREATE_ATTRINDEX, DEF_BASEX_DB_CREATE_TOKENINDEX, DEF_BASEX_FILTER_EXCLUDE};
         connectionSettings.add(conn);
         File settingsPath = new File(CONNECTION_SETTING_PATH);
         if (FileUtils.directoryExists(settingsPath)) {
@@ -764,7 +794,7 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
                         String[] connSetting = {properties.getProperty(CS_NAME), properties.getProperty(CS_HOST),
                                 properties.getProperty(CS_USER), properties.getProperty(CS_PWD), properties.getProperty(CS_VCS),
                                 properties.getProperty(CS_CHOP), properties.getProperty(CS_FT), properties.getProperty(CS_TEXT),
-                                properties.getProperty(CS_ATTR), properties.getProperty(CS_TOKEN), properties.getProperty(CS_FE) };
+                                properties.getProperty(CS_ATTR), properties.getProperty(CS_TOKEN), properties.getProperty(CS_FE)};
                         connectionSettings.add(connSetting);
                     } catch (IOException ioe) {
                         logger.debug(ioe.getMessage());

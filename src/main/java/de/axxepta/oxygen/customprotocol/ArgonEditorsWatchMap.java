@@ -22,7 +22,8 @@ public class ArgonEditorsWatchMap implements ObserverInterface {
     private Map<URL, Boolean> lockMap = new HashMap<>();
 
 
-    private ArgonEditorsWatchMap() {}
+    private ArgonEditorsWatchMap() {
+    }
 
     public static ArgonEditorsWatchMap getInstance() {
         return instance;

@@ -40,7 +40,8 @@ public class WorkspaceUtils {
     public static Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
     public static Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 
-    private WorkspaceUtils(){}
+    private WorkspaceUtils() {
+    }
 
     public static byte[] getEditorByteContent(WSEditor editorAccess) {
         Document doc = getDocumentFromEditor(editorAccess);
@@ -65,6 +66,7 @@ public class WorkspaceUtils {
     /**
      * Extracts encoding from XML prologue in editor string content and the String content as second element,
      * returns empty string as first element if no prologue is found.
+     *
      * @param editorAccess editor handle
      * @return encoding encoding and editor content as String array, empty if no encoding could be extracted
      */
@@ -73,7 +75,7 @@ public class WorkspaceUtils {
         String pageID = editorAccess.getCurrentPageID();
         if (!pageID.equals(EditorPageConstants.PAGE_TEXT))
             editorAccess.changePage(EditorPageConstants.PAGE_TEXT);
-        WSTextEditorPage textPage = (WSTextEditorPage)editorAccess.getCurrentPage();
+        WSTextEditorPage textPage = (WSTextEditorPage) editorAccess.getCurrentPage();
         Document doc = textPage.getDocument();
         if (!pageID.equals(EditorPageConstants.PAGE_TEXT))
             editorAccess.changePage(pageID);
@@ -93,7 +95,7 @@ public class WorkspaceUtils {
             editorInAuthorMode = true;
             editorAccess.changePage(EditorPageConstants.PAGE_TEXT);
         }
-        WSTextEditorPage  textPage = (WSTextEditorPage)editorAccess.getCurrentPage();
+        WSTextEditorPage textPage = (WSTextEditorPage) editorAccess.getCurrentPage();
         Document doc = textPage.getDocument();
         if (editorInAuthorMode) {
             editorAccess.changePage(EditorPageConstants.PAGE_AUTHOR);
@@ -113,7 +115,7 @@ public class WorkspaceUtils {
     }
 
     public static void setCursor(Cursor cursor) {
-        Component oxygenFrame = (Frame)workspaceAccess.getParentFrame();
+        Component oxygenFrame = (Frame) workspaceAccess.getParentFrame();
         oxygenFrame.setCursor(cursor);
         if (treePanel != null)
             treePanel.setCursor(cursor);
@@ -121,20 +123,21 @@ public class WorkspaceUtils {
 
     private static boolean checkOverwrite() {
         int save = workspaceAccess.showConfirmDialog(Lang.get(Lang.Keys.dlg_overwrite), Lang.get(Lang.Keys.lbl_overwrite),
-                new String[] {Lang.get(Lang.Keys.cm_yes), Lang.get(Lang.Keys.cm_no)}, new int[] { OVERWRITE_YES, OVERWRITE_NO }, 0);
+                new String[]{Lang.get(Lang.Keys.cm_yes), Lang.get(Lang.Keys.cm_no)}, new int[]{OVERWRITE_YES, OVERWRITE_NO}, 0);
         return (save == OVERWRITE_YES);
     }
 
     private static int checkOverwriteAll() {
         return workspaceAccess.showConfirmDialog(Lang.get(Lang.Keys.dlg_overwrite), Lang.get(Lang.Keys.lbl_overwrite),
-                new String[] {Lang.get(Lang.Keys.cm_yes), Lang.get(Lang.Keys.cm_always), Lang.get(Lang.Keys.cm_no), Lang.get(Lang.Keys.cm_never)},
-                new int[] { OVERWRITE_YES, OVERWRITE_ALL, OVERWRITE_NO, OVERWRITE_NONE }, 2);
+                new String[]{Lang.get(Lang.Keys.cm_yes), Lang.get(Lang.Keys.cm_always), Lang.get(Lang.Keys.cm_no), Lang.get(Lang.Keys.cm_never)},
+                new int[]{OVERWRITE_YES, OVERWRITE_ALL, OVERWRITE_NO, OVERWRITE_NONE}, 2);
     }
 
     /**
      * Check for existence of a BaseX resource and show overwrite dialog if necessary
+     *
      * @param source source of storage target
-     * @param path resource path of storage target
+     * @param path   resource path of storage target
      * @return true if resource does not yet exist or user agreed to overwrite
      * @see OverwriteChecker
      */
@@ -149,8 +152,9 @@ public class WorkspaceUtils {
     /**
      * Store the content of an editor editorAccess to a BaseX resource url. Checks for encoding in prologue and byte code,
      * if none can be obtained assumes UTF-8 encoding.
+     *
      * @param editorAccess editor handle
-     * @param url BaseX target url
+     * @param url          BaseX target url
      * @throws IOException BaseX connection can return exception
      */
     public static void saveEditorToBaseXURL(WSEditor editorAccess, URL url) throws IOException {

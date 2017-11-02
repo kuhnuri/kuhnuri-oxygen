@@ -1,16 +1,18 @@
 package de.axxepta.oxygen.api;
 
-import static de.axxepta.oxygen.api.ConnectionUtils.*;
+import de.axxepta.oxygen.api.BaseXClient.Query;
+import de.axxepta.oxygen.versioncontrol.VersionHistoryEntry;
 
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
-import de.axxepta.oxygen.api.BaseXClient.*;
-import de.axxepta.oxygen.versioncontrol.VersionHistoryEntry;
+import static de.axxepta.oxygen.api.ConnectionUtils.*;
 
 /**
  * BaseX client implementation for the Argon connection interface.
@@ -18,14 +20,17 @@ import de.axxepta.oxygen.versioncontrol.VersionHistoryEntry;
  * @author Christian Gruen, BaseX GmbH 2015, BSD License
  */
 public final class ClientConnection implements Connection {
-    /** Connection instance. */
+    /**
+     * Connection instance.
+     */
     private final BaseXClient client;
 
     /**
      * Constructor.
-     * @param server server name
-     * @param port connection port
-     * @param user user string
+     *
+     * @param server   server name
+     * @param port     connection port
+     * @param user     user string
      * @param password password string
      * @throws IOException I/O exception
      */
@@ -40,7 +45,7 @@ public final class ClientConnection implements Connection {
         query.bind(PATH, path, "");
 
         final ArrayList<BaseXResource> list = new ArrayList<>();
-        while(query.more()) {
+        while (query.more()) {
             final String type = query.next(), name = query.next();
             list.add(new BaseXResource(name, BaseXType.get(type), source));
         }
@@ -53,7 +58,7 @@ public final class ClientConnection implements Connection {
         query.bind(PATH, path, "");
 
         final ArrayList<BaseXResource> list = new ArrayList<>();
-        while(query.more()) {
+        while (query.more()) {
             final String type = query.next(), name = query.next();
             list.add(new BaseXResource(name, BaseXType.get(type), source));
         }
@@ -152,7 +157,7 @@ public final class ClientConnection implements Connection {
         final Query query = client.query(getQuery("search-" + source));
         query.bind(PATH, path, "");
         query.bind(FILTER, filter, "");
-        while(query.more()) list.add(query.next());
+        while (query.more()) list.add(query.next());
         return list;
     }
 
@@ -160,11 +165,11 @@ public final class ClientConnection implements Connection {
     public String xquery(final String query, final String... args) throws IOException {
         final Query qu = client.query(query);
         for (int i = 0; i < args.length; i = i + 2) {
-            qu.bind(args[i], args[i+1], "");
+            qu.bind(args[i], args[i + 1], "");
         }
         try {
             return qu.execute();
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             throw BaseXQueryException.get(ex);
         }
     }
@@ -176,7 +181,7 @@ public final class ClientConnection implements Connection {
         final ArrayList<VersionHistoryEntry> list = new ArrayList<>();
         DateFormat format = new SimpleDateFormat(ArgonConst.DATE_FORMAT);
         Date date;
-        while(query.more()) {
+        while (query.more()) {
             URL url = new URL(query.next());
             final String versionStr = query.next(), revisionStr = query.next();
             try {
@@ -196,7 +201,7 @@ public final class ClientConnection implements Connection {
         query.bind(XQUERY, xquery, "");
         try {
             query.execute();
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             throw BaseXQueryException.get(ex);
         }
     }
@@ -207,7 +212,7 @@ public final class ClientConnection implements Connection {
         query.bind(PATH, path, "");
         try {
             query.execute();
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             throw BaseXQueryException.get(ex);
         }
     }
@@ -237,7 +242,7 @@ public final class ClientConnection implements Connection {
     }
 
     @Override
-         public boolean lockedByUser(final BaseXSource source, final String path) throws IOException {
+    public boolean lockedByUser(final BaseXSource source, final String path) throws IOException {
         final Query query = client.query(getQuery("lockedByUser"));
         query.bind(SOURCE, source.toString(), "");
         query.bind(PATH, path, "");
@@ -256,7 +261,7 @@ public final class ClientConnection implements Connection {
     public String[] users() throws IOException {
         final ArrayList<String> list = new ArrayList<>();
         final Query query = client.query(getQuery("users"));
-        while(query.more()) list.add(query.next());
+        while (query.more()) list.add(query.next());
         return list.toArray(new String[list.size()]);
     }
 }

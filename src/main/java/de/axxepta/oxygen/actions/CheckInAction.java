@@ -5,8 +5,6 @@ import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.Connection;
 import de.axxepta.oxygen.customprotocol.ArgonEditorsWatchMap;
 import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
-import de.axxepta.oxygen.tree.ArgonTreeNode;
-import de.axxepta.oxygen.tree.TreeListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
@@ -16,7 +14,6 @@ import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.net.URL;
 
 

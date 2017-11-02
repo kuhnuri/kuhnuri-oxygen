@@ -17,7 +17,7 @@ public class BaseXConnectionWrapper {
     static Connection connection;
     private static String host = null;
 
-    public static void refreshFromOptions(boolean defaults){
+    public static void refreshFromOptions(boolean defaults) {
 
         String host = ArgonOptionPage.getOption(ArgonOptionPage.KEY_BASEX_HOST, defaults);
         BaseXConnectionWrapper.host = host;
@@ -68,7 +68,7 @@ public class BaseXConnectionWrapper {
         }
     }
 
-    public static Connection getConnection(){
+    public static Connection getConnection() {
         if (host == null) {
             refreshFromOptions(false);
         }

@@ -1,22 +1,29 @@
 package de.axxepta.oxygen.api;
 
-import static de.axxepta.oxygen.api.ConnectionUtils.*;
-import static org.basex.util.http.HttpMethod.*;
-
-import java.io.*;
-import java.net.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
 import de.axxepta.oxygen.versioncontrol.VersionHistoryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.basex.io.*;
-import org.basex.util.*;
+import org.basex.io.IOStream;
 import org.basex.util.Base64;
-import org.basex.util.http.*;
+import org.basex.util.Token;
+import org.basex.util.TokenBuilder;
+import org.basex.util.http.HttpText;
+import org.basex.util.http.MediaType;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import static de.axxepta.oxygen.api.ConnectionUtils.*;
+import static org.basex.util.http.HttpMethod.POST;
 
 /**
  * BaseX REST implementation for the Argon connection interface.
@@ -24,22 +31,25 @@ import org.basex.util.http.*;
  * @author Christian Gruen, BaseX GmbH 2015, BSD License
  */
 public class RestConnection implements Connection {
-    /** URI. */
+    /**
+     * URI.
+     */
     protected final URL url;
     protected final String basicAuth;
     private static final Logger logger = LogManager.getLogger(RestConnection.class);
 
     /**
      * Constructor.
-     * @param server server name
-     * @param port connection port
-     * @param user user string
+     *
+     * @param server   server name
+     * @param port     connection port
+     * @param user     user string
      * @param password password string
      */
     public RestConnection(final String server, final int port, final String user,
                           final String password) throws MalformedURLException {
         basicAuth = "Basic " + Base64.encode(user + ':' + password);
-        url = new URL("http://" + user + ":" + password + "@" + server );
+        url = new URL("http://" + user + ":" + password + "@" + server);
     }
 
     @Override
@@ -51,9 +61,9 @@ public class RestConnection implements Connection {
     public List<BaseXResource> list(final BaseXSource source, final String path) throws IOException {
         final String result = Token.string(request(getQuery("list-" + source), PATH, path));
         final ArrayList<BaseXResource> list = new ArrayList<>();
-        if(!result.isEmpty()) {
+        if (!result.isEmpty()) {
             final String[] results = result.split("\r?\n");
-            for(int r = 0, rl = results.length; r < rl; r += 2) {
+            for (int r = 0, rl = results.length; r < rl; r += 2) {
                 list.add(new BaseXResource(results[r + 1], BaseXType.get(results[r]), source));
             }
         }
@@ -64,9 +74,9 @@ public class RestConnection implements Connection {
     public List<BaseXResource> listAll(final BaseXSource source, final String path) throws IOException {
         final String result = Token.string(request(getQuery("listall-" + source), PATH, path));
         final ArrayList<BaseXResource> list = new ArrayList<>();
-        if(!result.isEmpty()) {
+        if (!result.isEmpty()) {
             final String[] results = result.split("\r?\n");
-            for(int r = 0, rl = results.length; r < rl; r += 2) {
+            for (int r = 0, rl = results.length; r < rl; r += 2) {
                 list.add(new BaseXResource(results[r + 1], BaseXType.get(results[r]), source));
             }
         }
@@ -146,7 +156,7 @@ public class RestConnection implements Connection {
     public String xquery(final String query, final String... args) throws IOException {
         try {
             return Token.string(request(query, args));
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             throw BaseXQueryException.get(ex);
         }
     }
@@ -155,10 +165,10 @@ public class RestConnection implements Connection {
     public List<VersionHistoryEntry> getHistory(final String path) throws IOException {
         final String result = Token.string(request(getQuery("get-history"), PATH, path));
         final ArrayList<VersionHistoryEntry> list = new ArrayList<>();
-        if(!result.isEmpty()) {
+        if (!result.isEmpty()) {
             DateFormat format = new SimpleDateFormat(ArgonConst.DATE_FORMAT);
             final String[] results = result.split("\r?\n");
-            for(int r = 0, rl = results.length; r < rl; r += 4) {
+            for (int r = 0, rl = results.length; r < rl; r += 4) {
                 try {
                     list.add(new VersionHistoryEntry(new URL(results[r]), Integer.parseInt(results[r + 1]),
                             Integer.parseInt(results[r + 2]), format.parse(results[r + 3])));
@@ -216,7 +226,8 @@ public class RestConnection implements Connection {
 
     /**
      * Executes the specified HTTP request and returns the result.
-     * @param body request body
+     *
+     * @param body     request body
      * @param bindings keys and values
      * @return string result, or {@code null} for a failure.
      * @throws IOException I/O exception
@@ -234,17 +245,17 @@ public class RestConnection implements Connection {
             final TokenBuilder tb = new TokenBuilder();
             tb.add("<query xmlns='http://basex.org/rest'>\n");
             tb.add("<text>").add(toEntities(body)).add("</text>\n");
-            for(int b = 0, bl = bindings.length; b < bl; b += 2) {
+            for (int b = 0, bl = bindings.length; b < bl; b += 2) {
                 tb.add("<variable name='").add(bindings[b]).add("' value='");
                 tb.add(toEntities(bindings[b + 1])).add("'/>\n");
             }
             tb.add("</query>");
-            try(final OutputStream out = conn.getOutputStream()) {
+            try (final OutputStream out = conn.getOutputStream()) {
                 out.write(tb.finish());
                 out.close();
             }
             return new IOStream(conn.getInputStream()).read();
-        } catch(final IOException ex) {
+        } catch (final IOException ex) {
             logger.debug("Connection failed to set query: ", ex.getMessage());
             final String msg = Token.string(new IOStream(conn.getErrorStream()).read());
             throw BaseXQueryException.get(msg);
@@ -255,6 +266,7 @@ public class RestConnection implements Connection {
 
     /**
      * Encodes entities in a string.
+     *
      * @param string input string
      * @return resulting string
      */

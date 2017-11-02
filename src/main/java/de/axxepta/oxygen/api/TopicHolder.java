@@ -5,7 +5,7 @@ package de.axxepta.oxygen.api;
  */
 public class TopicHolder {
 
-//    public static MsgTopic openFile = new MsgTopic("OPEN_FILE");
+    //    public static MsgTopic openFile = new MsgTopic("OPEN_FILE");
 //    public static MsgTopic changeFile = new MsgTopic("CHANGE_FILE");
     public static MsgTopic saveFile = new MsgTopic("SAVE_FILE");
     public static MsgTopic newDir = new MsgTopic("NEW_DIR");

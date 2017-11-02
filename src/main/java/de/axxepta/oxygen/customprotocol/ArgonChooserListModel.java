@@ -60,7 +60,7 @@ public class ArgonChooserListModel extends AbstractListModel {
         boolean inserted = false;
         for (int index = 1; index < oldSize; index++) {
             if ((newElement.getName().compareTo(data.get(index).getName()) < 0) ||
-                    data.get(index).getType().equals(ArgonEntity.FILE)){
+                    data.get(index).getType().equals(ArgonEntity.FILE)) {
                 data.add(index, newElement);
                 fireIntervalAdded(this, index, index);
                 inserted = true;

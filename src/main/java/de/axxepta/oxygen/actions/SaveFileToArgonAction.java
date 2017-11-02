@@ -13,7 +13,7 @@ import ro.sync.exml.workspace.api.editor.WSEditor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.io.*;
+import java.io.IOException;
 import java.net.URL;
 
 /**
@@ -30,9 +30,9 @@ public class SaveFileToArgonAction extends AbstractAction {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        ArgonChooserDialog urlChooser = new ArgonChooserDialog((Frame)workspace.getParentFrame(),
+        ArgonChooserDialog urlChooser = new ArgonChooserDialog((Frame) workspace.getParentFrame(),
                 Lang.get(Lang.Keys.dlg_saveas), ArgonChooserDialog.Type.SAVE);
-        URL[] url =  urlChooser.selectURLs();
+        URL[] url = urlChooser.selectURLs();
 
         WSEditor editorAccess = workspace.getCurrentEditorAccess(PluginWorkspace.MAIN_EDITING_AREA);
 

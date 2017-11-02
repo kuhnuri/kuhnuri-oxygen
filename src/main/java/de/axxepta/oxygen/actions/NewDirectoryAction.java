@@ -50,9 +50,14 @@ public class NewDirectoryAction extends AbstractAction {
         String urlString;
         if (tree == null) {
             switch (chooserPath.get(0).getType()) {
-                case REPO: source = BaseXSource.REPO; break;
-                case XQ: source = BaseXSource.RESTXQ; break;
-                default: source = BaseXSource.DATABASE;
+                case REPO:
+                    source = BaseXSource.REPO;
+                    break;
+                case XQ:
+                    source = BaseXSource.RESTXQ;
+                    break;
+                default:
+                    source = BaseXSource.DATABASE;
             }
             resource = ArgonChooserDialog.getResourceString(chooserPath);
             urlString = CustomProtocolURLHandlerExtension.protocolFromSource(source) + ":" + resource;
@@ -78,7 +83,7 @@ public class NewDirectoryAction extends AbstractAction {
         JFrame parentFrame = (JFrame) (new AuthorComponentFactory()).getWorkspaceUtilities().getParentFrame();
         newDirectoryDialog = DialogTools.getOxygenDialog(parentFrame, Lang.get(Lang.Keys.dlg_newdir) + " " + urlString);
 
-        JPanel content = new JPanel(new BorderLayout(10,10));
+        JPanel content = new JPanel(new BorderLayout(10, 10));
 
         MakeNewDirectoryAction makeDirectory = new MakeNewDirectoryAction(Lang.get(Lang.Keys.cm_newdir),
                 source, resource, urlString);

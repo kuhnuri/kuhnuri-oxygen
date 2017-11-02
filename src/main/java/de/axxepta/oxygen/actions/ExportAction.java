@@ -35,7 +35,7 @@ public class ExportAction extends AbstractAction {
     private final TreeListener treeListener;
     private final PluginWorkspace workspace = PluginWorkspaceProvider.getPluginWorkspace();
 
-    public ExportAction(String name, Icon icon, TreeListener treeListener){
+    public ExportAction(String name, Icon icon, TreeListener treeListener) {
         super(name, icon);
         this.treeListener = treeListener;
     }
@@ -103,8 +103,9 @@ public class ExportAction extends AbstractAction {
 
     /**
      * Builds resource name for BaseXResources obtained with ConnectionWrapper.listAll
-     * @param path path in source
-     * @param source BaseX source of resource
+     *
+     * @param path     path in source
+     * @param source   BaseX source of resource
      * @param resource resource of which the full name shall be obtained
      * @return full resource name
      */

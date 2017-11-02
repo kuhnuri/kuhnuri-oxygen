@@ -160,10 +160,10 @@ class ArgonEditorChangeListener extends WSEditorChangeListener {
         return new JMenuItem(checkOutAction);
     }
 
-    private void checkEditorDependentMenuButtonStatus(PluginWorkspace pluginWorkspaceAccess){
+    private void checkEditorDependentMenuButtonStatus(PluginWorkspace pluginWorkspaceAccess) {
         WSEditor currentEditor = pluginWorkspaceAccess.getCurrentEditorAccess(PluginWorkspace.MAIN_EDITING_AREA);
 
-        if(currentEditor == null) {
+        if (currentEditor == null) {
             runQueryButton.setEnabled(false);
             newVersionButton.setEnabled(false);
             saveToArgonButton.setEnabled(false);
