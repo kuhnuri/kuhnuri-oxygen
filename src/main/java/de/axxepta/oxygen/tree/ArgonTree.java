@@ -14,7 +14,7 @@ public class ArgonTree extends Tree {
 
     private static final long serialVersionUID = 1L;
 
-    public ArgonTree(TreeModel root) {
+    public ArgonTree(final TreeModel root) {
         super(root);
         // Use our custom cell renderer.
         this.setCellRenderer(ClassFactory.getInstance().getTreeCellRenderer());

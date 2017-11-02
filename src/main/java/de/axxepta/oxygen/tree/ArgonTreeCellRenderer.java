@@ -62,35 +62,36 @@ public class ArgonTreeCellRenderer extends TreeCellRenderer {
     public static String fileType(String leafStr) {
         if (leafStr.contains(".")) {
             return leafStr.substring(leafStr.lastIndexOf(".") + 1);
-        } else
+        } else {
             return "";
+        }
     }
 
     protected boolean isRoot(JTree tree, Object value) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+        final DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
         return node.equals(root);
     }
 
     protected boolean isDatabase(JTree tree, Object value) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
-        DefaultMutableTreeNode db = (DefaultMutableTreeNode) tree.getModel().getChild(root, 0);
+        final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+        final DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        final DefaultMutableTreeNode db = (DefaultMutableTreeNode) tree.getModel().getChild(root, 0);
         return node.getParent().equals(db);
     }
 
     protected boolean isDBSource(JTree tree, Object value) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
-        DefaultMutableTreeNode db = (DefaultMutableTreeNode) tree.getModel().getChild(root, 0);
+        final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+        final DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        final DefaultMutableTreeNode db = (DefaultMutableTreeNode) tree.getModel().getChild(root, 0);
         return node.equals(db);
     }
 
     protected boolean isSourceDir(JTree tree, Object value) {
-        DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
-        DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
-        DefaultMutableTreeNode restxq = (DefaultMutableTreeNode) tree.getModel().getChild(root, 1);
-        DefaultMutableTreeNode repo = (DefaultMutableTreeNode) tree.getModel().getChild(root, 2);
+        final DefaultMutableTreeNode node = (DefaultMutableTreeNode) value;
+        final DefaultMutableTreeNode root = (DefaultMutableTreeNode) tree.getModel().getRoot();
+        final DefaultMutableTreeNode restxq = (DefaultMutableTreeNode) tree.getModel().getChild(root, 1);
+        final DefaultMutableTreeNode repo = (DefaultMutableTreeNode) tree.getModel().getChild(root, 2);
         return (node.equals(restxq) || node.equals(repo));
     }
 

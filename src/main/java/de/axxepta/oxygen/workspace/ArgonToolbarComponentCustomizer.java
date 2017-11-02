@@ -11,6 +11,8 @@ import java.util.List;
 
 class ArgonToolbarComponentCustomizer implements ToolbarComponentsCustomizer {
 
+    private static final String ARGON_WORKSPACE_ACCESS_TOOLBAR_ID = "ArgonWorkspaceAccessToolbarID";
+
     private ToolbarButton runQueryButton;
     private ToolbarButton newVersionButton;
     private ToolbarButton saveToArgonButton;
@@ -27,12 +29,12 @@ class ArgonToolbarComponentCustomizer implements ToolbarComponentsCustomizer {
     @Override
     public void customizeToolbar(ToolbarInfo toolbarInfo) {
 
-        addButtons("ArgonWorkspaceAccessToolbarID",
+        addButtons(ARGON_WORKSPACE_ACCESS_TOOLBAR_ID,
                 new JComponent[]{runQueryButton, new JSeparator(SwingConstants.VERTICAL), newVersionButton},
                 toolbarInfo, -1);
 
         // Set title
-        if ("ArgonWorkspaceAccessToolbarID".equals(toolbarInfo.getToolbarID()))
+        if (ARGON_WORKSPACE_ACCESS_TOOLBAR_ID.equals(toolbarInfo.getToolbarID()))
             toolbarInfo.setTitle("BaseX DB Connection");
 
         addButtons("File", new JComponent[]{saveToArgonButton}, toolbarInfo, 2);

@@ -163,72 +163,39 @@ public class ArgonPopupMenu extends PopupMenu {
         // check whether items apply to node
         int itemCount = this.getItemCount();
         for (int i = 0; i < itemCount; i++) {
-
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_open))) {
-                if (isFile)
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, isFile ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_checkout))) {
-                if (isFile)
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, isFile ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_adddb))) {
-                if (TreeUtils.isDbSource(path))
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, TreeUtils.isDbSource(path) ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_delete))) {
-                if (isFile || isDir || isDB)
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, isFile || isDir || isDB ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_rename))) {
-                if (isFile || (isDir && !TreeUtils.isWEBINF(path)))  // never! try to change the name of a WEB-INF folder
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                // never! try to change the name of a WEB-INF folder
+                this.setItemEnabled(i, isFile || (isDir && !TreeUtils.isWEBINF(path)) ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_export))) {
-                if (!isRoot && !isDbSource)
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, !isRoot && !isDbSource ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_add))) {
-                if (isDir || isDB || isFileSource)
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, isDir || isDB || isFileSource ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_newdir))) {
-                if (isDir || isDB || isFileSource)
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, isDir || isDB || isFileSource ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_showversion))) {
-                if (isFile)
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, isFile ? true : false);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_find))) {
-                if (isFile)
-                    this.setItemEnabled(i, false);
-                else
-                    this.setItemEnabled(i, true);
+                this.setItemEnabled(i, isFile ? false : true);
             }
             if (this.getItemName(i).equals(Lang.get(Lang.Keys.cm_search))) {
-                if (isDB || isInDB)
-                    this.setItemEnabled(i, true);
-                else
-                    this.setItemEnabled(i, false);
+                this.setItemEnabled(i, (isDB || isInDB) ? true : false);
             }
         }
     }

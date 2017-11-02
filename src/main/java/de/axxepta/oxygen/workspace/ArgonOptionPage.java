@@ -1,6 +1,5 @@
 package de.axxepta.oxygen.workspace;
 
-
 import de.axxepta.oxygen.actions.CloseDialogAction;
 import de.axxepta.oxygen.actions.FileNameFieldListener;
 import de.axxepta.oxygen.utils.DialogTools;
@@ -59,7 +58,6 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
     private static final String DEF_BASEX_VERSIONING = "true";
     private static final String DEF_BASEX_FILTER_EXCLUDE = "";
     private static final String DEF_BASEX_LOGFILE = System.getProperty("user.home") + "/argon.log";
-    //"/tmp/argon.log";
     private static final String DEF_BASEX_DB_CREATE_CHOP = "false";
     private static final String DEF_BASEX_DB_CREATE_FTINDEX = "false";
     private static final String DEF_BASEX_DB_CREATE_TEXTINDEX = "false";
@@ -114,15 +112,16 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
             pluginWorkspace.showErrorMessage(Lang.get(Lang.Keys.warn_connectionsettings1) + "\n" +
                     Lang.get(Lang.Keys.warn_connectionsettings2));
         } else {
+            final WSOptionsStorage optionsStorage = pluginWorkspace.getOptionsStorage();
 
             // save BaseX configs in the option storage
             settingsChangedOverwrite();
-
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_CONNECTION_SETTING,
+            
+            optionsStorage.setOption(KEY_BASEX_CONNECTION_SETTING,
                     !"".equals(baseXConnectionSettingsComboBox.getSelectedItem().toString()) ?
                             baseXConnectionSettingsComboBox.getSelectedItem().toString() : DEF_BASEX_CONNECTION_SETTING);
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_HOST,
+            optionsStorage.setOption(KEY_BASEX_HOST,
                     !"".equals(baseXHostTextField.getText()) ? baseXHostTextField.getText() : DEF_BASEX_HOST);
 
 /*        pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_HTTP_PORT,
@@ -131,36 +130,36 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
         pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_TCP_PORT,
                 !"".equals(baseXTcpPortTextField.getText()) ? baseXTcpPortTextField.getText() : DEF_BASEX_TCP_PORT);*/
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_USERNAME,
+            optionsStorage.setOption(KEY_BASEX_USERNAME,
                     !"".equals(baseXUsernameTextField.getText()) ? baseXUsernameTextField.getText() : DEF_BASEX_USERNAME);
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_PASSWORD,
+            optionsStorage.setOption(KEY_BASEX_PASSWORD,
                     !"".equals(baseXPasswordTextField.getText()) ? baseXPasswordTextField.getText() : DEF_BASEX_PASSWORD);
 
 /*        pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_CONNECTION,
                 baseXConnectionTypeComboBox.getSelectedItem().toString());*/
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_VERSIONING,
+            optionsStorage.setOption(KEY_BASEX_VERSIONING,
                     baseXVersioningCheckBox.isSelected() ? "true" : "false");
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_FILTER_EXCLUDE, baseXFilterExcludeTextField.getText());
+            optionsStorage.setOption(KEY_BASEX_FILTER_EXCLUDE, baseXFilterExcludeTextField.getText());
 
 /*        pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_LOGFILE,
                 !"".equals(baseXLogfileTextField.getText()) ? baseXLogfileTextField.getText() : DEF_BASEX_LOGFILE);*/
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_DB_CREATE_CHOP,
+            optionsStorage.setOption(KEY_BASEX_DB_CREATE_CHOP,
                     baseXDBCreateChopCheckBox.isSelected() ? "true" : "false");
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_DB_CREATE_FTINDEX,
+            optionsStorage.setOption(KEY_BASEX_DB_CREATE_FTINDEX,
                     baseXDBCreateFTIndexCheckBox.isSelected() ? "true" : "false");
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_DB_CREATE_TEXTINDEX,
+            optionsStorage.setOption(KEY_BASEX_DB_CREATE_TEXTINDEX,
                     baseXDBCreateTextIndexCheckBox.isSelected() ? "true" : "false");
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_DB_CREATE_ATTRINDEX,
+            optionsStorage.setOption(KEY_BASEX_DB_CREATE_ATTRINDEX,
                     baseXDBCreateAttrIndexCheckBox.isSelected() ? "true" : "false");
 
-            pluginWorkspace.getOptionsStorage().setOption(KEY_BASEX_DB_CREATE_TOKENINDEX,
+            optionsStorage.setOption(KEY_BASEX_DB_CREATE_TOKENINDEX,
                     baseXDBCreateTokenIndexCheckBox.isSelected() ? "true" : "false");
         }
     }
@@ -751,14 +750,17 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
     }
 
     private void updateSettingsList(String name, int index) {
-        String[] newSetting = {(String) baseXConnectionSettingsComboBox.getSelectedItem(),
-                baseXHostTextField.getText(), baseXUsernameTextField.getText(), baseXPasswordTextField.getText(),
-                baseXVersioningCheckBox.isSelected() ? "true" : "false",
-                baseXDBCreateChopCheckBox.isSelected() ? "true" : "false",
-                baseXDBCreateFTIndexCheckBox.isSelected() ? "true" : "false",
-                baseXDBCreateTextIndexCheckBox.isSelected() ? "true" : "false",
-                baseXDBCreateAttrIndexCheckBox.isSelected() ? "true" : "false",
-                baseXDBCreateTokenIndexCheckBox.isSelected() ? "true" : "false",
+        final String[] newSetting = {
+                (String) baseXConnectionSettingsComboBox.getSelectedItem(),
+                baseXHostTextField.getText(),
+                baseXUsernameTextField.getText(),
+                baseXPasswordTextField.getText(),
+                Boolean.toString(baseXVersioningCheckBox.isSelected()),
+                Boolean.toString(baseXDBCreateChopCheckBox.isSelected()),
+                Boolean.toString(baseXDBCreateFTIndexCheckBox.isSelected()),
+                Boolean.toString(baseXDBCreateTextIndexCheckBox.isSelected()),
+                Boolean.toString(baseXDBCreateAttrIndexCheckBox.isSelected()),
+                Boolean.toString(baseXDBCreateTokenIndexCheckBox.isSelected()),
                 baseXFilterExcludeTextField.getText()
         };
         if (index == -1) {
@@ -772,21 +774,21 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
     }
 
     private static List loadConnectionSettings() {
-        List<String[]> connectionSettings = new ArrayList<>();
-        String[] conn = {"default", DEF_BASEX_HOST, DEF_BASEX_USERNAME, DEF_BASEX_PASSWORD, DEF_BASEX_VERSIONING,
+        final List<String[]> connectionSettings = new ArrayList<>();
+        final String[] conn = {"default", DEF_BASEX_HOST, DEF_BASEX_USERNAME, DEF_BASEX_PASSWORD, DEF_BASEX_VERSIONING,
                 DEF_BASEX_DB_CREATE_CHOP, DEF_BASEX_DB_CREATE_FTINDEX, DEF_BASEX_DB_CREATE_TEXTINDEX,
                 DEF_BASEX_DB_CREATE_ATTRINDEX, DEF_BASEX_DB_CREATE_TOKENINDEX, DEF_BASEX_FILTER_EXCLUDE};
         connectionSettings.add(conn);
-        File settingsPath = new File(CONNECTION_SETTING_PATH);
+        final File settingsPath = new File(CONNECTION_SETTING_PATH);
         if (FileUtils.directoryExists(settingsPath)) {
-            String[] fileList = settingsPath.list((dir, fileName) -> fileName.toLowerCase().endsWith(CONNECTION_SETTING_FILE_TYPE));
+            final String[] fileList = settingsPath.list((dir, fileName) -> fileName.toLowerCase().endsWith(CONNECTION_SETTING_FILE_TYPE));
             if (fileList != null) {
                 for (String settingsFile : fileList) {
-                    Properties properties = new Properties();
+                    final Properties properties = new Properties();
                     try (InputStream in = new BufferedInputStream(
                             new FileInputStream(CONNECTION_SETTING_PATH + "/" + settingsFile))) {
                         properties.load(in);
-                        String[] connSetting = {properties.getProperty(CS_NAME), properties.getProperty(CS_HOST),
+                        final String[] connSetting = {properties.getProperty(CS_NAME), properties.getProperty(CS_HOST),
                                 properties.getProperty(CS_USER), properties.getProperty(CS_PWD), properties.getProperty(CS_VCS),
                                 properties.getProperty(CS_CHOP), properties.getProperty(CS_FT), properties.getProperty(CS_TEXT),
                                 properties.getProperty(CS_ATTR), properties.getProperty(CS_TOKEN), properties.getProperty(CS_FE)};
@@ -801,7 +803,7 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
     }
 
     private void storeConnectionSettings() {
-        File settingsPath = new File(CONNECTION_SETTING_PATH);
+        final File settingsPath = new File(CONNECTION_SETTING_PATH);
         boolean noDirectory = false;
         if (!FileUtils.directoryExists(settingsPath)) {
             if (!settingsPath.mkdir()) {
@@ -811,10 +813,10 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
             }
         }
         if (!noDirectory) {
-            String fileName = CONNECTION_SETTING_PATH + "/" +
+            final String fileName = CONNECTION_SETTING_PATH + "/" +
                     baseXConnectionSettingsComboBox.getSelectedItem() + CONNECTION_SETTING_FILE_TYPE;
-            File settingsFile = new File(fileName);
-            Properties properties = new Properties();
+            final File settingsFile = new File(fileName);
+            final Properties properties = new Properties();
             properties.setProperty(CS_NAME, (String) baseXConnectionSettingsComboBox.getSelectedItem());
             properties.setProperty(CS_HOST, baseXHostTextField.getText());
             properties.setProperty(CS_USER, baseXUsernameTextField.getText());
