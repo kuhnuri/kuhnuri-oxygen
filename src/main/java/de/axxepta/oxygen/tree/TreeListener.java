@@ -225,9 +225,9 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
             String[] path = protocol[1].split("/");
             currPath = new TreePath(treeModel.getRoot());
             switch (protocol[0]) {
-                case ArgonConst.ARGON_REPO:
-                    currPath = TreeUtils.pathByAddingChildAsStr(currPath, Lang.get(Lang.Keys.tree_repo));
-                    break;
+//                case ArgonConst.ARGON_REPO:
+//                    currPath = TreeUtils.pathByAddingChildAsStr(currPath, Lang.get(Lang.Keys.tree_repo));
+//                    break;
 //                case ArgonConst.ARGON_XQ:
 //                    currPath = TreeUtils.pathByAddingChildAsStr(currPath, Lang.get(Lang.Keys.tree_restxq));
 //                    break;

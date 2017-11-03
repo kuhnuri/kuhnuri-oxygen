@@ -154,10 +154,10 @@ public class SearchInPathAction extends AbstractAction {
         List<String> filterExlucdeDBs = new ArrayList(Arrays.asList(filterExcludeOption.split("\\s*(;|,|\\s)\\s*")));
         switch (type) {
             case SEARCH_ALL: {
-                TreePath currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_repo));
-                allResources.addAll(searchResourcesInPath(BaseXSource.REPO, currentPath, filter, caseSensitive));
+//                TreePath currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_repo));
+//                allResources.addAll(searchResourcesInPath(BaseXSource.REPO, currentPath, filter, caseSensitive));
 //                currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_restxq));
-                allResources.addAll(searchResourcesInPath(BaseXSource.RESTXQ, currentPath, filter, caseSensitive));
+//                allResources.addAll(searchResourcesInPath(BaseXSource.RESTXQ, currentPath, filter, caseSensitive));
             }
             case SEARCH_ALL_DBS: {
                 List<String> dbList = getDatabases();

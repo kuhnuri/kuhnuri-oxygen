@@ -91,9 +91,9 @@ public class TreeUtils {
         TreePath path = new TreePath(model.getRoot());
         BaseXSource source = CustomProtocolURLHandlerExtension.sourceFromURLString(urlString);
         switch (source) {
-            case REPO:
-                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_repo));
-                break;
+//            case REPO:
+//                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_repo));
+//                break;
 //            case RESTXQ:
 //                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_restxq));
 //                break;
@@ -117,8 +117,8 @@ public class TreeUtils {
                 return BaseXSource.DATABASE;
 //            if (sourceStr.equals(Lang.get(Lang.Keys.tree_restxq)))
 //                return BaseXSource.RESTXQ;
-            if (sourceStr.equals(Lang.get(Lang.Keys.tree_repo)))
-                return BaseXSource.REPO;
+//            if (sourceStr.equals(Lang.get(Lang.Keys.tree_repo)))
+//                return BaseXSource.REPO;
             return null;
         } else {
             return null;
@@ -132,8 +132,8 @@ public class TreeUtils {
                 return ArgonConst.ARGON;
 //            if (sourceStr.equals(Lang.get(Lang.Keys.tree_restxq)))
 //                return ArgonConst.ARGON_XQ;
-            if (sourceStr.equals(Lang.get(Lang.Keys.tree_repo)))
-                return ArgonConst.ARGON_REPO;
+//            if (sourceStr.equals(Lang.get(Lang.Keys.tree_repo)))
+//                return ArgonConst.ARGON_REPO;
             return null;
         } else {
             return null;
@@ -158,9 +158,9 @@ public class TreeUtils {
 //        if (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)))
 //            db_path = new StringBuilder(ArgonConst.ARGON_XQ + ":");
 //        else
-        if (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_repo)))
-            db_path = new StringBuilder(ArgonConst.ARGON_REPO + ":");
-        else
+//        if (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_repo)))
+//            db_path = new StringBuilder(ArgonConst.ARGON_REPO + ":");
+//        else
             db_path = new StringBuilder(ArgonConst.ARGON + ":");
         for (int i = 2; i < path.getPathCount(); i++) {
             if (i > 2)
@@ -186,9 +186,9 @@ public class TreeUtils {
 //            if (components[1].equals(Lang.get(Lang.Keys.tree_restxq)))
 //                db_path = new StringBuilder(ArgonConst.ARGON_XQ + ":");
 //            else
-            if (components[1].equals(Lang.get(Lang.Keys.tree_repo)))
-                db_path = new StringBuilder(ArgonConst.ARGON_REPO + ":");
-            else
+//            if (components[1].equals(Lang.get(Lang.Keys.tree_repo)))
+//                db_path = new StringBuilder(ArgonConst.ARGON_REPO + ":");
+//            else
                 db_path = new StringBuilder(ArgonConst.ARGON + ":");
             db_path.append(treeString.substring(components[0].length() + components[1].length() + 2));
         } else {
@@ -251,11 +251,11 @@ public class TreeUtils {
 //                (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)));
 //    }
 
-    public static boolean isInRepo(TreePath path) {
-        int pathCount = path.getPathCount();
-        return (pathCount > 2) &&
-                (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_repo)));
-    }
+//    public static boolean isInRepo(TreePath path) {
+//        int pathCount = path.getPathCount();
+//        return (pathCount > 2) &&
+//                (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_repo)));
+//    }
 
     public static boolean isSource(TreePath path) {
         int pathCount = path.getPathCount();

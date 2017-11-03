@@ -264,7 +264,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
         List<ArgonChooserListModel.Element> list = new ArrayList<>();
         list.add(new ArgonChooserListModel.Element(ArgonEntity.DB_BASE, Lang.get(Lang.Keys.tree_DB)));
 //        list.add(new ArgonChooserListModel.Element(ArgonEntity.XQ, Lang.get(Lang.Keys.tree_restxq)));
-        list.add(new ArgonChooserListModel.Element(ArgonEntity.REPO, Lang.get(Lang.Keys.tree_repo)));
+//        list.add(new ArgonChooserListModel.Element(ArgonEntity.REPO, Lang.get(Lang.Keys.tree_repo)));
         return list;
     }
 
