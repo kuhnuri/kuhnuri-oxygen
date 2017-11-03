@@ -156,7 +156,7 @@ public class SearchInPathAction extends AbstractAction {
             case SEARCH_ALL: {
                 TreePath currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_repo));
                 allResources.addAll(searchResourcesInPath(BaseXSource.REPO, currentPath, filter, caseSensitive));
-                currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_restxq));
+//                currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_restxq));
                 allResources.addAll(searchResourcesInPath(BaseXSource.RESTXQ, currentPath, filter, caseSensitive));
             }
             case SEARCH_ALL_DBS: {

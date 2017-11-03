@@ -94,9 +94,9 @@ public class TreeUtils {
             case REPO:
                 path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_repo));
                 break;
-            case RESTXQ:
-                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_restxq));
-                break;
+//            case RESTXQ:
+//                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_restxq));
+//                break;
             default:
                 path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_DB));
         }
@@ -115,8 +115,8 @@ public class TreeUtils {
             String sourceStr = path.getPathComponent(1).toString();
             if (sourceStr.equals(Lang.get(Lang.Keys.tree_DB)))
                 return BaseXSource.DATABASE;
-            if (sourceStr.equals(Lang.get(Lang.Keys.tree_restxq)))
-                return BaseXSource.RESTXQ;
+//            if (sourceStr.equals(Lang.get(Lang.Keys.tree_restxq)))
+//                return BaseXSource.RESTXQ;
             if (sourceStr.equals(Lang.get(Lang.Keys.tree_repo)))
                 return BaseXSource.REPO;
             return null;
@@ -130,8 +130,8 @@ public class TreeUtils {
             String sourceStr = path.getPathComponent(1).toString();
             if (sourceStr.equals(Lang.get(Lang.Keys.tree_DB)))
                 return ArgonConst.ARGON;
-            if (sourceStr.equals(Lang.get(Lang.Keys.tree_restxq)))
-                return ArgonConst.ARGON_XQ;
+//            if (sourceStr.equals(Lang.get(Lang.Keys.tree_restxq)))
+//                return ArgonConst.ARGON_XQ;
             if (sourceStr.equals(Lang.get(Lang.Keys.tree_repo)))
                 return ArgonConst.ARGON_REPO;
             return null;
@@ -155,9 +155,10 @@ public class TreeUtils {
 
     public static String urlStringFromTreePath(TreePath path) {
         StringBuilder db_path;
-        if (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)))
-            db_path = new StringBuilder(ArgonConst.ARGON_XQ + ":");
-        else if (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_repo)))
+//        if (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)))
+//            db_path = new StringBuilder(ArgonConst.ARGON_XQ + ":");
+//        else
+        if (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_repo)))
             db_path = new StringBuilder(ArgonConst.ARGON_REPO + ":");
         else
             db_path = new StringBuilder(ArgonConst.ARGON + ":");
@@ -182,9 +183,10 @@ public class TreeUtils {
         StringBuilder db_path;
 
         if (components.length > 2) {
-            if (components[1].equals(Lang.get(Lang.Keys.tree_restxq)))
-                db_path = new StringBuilder(ArgonConst.ARGON_XQ + ":");
-            else if (components[1].equals(Lang.get(Lang.Keys.tree_repo)))
+//            if (components[1].equals(Lang.get(Lang.Keys.tree_restxq)))
+//                db_path = new StringBuilder(ArgonConst.ARGON_XQ + ":");
+//            else
+            if (components[1].equals(Lang.get(Lang.Keys.tree_repo)))
                 db_path = new StringBuilder(ArgonConst.ARGON_REPO + ":");
             else
                 db_path = new StringBuilder(ArgonConst.ARGON + ":");
@@ -243,11 +245,11 @@ public class TreeUtils {
                 (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_DB)));
     }
 
-    public static boolean isInRestXQ(TreePath path) {
-        int pathCount = path.getPathCount();
-        return (pathCount > 2) &&
-                (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)));
-    }
+//    public static boolean isInRestXQ(TreePath path) {
+//        int pathCount = path.getPathCount();
+//        return (pathCount > 2) &&
+//                (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)));
+//    }
 
     public static boolean isInRepo(TreePath path) {
         int pathCount = path.getPathCount();
@@ -277,9 +279,12 @@ public class TreeUtils {
     public static boolean isWEBINF(TreePath path) {
         DefaultMutableTreeNode clickedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         int pathCount = path.getPathCount();
-        return (TreeUtils.isDir(path) && clickedNode.getUserObject().toString().equals("WEB-INF") &&
-                ((pathCount == 3) && (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq)))
-                        || ((pathCount == 5) && (path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_DB))))));
+        return TreeUtils.isDir(path)
+                && clickedNode.getUserObject().toString().equals("WEB-INF")
+                && (
+//                    ((pathCount == 3) && path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_restxq))) ||
+                ((pathCount == 5) && path.getPathComponent(1).toString().equals(Lang.get(Lang.Keys.tree_DB)))
+                );
     }
 
 }

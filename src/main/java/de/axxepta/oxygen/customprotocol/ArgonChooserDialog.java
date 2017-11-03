@@ -207,10 +207,10 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
         }
         BaseXSource source;
         switch (rootEntity) {
-            case XQ: {
-                source = BaseXSource.RESTXQ;
-                break;
-            }
+//            case XQ: {
+//                source = BaseXSource.RESTXQ;
+//                break;
+//            }
             case REPO: {
                 source = BaseXSource.REPO;
                 break;
@@ -263,7 +263,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
     private List<ArgonChooserListModel.Element> getProtocolList() {
         List<ArgonChooserListModel.Element> list = new ArrayList<>();
         list.add(new ArgonChooserListModel.Element(ArgonEntity.DB_BASE, Lang.get(Lang.Keys.tree_DB)));
-        list.add(new ArgonChooserListModel.Element(ArgonEntity.XQ, Lang.get(Lang.Keys.tree_restxq)));
+//        list.add(new ArgonChooserListModel.Element(ArgonEntity.XQ, Lang.get(Lang.Keys.tree_restxq)));
         list.add(new ArgonChooserListModel.Element(ArgonEntity.REPO, Lang.get(Lang.Keys.tree_repo)));
         return list;
     }

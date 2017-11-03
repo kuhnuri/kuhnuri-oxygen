@@ -228,9 +228,9 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
                 case ArgonConst.ARGON_REPO:
                     currPath = TreeUtils.pathByAddingChildAsStr(currPath, Lang.get(Lang.Keys.tree_repo));
                     break;
-                case ArgonConst.ARGON_XQ:
-                    currPath = TreeUtils.pathByAddingChildAsStr(currPath, Lang.get(Lang.Keys.tree_restxq));
-                    break;
+//                case ArgonConst.ARGON_XQ:
+//                    currPath = TreeUtils.pathByAddingChildAsStr(currPath, Lang.get(Lang.Keys.tree_restxq));
+//                    break;
                 default:
                     currPath = TreeUtils.pathByAddingChildAsStr(currPath, Lang.get(Lang.Keys.tree_DB));
             }

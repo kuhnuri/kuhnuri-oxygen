@@ -53,17 +53,20 @@ public class NewDirectoryAction extends AbstractAction {
                 case REPO:
                     source = BaseXSource.REPO;
                     break;
-                case XQ:
-                    source = BaseXSource.RESTXQ;
-                    break;
+//                case XQ:
+//                    source = BaseXSource.RESTXQ;
+//                    break;
                 default:
                     source = BaseXSource.DATABASE;
             }
             resource = ArgonChooserDialog.getResourceString(chooserPath);
             urlString = CustomProtocolURLHandlerExtension.protocolFromSource(source) + ":" + resource;
             ArgonEntity element = chooserPath.get(chooserPath.size() - 1).getType();
-            if (element.equals(ArgonEntity.DIR) || element.equals(ArgonEntity.DB) ||
-                    element.equals(ArgonEntity.REPO) || element.equals(ArgonEntity.XQ)) {
+            if (element.equals(ArgonEntity.DIR)
+                    || element.equals(ArgonEntity.DB)
+                    || element.equals(ArgonEntity.REPO)
+//                    || element.equals(ArgonEntity.XQ)
+                    ) {
                 createNewDirDialog(source, resource, urlString);
             }
         } else {

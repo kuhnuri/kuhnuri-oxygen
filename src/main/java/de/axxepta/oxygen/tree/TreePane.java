@@ -114,13 +114,13 @@ public class TreePane extends JPanel {
                 ArgonConst.ARGON + ":");
         databases.setAllowsChildren(true);
         root.add(databases);
-        DefaultMutableTreeNode queryFolder = ClassFactory.getInstance().getTreeNode(Lang.get(Lang.Keys.tree_restxq),
-                ArgonConst.ARGON_XQ + ":");
-        queryFolder.setAllowsChildren(true);
-        root.add(queryFolder);
+//        DefaultMutableTreeNode queryFolder = ClassFactory.getInstance().getTreeNode(Lang.get(Lang.Keys.tree_restxq),
+//                ArgonConst.ARGON_XQ + ":");
+//        queryFolder.setAllowsChildren(true);
+//        queryFolder.setAllowsChildren(true);
+//        root.add(queryFolder);
         DefaultMutableTreeNode repoFolder = ClassFactory.getInstance().getTreeNode(Lang.get(Lang.Keys.tree_repo),
                 ArgonConst.ARGON_REPO + ":");
-        queryFolder.setAllowsChildren(true);
         root.add(repoFolder);
         return root;
     }
