@@ -244,17 +244,18 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
         List<ArgonChooserListModel.Element> newList = new ArrayList<>();
         newList.add(new ArgonChooserListModel.Element(ArgonEntity.ROOT, ".."));
         try {
-            List<BaseXResource> resourceList = ConnectionWrapper.list(source, path);
-            for (BaseXResource resource : resourceList) {
-                if ((depth == 1) && (this.path.get(0).getType().equals(ArgonEntity.DB_BASE)))
-                    newList.add(new ArgonChooserListModel.Element(ArgonEntity.DB, resource.getName()));
-                else if (resource.getType().equals(BaseXType.DIRECTORY))
-                    newList.add(new ArgonChooserListModel.Element(ArgonEntity.DIR, resource.getName()));
-                else
-                    newList.add(new ArgonChooserListModel.Element(ArgonEntity.FILE, resource.getName()));
+            List<Resource> resourceList = ConnectionWrapper.list(source, path);
+            for (Resource resource : resourceList) {
+                if ((depth == 1) && (this.path.get(0).getType().equals(ArgonEntity.DB_BASE))) {
+                    newList.add(new ArgonChooserListModel.Element(ArgonEntity.DB, resource.name));
+                } else if (resource.type.equals(BaseXType.DIRECTORY)) {
+                    newList.add(new ArgonChooserListModel.Element(ArgonEntity.DIR, resource.name));
+                } else {
+                    newList.add(new ArgonChooserListModel.Element(ArgonEntity.FILE, resource.name));
+                }
             }
         } catch (IOException ioe) {
-            PluginWorkspaceProvider.getPluginWorkspace().showErrorMessage(Lang.get(Lang.Keys.warn_failedlist) + " " +
+            PluginWorkspaceProvider.getPluginWorkspace().showErrorMessage("YYY " + Lang.get(Lang.Keys.warn_failedlist) + " " +
                     ioe.getMessage());
         }
         return newList;

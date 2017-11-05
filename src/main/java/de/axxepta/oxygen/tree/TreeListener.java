@@ -4,10 +4,10 @@ import de.axxepta.oxygen.actions.AddDatabaseAction;
 import de.axxepta.oxygen.actions.AddNewFileAction;
 import de.axxepta.oxygen.actions.DeleteAction;
 import de.axxepta.oxygen.actions.RefreshTreeAction;
-import de.axxepta.oxygen.api.ArgonConst;
 import de.axxepta.oxygen.api.BaseXResource;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.BaseXType;
+import de.axxepta.oxygen.api.Resource;
 import de.axxepta.oxygen.core.ClassFactory;
 import de.axxepta.oxygen.core.ObserverInterface;
 import de.axxepta.oxygen.utils.ConnectionWrapper;
@@ -28,6 +28,7 @@ import java.awt.event.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -127,34 +128,34 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
         node = (TreeNode) path.getLastPathComponent();
         int depth = path.getPathCount();
 
-        if ((depth > 1) && (node.getAllowsChildren()) && this.newExpandEvent) {
+        if (depth > 1 && node.getAllowsChildren() && this.newExpandEvent) {
+            BaseXSource source = TreeUtils.sourceFromTreePath(path);
 
-            List<BaseXResource> childList;
-            List<String> newValues = new ArrayList<>();
-            BaseXSource source;
             String db_path;
-
-            source = TreeUtils.sourceFromTreePath(path);
-
             if (depth > 2)      // get path in source
+            {
                 db_path = (((String) ((ArgonTreeNode) node).getTag()).split(":/*"))[1] + "/";
-            else
+            } else {
                 db_path = "";
+            }
 
+            List<Resource> childList;
             try {
                 childList = ConnectionWrapper.list(source, db_path);
             } catch (Exception er) {
                 childList = new ArrayList<>();
                 logger.debug(er);
                 String error = er.getMessage();
-                if ((error == null) || error.equals(""))
+                if (error == null || error.equals("")) {
                     error = "Database connection could not be established.";
-                if (showErrorMessages)
+                }
+                if (showErrorMessages) {
                     workspace.showInformationMessage(Lang.get(Lang.Keys.warn_failedlist) + "\n" + error);
+                }
             }
-            for (BaseXResource child : childList) {
-                newValues.add(child.getName());
-            }
+            final List<String> newValues = childList.stream()
+                    .map(child -> child.name)
+                    .collect(Collectors.toList());
             if (updateExpandedNode(node, childList, newValues)) {
                 this.newExpandEvent = false;
                 tree.expandPath(path);
@@ -263,7 +264,7 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
         doubleClickExpandEnabled = expand;
     }
 
-    private boolean updateExpandedNode(TreeNode node, List<BaseXResource> newChildrenList, List<String> childrenValues) {
+    private boolean updateExpandedNode(TreeNode node, List<Resource> newChildrenList, List<String> childrenValues) {
         DefaultMutableTreeNode newChild;
         List<String> oldChildren = new ArrayList<>();
         String oldChild;
@@ -290,21 +291,18 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
             }
         }
         if (node.getChildCount() == 0) {  // if old list was empty skip lexicographic insert (faster)
-            for (BaseXResource newPossibleChild : newChildrenList) {
-                newChild = ClassFactory.getInstance().getTreeNode(newPossibleChild.getName(),
-                        ((ArgonTreeNode) node).getTag().toString() + "/" + newPossibleChild.getName());
-                if (newPossibleChild.getType().equals(BaseXType.DIRECTORY))
-                    newChild.setAllowsChildren(true);
-                else
-                    newChild.setAllowsChildren(false);
+            for (Resource newPossibleChild : newChildrenList) {
+                newChild = ClassFactory.getInstance().getTreeNode(newPossibleChild.name,
+                        ((ArgonTreeNode) node).getTag().toString() + "/" + newPossibleChild.name);
+                newChild.setAllowsChildren(newPossibleChild.type.equals(BaseXType.DIRECTORY));
                 ((DefaultTreeModel) treeModel).insertNodeInto(newChild, (MutableTreeNode) node, node.getChildCount());
                 treeChanged = true;
             }
         } else {
-            for (BaseXResource newPossibleChild : newChildrenList) {
-                if (!oldChildren.contains(newPossibleChild.getName())) {
-                    TreeUtils.insertStrAsNodeLexi(treeModel, newPossibleChild.getName(), (DefaultMutableTreeNode) node,
-                            !(newPossibleChild.getType().equals(BaseXType.DIRECTORY)));
+            for (Resource newPossibleChild : newChildrenList) {
+                if (!oldChildren.contains(newPossibleChild.name)) {
+                    TreeUtils.insertStrAsNodeLexi(treeModel, newPossibleChild.name, (DefaultMutableTreeNode) node,
+                            !(newPossibleChild.type.equals(BaseXType.DIRECTORY)));
                     treeChanged = true;
                 }
             }

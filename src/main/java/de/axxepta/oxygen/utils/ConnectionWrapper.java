@@ -15,10 +15,7 @@ import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,7 +61,7 @@ public final class ConnectionWrapper {
             os.write(bytes);
         } catch (NullPointerException npe) {
             logger.info("Error saving to " + url.toString() + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         } catch (IOException ioe) {
             logger.error("IO error saving to " + url.toString() + ": ", ioe.getMessage());
             throw new IOException(ioe);
@@ -76,7 +73,7 @@ public final class ConnectionWrapper {
             os.write(bytes);
         } catch (NullPointerException npe) {
             logger.info("Error saving to " + url.toString() + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         } catch (IOException ioe) {
             logger.error("IO error saving to " + url.toString() + ": ", ioe.getMessage());
             throw new IOException(ioe);
@@ -88,7 +85,7 @@ public final class ConnectionWrapper {
             os.write(bytes);
         } catch (NullPointerException npe) {
             logger.info("Error saving to " + url.toString() + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         } catch (IOException ioe) {
             logger.error("IO error saving to " + url.toString() + ": ", ioe.getMessage());
             throw new IOException(ioe);
@@ -100,7 +97,7 @@ public final class ConnectionWrapper {
             os.write(bytes);
         } catch (NullPointerException npe) {
             logger.info("Error saving to " + url.toString() + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         } catch (IOException ioe) {
             logger.error("IO error saving to " + url.toString() + ": ", ioe.getMessage());
             throw new IOException(ioe);
@@ -112,7 +109,7 @@ public final class ConnectionWrapper {
             os.write(bytes);
         } catch (NullPointerException npe) {
             logger.info("Error saving to " + url.toString() + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         } catch (IOException ioe) {
             logger.error("IO error saving to " + url.toString() + ": ", ioe.getMessage());
             throw new IOException(ioe);
@@ -124,7 +121,7 @@ public final class ConnectionWrapper {
             os.write(bytes);
         } catch (NullPointerException npe) {
             logger.info("Error saving to " + url.toString() + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         } catch (IOException ioe) {
             logger.error("IO error saving to " + url.toString() + ": ", ioe.getMessage());
             throw new IOException(ioe);
@@ -136,7 +133,7 @@ public final class ConnectionWrapper {
             os.write(bytes);
         } catch (NullPointerException npe) {
             logger.info("Error saving to " + url.toString() + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         } catch (IOException ioe) {
             logger.error("IO error saving to " + url.toString() + ": ", ioe.getMessage());
             throw new IOException(ioe);
@@ -151,7 +148,7 @@ public final class ConnectionWrapper {
                     CustomProtocolURLHandlerExtension.pathFromURL(url), false));
         } catch (NullPointerException npe) {
             logger.info("Error obtaining input stream from " + url.toString() + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         } catch (IOException io) {
             logger.debug("Failed to obtain InputStream: ", io.getMessage());
             throw new IOException(io);
@@ -159,12 +156,15 @@ public final class ConnectionWrapper {
         return inputStream;
     }
 
-    public static List<BaseXResource> list(BaseXSource source, String path) throws IOException {
+    public static List<Resource> list(BaseXSource source, String path) throws IOException {
+        logger.info("list " + source + " "+ path);
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             return connection.list(source, path);
         } catch (NullPointerException npe) {
-            logger.info("Error listing path " + path + ": no database connection");
-            throw new IOException("No database connection");
+            final PrintWriter buf = new PrintWriter(new StringWriter());
+            npe.printStackTrace(buf);
+            logger.info("Error listing path " + path + ": no database connection : " + buf.toString());
+            throw new NoDatabaseConnectionException();
         }
     }
 
@@ -177,17 +177,18 @@ public final class ConnectionWrapper {
      * @throws IOException throws exception if connection returns an exception/error code
      */
     public static List<BaseXResource> listAll(BaseXSource source, String path) throws IOException {
+        logger.info("listAll" + source + " "+ path);
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             return connection.listAll(source, path);
         } catch (NullPointerException npe) {
             logger.info("Error listing path " + path + ": no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         }
     }
 
     public static boolean directoryExists(BaseXSource source, String path) {
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
-            List<BaseXResource> resourceList = connection.list(source, path);
+            List<Resource> resourceList = connection.list(source, path);
             return (resourceList.size() != 0);
         } catch (NullPointerException npe) {
             logger.info("Error checking for directory " + path + ": no database connection");
@@ -266,7 +267,7 @@ public final class ConnectionWrapper {
             }
         } catch (NullPointerException npe) {
             logger.error("Error searching for files: no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         }
         return result;
     }
@@ -292,7 +293,7 @@ public final class ConnectionWrapper {
             return connection.xquery(query, parameter);
         } catch (NullPointerException npe) {
             logger.info("Error sending query: no database connection");
-            throw new IOException("No database connection");
+            throw new NoDatabaseConnectionException();
         }
     }
 

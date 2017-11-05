@@ -1,6 +1,7 @@
 package de.axxepta.oxygen.api;
 
-import java.util.Locale;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonValue;
 
 /**
  * Resource types.
@@ -17,18 +18,15 @@ public enum BaseXType {
      */
     RESOURCE;
 
-    /**
-     * Returns a resource.
-     *
-     * @param string string representation
-     * @return enumeration
-     */
-    public static BaseXType get(final String string) {
-        return BaseXType.valueOf(string.toUpperCase(Locale.ENGLISH));
+    @JsonCreator
+    public static BaseXType deserialize(String name) {
+        return BaseXType.valueOf(name);
     }
 
+    @JsonValue
     @Override
     public String toString() {
-        return name().toLowerCase(Locale.ENGLISH);
+        return this.name();
     }
+
 }

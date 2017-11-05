@@ -189,7 +189,8 @@ public class SearchInPathAction extends AbstractAction {
         List<BaseXResource> databaseList;
         List<String> databases = new ArrayList<>();
         try {
-            databaseList = ConnectionWrapper.list(BaseXSource.DATABASE, "");
+//            databaseList = ConnectionWrapper.list(BaseXSource.DATABASE, "");
+            databaseList = new ArrayList<>();
         } catch (Exception er) {
             logger.debug("Couldn't obtain database list. Error: ", er.getMessage());
             databaseList = new ArrayList<>();

@@ -1,19 +1,20 @@
 package de.axxepta.oxygen.api;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import de.axxepta.oxygen.versioncontrol.VersionHistoryEntry;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.basex.io.IOStream;
 import org.basex.util.Base64;
 import org.basex.util.Token;
-import org.basex.util.TokenBuilder;
-import org.basex.util.http.HttpText;
-import org.basex.util.http.MediaType;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static de.axxepta.oxygen.api.ConnectionUtils.*;
-import static org.basex.util.http.HttpMethod.POST;
+import static org.basex.util.http.HttpMethod.GET;
 
 /**
  * BaseX REST implementation for the Argon connection interface.
@@ -58,26 +59,32 @@ public class RestConnection implements Connection {
     }
 
     @Override
-    public List<BaseXResource> list(final BaseXSource source, final String path) throws IOException {
-        final String result = Token.string(request(getQuery("list-" + source), PATH, path));
-        final ArrayList<BaseXResource> list = new ArrayList<>();
-        if (!result.isEmpty()) {
-            final String[] results = result.split("\r?\n");
-            for (int r = 0, rl = results.length; r < rl; r += 2) {
-                list.add(new BaseXResource(results[r + 1], BaseXType.get(results[r]), source));
-            }
-        }
+    public List<Resource> list(final BaseXSource source, final String path) throws IOException {
+        logger.info("list " + source + " [" +  path + "]");
+        final ObjectMapper mapper = new ObjectMapper();
+        logger.info("before request");
+        final byte[] request = request("list/" + path);
+        final List<Resource> list = Arrays.asList(mapper.readValue(request, Resource[].class));
+//        final String result = Token.string(request);
+//        final ArrayList<BaseXResource> list = new ArrayList<>();
+//        if (!result.isEmpty()) {
+//            final String[] results = result.split("\r?\n");
+//            for (int r = 0, rl = results.length; r < rl; r += 2) {
+//                list.add(new BaseXResource(results[r + 1], BaseXType.get(results[r]), source));
+//            }
+//        }
         return list;
     }
 
     @Override
     public List<BaseXResource> listAll(final BaseXSource source, final String path) throws IOException {
+        logger.info("listAll " + source + " [" +  path + "]");
         final String result = Token.string(request(getQuery("listall-" + source), PATH, path));
         final ArrayList<BaseXResource> list = new ArrayList<>();
         if (!result.isEmpty()) {
             final String[] results = result.split("\r?\n");
             for (int r = 0, rl = results.length; r < rl; r += 2) {
-                list.add(new BaseXResource(results[r + 1], BaseXType.get(results[r]), source));
+                list.add(new BaseXResource(results[r + 1], BaseXType.valueOf(results[r]), source));
             }
         }
         return list;
@@ -85,7 +92,8 @@ public class RestConnection implements Connection {
 
     @Override
     public void init() throws IOException {
-        request(getQuery("init"), RESOURCE, prepare(getAPIResource(ArgonConst.META_TEMPLATE).getBytes("UTF-8"), false));
+        logger.info("init");
+//        request(getQuery("init"), RESOURCE, prepare(getAPIResource(ArgonConst.META_TEMPLATE).getBytes("UTF-8"), false));
     }
 
     @Override
@@ -102,12 +110,9 @@ public class RestConnection implements Connection {
 
     @Override
     public byte[] get(final BaseXSource source, final String inPath, boolean export) throws IOException {
-        String path;
-        if (inPath.startsWith("/"))
-            path = inPath.substring(1);
-        else
-            path = inPath;
-        return request(getQuery("get-" + source), PATH, path);
+        final String path = inPath.startsWith("/") ? inPath.substring(1) : inPath;
+//        return request(getQuery("get-" + source), PATH, path);
+        return request("file/" + path);
     }
 
     @Override
@@ -163,20 +168,21 @@ public class RestConnection implements Connection {
 
     @Override
     public List<VersionHistoryEntry> getHistory(final String path) throws IOException {
-        final String result = Token.string(request(getQuery("get-history"), PATH, path));
+        // FIXME
+//        final String result = Token.string(request(getQuery("get-history"), PATH, path));
         final ArrayList<VersionHistoryEntry> list = new ArrayList<>();
-        if (!result.isEmpty()) {
-            DateFormat format = new SimpleDateFormat(ArgonConst.DATE_FORMAT);
-            final String[] results = result.split("\r?\n");
-            for (int r = 0, rl = results.length; r < rl; r += 4) {
-                try {
-                    list.add(new VersionHistoryEntry(new URL(results[r]), Integer.parseInt(results[r + 1]),
-                            Integer.parseInt(results[r + 2]), format.parse(results[r + 3])));
-                } catch (ParseException pe) {
-                    throw new IOException(pe.getMessage());
-                }
-            }
-        }
+//        if (!result.isEmpty()) {
+//            DateFormat format = new SimpleDateFormat(ArgonConst.DATE_FORMAT);
+//            final String[] results = result.split("\r?\n");
+//            for (int r = 0, rl = results.length; r < rl; r += 4) {
+//                try {
+//                    list.add(new VersionHistoryEntry(new URL(results[r]), Integer.parseInt(results[r + 1]),
+//                            Integer.parseInt(results[r + 2]), format.parse(results[r + 3])));
+//                } catch (ParseException pe) {
+//                    throw new IOException(pe.getMessage());
+//                }
+//            }
+//        }
         return list;
     }
 
@@ -202,14 +208,18 @@ public class RestConnection implements Connection {
 
     @Override
     public boolean locked(final BaseXSource source, final String path) throws IOException {
-        final byte[] result = request(getQuery("locked"), SOURCE, source.toString(), PATH, path);
-        return Token.string(result).equals("true");
+        // FIXME
+//        final byte[] result = request(getQuery("locked"), SOURCE, source.toString(), PATH, path);
+//        return Token.string(result).equals("true");
+        return false;
     }
 
     @Override
     public boolean lockedByUser(final BaseXSource source, final String path) throws IOException {
-        final byte[] result = request(getQuery("lockedByUser"), SOURCE, source.toString(), PATH, path);
-        return Token.string(result).equals("true");
+        // FIXME
+//        final byte[] result = request(getQuery("lockedByUser"), SOURCE, source.toString(), PATH, path);
+//        return Token.string(result).equals("true");
+        return false;
     }
 
     @Override
@@ -233,32 +243,69 @@ public class RestConnection implements Connection {
      * @throws IOException I/O exception
      */
     protected byte[] request(final String body, final String... bindings) throws IOException {
+        logger.info("request " + body.split("\n")[0] + " " + String.join(",", bindings));
+        final StringWriter buf = new StringWriter();
+        new UnsupportedOperationException().printStackTrace(new PrintWriter(buf));
+        logger.error(buf);
+        if (true) return new byte[]{};
         final HttpURLConnection conn = ConnectionUtils.getConnection(url);
         try {
             conn.setRequestProperty("Authorization", basicAuth);
             conn.setDoOutput(true);
+            conn.setDoInput(false);
             conn.setAllowUserInteraction(false);
-            conn.setRequestMethod(POST.name());
-            conn.setRequestProperty(HttpText.CONTENT_TYPE, MediaType.APPLICATION_XML.toString());
+//            conn.setRequestMethod(POST.name());
+            conn.setRequestMethod(GET.name());
+//            conn.setRequestProperty(HttpText.CONTENT_TYPE, MediaType.APPLICATION_XML.toString());
 
             // build and send query
-            final TokenBuilder tb = new TokenBuilder();
-            tb.add("<query xmlns='http://basex.org/rest'>\n");
-            tb.add("<text>").add(toEntities(body)).add("</text>\n");
-            for (int b = 0, bl = bindings.length; b < bl; b += 2) {
-                tb.add("<variable name='").add(bindings[b]).add("' value='");
-                tb.add(toEntities(bindings[b + 1])).add("'/>\n");
-            }
-            tb.add("</query>");
-            try (final OutputStream out = conn.getOutputStream()) {
-                out.write(tb.finish());
-                out.close();
-            }
+//            final TokenBuilder tb = new TokenBuilder();
+//            tb.add("<query xmlns='http://basex.org/rest'>\n");
+//            tb.add("<text>").add(toEntities(body)).add("</text>\n");
+//            for (int b = 0, bl = bindings.length; b < bl; b += 2) {
+//                tb.add("<variable name='").add(bindings[b]).add("' value='");
+//                tb.add(toEntities(bindings[b + 1])).add("'/>\n");
+//            }
+//            tb.add("</query>");
+//            try (final OutputStream out = conn.getOutputStream()) {
+//                out.write(tb.finish());
+//                out.close();
+//            }
             return new IOStream(conn.getInputStream()).read();
         } catch (final IOException ex) {
             logger.debug("Connection failed to set query: ", ex.getMessage());
             final String msg = Token.string(new IOStream(conn.getErrorStream()).read());
             throw BaseXQueryException.get(msg);
+        } finally {
+            conn.disconnect();
+        }
+    }
+
+    /**
+     * Executes the specified HTTP request and returns the result.
+     *
+     * @return string result, or {@code null} for a failure.
+     * @throws IOException I/O exception
+     */
+    protected byte[] request(final String path) throws IOException {
+        try {
+            logger.info(url + " " + path + " -> " + url.toURI().resolve(path).toURL());
+        } catch (URISyntaxException e) {
+            e.printStackTrace();
+        }
+        HttpURLConnection conn = null;
+        try {
+            conn = ConnectionUtils.getConnection(url.toURI().resolve(path).toURL());
+            conn.setRequestProperty("Authorization", basicAuth);
+            conn.setAllowUserInteraction(false);
+            conn.setRequestMethod(GET.name());
+            return new IOStream(conn.getInputStream()).read();
+        } catch (final IOException ex) {
+            logger.debug("Connection failed to set query: ", ex.getMessage());
+            final String msg = Token.string(new IOStream(conn.getErrorStream()).read());
+            throw BaseXQueryException.get(msg);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(path);
         } finally {
             conn.disconnect();
         }
