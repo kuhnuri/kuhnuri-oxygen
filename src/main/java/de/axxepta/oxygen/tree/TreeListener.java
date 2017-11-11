@@ -28,6 +28,7 @@ import java.awt.event.*;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -41,7 +42,7 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
     private static final PluginWorkspace workspace = PluginWorkspaceProvider.getPluginWorkspace();
 
     private ArgonTree tree;
-    private TreeModel treeModel;
+    private DefaultTreeModel treeModel;
     private TreePath path;
     private TreeNode node;
     private boolean showErrorMessages = true;
@@ -53,10 +54,10 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
 
     public TreeListener(ArgonTree tree, TreeModel treeModel, ArgonPopupMenu contextMenu) {
         this.tree = tree;
-        this.treeModel = treeModel;
+        this.treeModel = (DefaultTreeModel) treeModel;
         this.newExpandEvent = true;
         this.contextMenu = contextMenu;
-        ActionListener actionListener = e -> {
+        final ActionListener actionListener = e -> {
             timer.stop();
             if (singleClick) {
                 singleClickHandler(e);
@@ -68,7 +69,7 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
                 }
             }
         };
-        int doubleClickDelay = 300;
+        final int doubleClickDelay = 300;
         timer = new javax.swing.Timer(doubleClickDelay, actionListener);
         timer.setRepeats(false);
     }
@@ -92,15 +93,20 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        logger.info("mouseReleased " + e.toString());
         path = tree.getPathForLocation(e.getX(), e.getY());
+        logger.info("  path " + path);
         try {
-            if (path != null)
+            if (path != null) {
+                logger.info("  node " + node);
                 node = (TreeNode) path.getLastPathComponent();
+            }
         } catch (NullPointerException er) {
             er.printStackTrace();
         }
-        if (e.isPopupTrigger())
+        if (e.isPopupTrigger()) {
             contextMenu.show(e.getComponent(), e.getX(), e.getY(), path);
+        }
     }
 
 
@@ -121,23 +127,27 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
 
     @Override
     public void treeWillExpand(TreeExpansionEvent event) throws ExpandVetoException {
+        logger.info("treeWillExpand "/* + event*/);
         // method is called twice, if new data is loaded--prevent database check in 2nd call
-        boolean newTreeExpandEvent = this.newExpandEvent;
-
+        final boolean newTreeExpandEvent = this.newExpandEvent;
+        logger.info("   newTreeExpandEvent " + newTreeExpandEvent);
         path = event.getPath();
+        logger.info("  path " + path);
         node = (TreeNode) path.getLastPathComponent();
+        logger.info("  node " + node);
         int depth = path.getPathCount();
-
+        logger.info("  depth " + depth);
+        logger.info("  " + (depth > 1) + " && " + node.getAllowsChildren() + " && " + this.newExpandEvent);
         if (depth > 1 && node.getAllowsChildren() && this.newExpandEvent) {
-            BaseXSource source = TreeUtils.sourceFromTreePath(path);
-
+            final BaseXSource source = TreeUtils.sourceFromTreePath(path);
+            logger.info("  source " + source);
             String db_path;
-            if (depth > 2)      // get path in source
-            {
+            if (depth > 2) {    // get path in source
                 db_path = (((String) ((ArgonTreeNode) node).getTag()).split(":/*"))[1] + "/";
             } else {
                 db_path = "";
             }
+            logger.info("  db_path " + db_path);
 
             List<Resource> childList;
             try {
@@ -153,16 +163,33 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
                     workspace.showInformationMessage(Lang.get(Lang.Keys.warn_failedlist) + "\n" + error);
                 }
             }
-            final List<String> newValues = childList.stream()
-                    .map(child -> child.name)
-                    .collect(Collectors.toList());
-            if (updateExpandedNode(node, childList, newValues)) {
+
+            if (updateExpandedNode((MutableTreeNode) node, childList)) {
+                logger.info("  newExpandEvent = false");
                 this.newExpandEvent = false;
+                printTree(tree);
                 tree.expandPath(path);
             }
 
         }
-        if (!newTreeExpandEvent) this.newExpandEvent = true;
+        if (!newTreeExpandEvent) {
+            logger.info("  newExpandEvent = true");
+            this.newExpandEvent = true;
+        }
+        logger.info("   newTreeExpandEvent " + newTreeExpandEvent);
+    }
+
+    private void printTree(ArgonTree tree) {
+        logger.info("printTree");
+        logger.info("  rowCount " + tree.getRowCount());
+        printTreeNode((DefaultMutableTreeNode) tree.getModel().getRoot(), "  ");
+    }
+
+    private void printTreeNode(DefaultMutableTreeNode node, String indent) {
+        logger.info(indent + " * " + node.toString() + " {level=" + node.getLevel() + " depth=" + node.getDepth() + " }");
+        for (int i = 0; i < node.getChildCount(); i++) {
+            printTreeNode((DefaultMutableTreeNode) node.getChildAt(i), indent + "  ");
+        }
     }
 
     @Override
@@ -207,7 +234,6 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
         WorkspaceUtils.openURLString(dbPath);
     }
 
-
     /*
      * method for interface Observer
      */
@@ -244,7 +270,7 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
                     if (TreeUtils.isNodeAsStrChild(currNode, path[i]) == -1) {
                         isFile = (i + 1 == path.length) && type.equals("SAVE_FILE");
                         TreeUtils.insertStrAsNodeLexi(treeModel, path[i], (DefaultMutableTreeNode) currNode, isFile);
-                        ((DefaultTreeModel) treeModel).reload(currNode);
+                        treeModel.reload(currNode);
                     }
                     currPath = TreeUtils.pathByAddingChildAsStr(currPath, path[i]);
                     currNode = (DefaultMutableTreeNode) currPath.getLastPathComponent();
@@ -255,7 +281,6 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
         }
     }
 
-
     /*
      * other methods
      */
@@ -264,45 +289,61 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
         doubleClickExpandEnabled = expand;
     }
 
-    private boolean updateExpandedNode(TreeNode node, List<Resource> newChildrenList, List<String> childrenValues) {
+    private boolean updateExpandedNode(MutableTreeNode node, List<Resource> newChildrenList) {
+        logger.info("updateExpandedNode");
+        final Set<String> childrenValues = newChildrenList.stream()
+                .map(child -> child.name)
+                .collect(Collectors.toSet());
+
         DefaultMutableTreeNode newChild;
-        List<String> oldChildren = new ArrayList<>();
+        final List<String> oldChildren = new ArrayList<>();
         String oldChild;
         boolean treeChanged = false;
 
         // check whether old children are in new list and vice versa
         if (node.getChildCount() > 0) {
+            logger.info("  find old nodes");
             boolean[] inNewList = new boolean[node.getChildCount()];
             if (newChildrenList.size() > 0) {
                 for (int i = 0; i < node.getChildCount(); i++) {
-                    DefaultMutableTreeNode currNode = (DefaultMutableTreeNode) node.getChildAt(i);
+                    final DefaultMutableTreeNode currNode = (DefaultMutableTreeNode) node.getChildAt(i);
                     oldChild = currNode.getUserObject().toString();
                     oldChildren.add(oldChild);
-                    if (childrenValues.contains(oldChild))
+                    if (childrenValues.contains(oldChild)) {
+                        logger.info("  found old child " + oldChild);
                         inNewList[i] = true;
+                    }
                 }
             }
             for (int i = node.getChildCount() - 1; i > -1; i--) {
                 if (!inNewList[i]) {
-                    ((DefaultTreeModel) treeModel).removeNodeFromParent((MutableTreeNode) node.getChildAt(i));
-                    ((DefaultTreeModel) treeModel).nodeChanged(node);
+                    logger.info("  remove node " + i);
+                    treeModel.removeNodeFromParent((MutableTreeNode) node.getChildAt(i));
+                    treeModel.nodeChanged(node);
                     treeChanged = true;
                 }
             }
         }
+        logger.info("updateExpandedNode node.getChildCount() == " + node.getChildCount());
         if (node.getChildCount() == 0) {  // if old list was empty skip lexicographic insert (faster)
+            logger.info("  no old children");
             for (Resource newPossibleChild : newChildrenList) {
-                newChild = ClassFactory.getInstance().getTreeNode(newPossibleChild.name,
-                        ((ArgonTreeNode) node).getTag().toString() + "/" + newPossibleChild.name);
-                newChild.setAllowsChildren(newPossibleChild.type.equals(BaseXType.DIRECTORY));
-                ((DefaultTreeModel) treeModel).insertNodeInto(newChild, (MutableTreeNode) node, node.getChildCount());
+                final String url = ((ArgonTreeNode) node).getTag().toString() + "/" + newPossibleChild.name;
+                logger.info("  adding " + newPossibleChild + " " + url);
+                newChild = ClassFactory.getInstance().getTreeNode(newPossibleChild.name, url);
+                newChild.setAllowsChildren(newPossibleChild.type == BaseXType.DIRECTORY);
+                logger.info("  insert " + newChild + " " + node.getChildCount());
+                treeModel.insertNodeInto(newChild, node, node.getChildCount());
+                logger.info("  after " + node.getChildCount());
                 treeChanged = true;
             }
         } else {
+            logger.info("  has old children");
             for (Resource newPossibleChild : newChildrenList) {
+                logger.info("  adding " + newPossibleChild);
                 if (!oldChildren.contains(newPossibleChild.name)) {
                     TreeUtils.insertStrAsNodeLexi(treeModel, newPossibleChild.name, (DefaultMutableTreeNode) node,
-                            !(newPossibleChild.type.equals(BaseXType.DIRECTORY)));
+                            newPossibleChild.type != BaseXType.DIRECTORY);
                     treeChanged = true;
                 }
             }
@@ -337,11 +378,11 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
             case KeyEvent.VK_F5:
                 new RefreshTreeAction(tree).actionPerformed(null);
                 break;
-            // if URL raises exception, just ignore
             case KeyEvent.VK_ENTER:
                 try {
                     doubleClickHandler(null);
                 } catch (ParseException pe) {
+                    // if URL raises exc    eption, just ignore
                 }
                 break;
             case KeyEvent.VK_INSERT:

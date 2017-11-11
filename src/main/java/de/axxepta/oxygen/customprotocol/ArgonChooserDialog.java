@@ -224,35 +224,36 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
     public static String getResourceString(List<ArgonChooserListModel.Element> path) {
         StringBuilder resourceString = new StringBuilder("");
         for (int i = 1; i < path.size(); i++) {
-            if (i != 1)
+            if (i != 1) {
                 resourceString.append("/");
+            }
             resourceString.append(path.get(i).getName());
         }
         return resourceString.toString();
     }
 
     private void buildSelectionString() {
-        if (depth == 0)
+        if (depth == 0) {
             pathString = "";
-        else
+        } else {
             pathString = CustomProtocolURLHandlerExtension.protocolFromSource(getSourceFromElement(path.get(0))) +
                     ":" + getResourceString(path) + "/" + selectedFileTextField.getText();
+        }
         pathString = pathString.replace(":/", ":");
     }
 
     private List<ArgonChooserListModel.Element> obtainNewList(BaseXSource source, String path) {
-        List<ArgonChooserListModel.Element> newList = new ArrayList<>();
+        final List<ArgonChooserListModel.Element> newList = new ArrayList<>();
         newList.add(new ArgonChooserListModel.Element(ArgonEntity.ROOT, ".."));
         try {
-            List<Resource> resourceList = ConnectionWrapper.list(source, path);
+            final List<Resource> resourceList = ConnectionWrapper.list(source, path);
             for (Resource resource : resourceList) {
-                if ((depth == 1) && (this.path.get(0).getType().equals(ArgonEntity.DB_BASE))) {
+                if (depth == 1 && this.path.get(0).getType() == ArgonEntity.DB_BASE) {
                     newList.add(new ArgonChooserListModel.Element(ArgonEntity.DB, resource.name));
-                } else if (resource.type.equals(BaseXType.DIRECTORY)) {
+                } else if (resource.type == BaseXType.DIRECTORY) {
                     newList.add(new ArgonChooserListModel.Element(ArgonEntity.DIR, resource.name));
-                } else {
+                } else
                     newList.add(new ArgonChooserListModel.Element(ArgonEntity.FILE, resource.name));
-                }
             }
         } catch (IOException ioe) {
             PluginWorkspaceProvider.getPluginWorkspace().showErrorMessage("YYY " + Lang.get(Lang.Keys.warn_failedlist) + " " +
@@ -265,7 +266,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
         List<ArgonChooserListModel.Element> list = new ArrayList<>();
         list.add(new ArgonChooserListModel.Element(ArgonEntity.DB_BASE, Lang.get(Lang.Keys.tree_DB)));
 //        list.add(new ArgonChooserListModel.Element(ArgonEntity.XQ, Lang.get(Lang.Keys.tree_restxq)));
-//        list.add(new ArgonChooserListModel.Element(ArgonEntity.REPO, Lang.get(Lang.Keys.tree_repo)));
+        list.add(new ArgonChooserListModel.Element(ArgonEntity.REPO, Lang.get(Lang.Keys.tree_repo)));
         return list;
     }
 

@@ -16,8 +16,7 @@ public class ArgonTree extends Tree {
 
     public ArgonTree(final TreeModel root) {
         super(root);
-        // Use our custom cell renderer.
-        this.setCellRenderer(ClassFactory.getInstance().getTreeCellRenderer());
+        setCellRenderer(ClassFactory.getInstance().getTreeCellRenderer());
     }
 
 }

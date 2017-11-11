@@ -15,6 +15,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 import java.util.List;
 
+import static de.axxepta.oxygen.tree.TreeUtils.DEPTH_DB;
+
 /**
  * @author Markus on 27.10.2016.
  */
@@ -43,13 +45,13 @@ class ArgonTreeTransferable implements Transferable {
     @Override
     public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
         if (flavor.equals(treePathFlavor)) {
-            if ((path.getPathCount() < 3) || TreeUtils.isDB(path)) {
+            if ((path.getPathCount() < DEPTH_DB) || TreeUtils.isDB(path)) {
                 throw new IOException("Drag error: Cannot copy/move databases or root branches.");
             }
             return path;
         }
         if (flavor.equals(uriListFlavor)) {
-            if ((path.getPathCount() < 3) || TreeUtils.isDB(path)) {
+            if ((path.getPathCount() < DEPTH_DB) || TreeUtils.isDB(path)) {
                 throw new IOException("Drag error: Cannot open databases or root branches.");
             }
             return getURIList();

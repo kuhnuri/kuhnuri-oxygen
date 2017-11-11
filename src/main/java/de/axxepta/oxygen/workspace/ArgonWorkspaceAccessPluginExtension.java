@@ -29,14 +29,14 @@ public class ArgonWorkspaceAccessPluginExtension implements WorkspaceAccessPlugi
 
     @java.lang.Override
     public void applicationStarted(final StandalonePluginWorkspace wsa) {
-
         wsa.setGlobalObjectProperty("can.edit.read.only.files", Boolean.FALSE);
 
         // init language pack
-        if (wsa.getUserInterfaceLanguage().equals("de_DE"))
+        if (wsa.getUserInterfaceLanguage().equals("de_DE")) {
             Lang.init(Locale.GERMAN);
-        else
+        } else {
             Lang.init(Locale.UK);
+        }
 
         // init icon map
         ImageUtils.init();
@@ -90,14 +90,9 @@ public class ArgonWorkspaceAccessPluginExtension implements WorkspaceAccessPlugi
         replyCommentButton.setText("");
     }
 
-
     private class BaseXViewComponentCustomizer implements ViewComponentCustomizer {
-        /**
-         * @see ro.sync.exml.workspace.api.standalone.ViewComponentCustomizer#customizeView(ro.sync.exml.workspace.api.standalone.ViewInfo)
-         */
         @Override
         public void customizeView(ViewInfo viewInfo) {
-
             if ("ArgonWorkspaceAccessID".equals(viewInfo.getViewID())) {
                 //The view ID defined in the "plugin.xml"
                 viewInfo.setComponent(new TreePane());

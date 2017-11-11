@@ -74,15 +74,15 @@ public class SearchInPathAction extends AbstractAction {
                     }
                     source = BaseXSource.DATABASE;
                     break;
-                case "Query Folder":
-                    search_type = SEARCH_XQ;
-                    if (path.getPathCount() == 2) {
-                        pathStr = path.getPathComponent(1).toString();
-                    } else {
-                        pathStr = ArgonConst.ARGON_XQ + ":" + TreeUtils.resourceFromTreePath(path);
-                    }
-                    source = BaseXSource.RESTXQ;
-                    break;
+//                case "Query Folder":
+//                    search_type = SEARCH_XQ;
+//                    if (path.getPathCount() == 2) {
+//                        pathStr = path.getPathComponent(1).toString();
+//                    } else {
+//                        pathStr = ArgonConst.ARGON_XQ + ":" + TreeUtils.resourceFromTreePath(path);
+//                    }
+//                    source = BaseXSource.RESTXQ;
+//                    break;
                 default:
                     search_type = SEARCH_REPO;
                     if (path.getPathCount() == 2) {
@@ -154,8 +154,8 @@ public class SearchInPathAction extends AbstractAction {
         List<String> filterExlucdeDBs = new ArrayList(Arrays.asList(filterExcludeOption.split("\\s*(;|,|\\s)\\s*")));
         switch (type) {
             case SEARCH_ALL: {
-//                TreePath currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_repo));
-//                allResources.addAll(searchResourcesInPath(BaseXSource.REPO, currentPath, filter, caseSensitive));
+                TreePath currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_repo));
+                allResources.addAll(searchResourcesInPath(BaseXSource.REPO, currentPath, filter, caseSensitive));
 //                currentPath = TreeUtils.pathByAddingChildAsStr(rootPath, Lang.get(Lang.Keys.tree_restxq));
 //                allResources.addAll(searchResourcesInPath(BaseXSource.RESTXQ, currentPath, filter, caseSensitive));
             }

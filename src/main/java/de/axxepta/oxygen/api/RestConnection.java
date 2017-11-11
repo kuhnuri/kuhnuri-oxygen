@@ -8,7 +8,9 @@ import org.basex.io.IOStream;
 import org.basex.util.Base64;
 import org.basex.util.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.basex.util.http.HttpMethod;
 
+import javax.ws.rs.PUT;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
@@ -62,9 +64,9 @@ public class RestConnection implements Connection {
     public List<Resource> list(final BaseXSource source, final String path) throws IOException {
         logger.info("list " + source + " [" +  path + "]");
         final ObjectMapper mapper = new ObjectMapper();
-        logger.info("before request");
         final byte[] request = request("list/" + path);
-        final List<Resource> list = Arrays.asList(mapper.readValue(request, Resource[].class));
+//        final List<Resource> list = Arrays.asList(mapper.readValue(request, Resource[].class));
+        final List<Resource> list = mapper.readValue(request, Resource.class).children;
 //        final String result = Token.string(request);
 //        final ArrayList<BaseXResource> list = new ArrayList<>();
 //        if (!result.isEmpty()) {
@@ -198,20 +200,21 @@ public class RestConnection implements Connection {
 
     @Override
     public void lock(final BaseXSource source, final String path) throws IOException {
-        request(getQuery("lock"), SOURCE, source.toString(), PATH, path);
+//        request(getQuery("lock"), SOURCE, source.toString(), PATH, path);
+        request("lock/" + path, HttpMethod.PUT);
     }
 
     @Override
     public void unlock(final BaseXSource source, final String path) throws IOException {
-        request(getQuery("unlock"), SOURCE, source.toString(), PATH, path);
+//        request(getQuery("unlock"), SOURCE, source.toString(), PATH, path);
+        request("lock/" + path, HttpMethod.DELETE);
     }
 
     @Override
     public boolean locked(final BaseXSource source, final String path) throws IOException {
-        // FIXME
-//        final byte[] result = request(getQuery("locked"), SOURCE, source.toString(), PATH, path);
-//        return Token.string(result).equals("true");
-        return false;
+        final ObjectMapper mapper = new ObjectMapper();
+        final byte[] request = request("list/" + path);
+        return mapper.readValue(request, Resource.class).locked;
     }
 
     @Override
@@ -288,8 +291,20 @@ public class RestConnection implements Connection {
      * @throws IOException I/O exception
      */
     protected byte[] request(final String path) throws IOException {
+        return request(path, GET);
+    }
+
+    /**
+     * Executes the specified HTTP request and returns the result.
+     *
+     * @return string result, or {@code null} for a failure.
+     * @throws IOException I/O exception
+     */
+    protected byte[] request(final String path, final HttpMethod method) throws IOException {
         try {
-            logger.info(url + " " + path + " -> " + url.toURI().resolve(path).toURL());
+            logger.info(method.name() + " "
+//                    + url + " " + path + " -> "
+                    + url.toURI().resolve(path).toURL());
         } catch (URISyntaxException e) {
             e.printStackTrace();
         }
@@ -298,7 +313,7 @@ public class RestConnection implements Connection {
             conn = ConnectionUtils.getConnection(url.toURI().resolve(path).toURL());
             conn.setRequestProperty("Authorization", basicAuth);
             conn.setAllowUserInteraction(false);
-            conn.setRequestMethod(GET.name());
+            conn.setRequestMethod(method.name());
             return new IOStream(conn.getInputStream()).read();
         } catch (final IOException ex) {
             logger.debug("Connection failed to set query: ", ex.getMessage());

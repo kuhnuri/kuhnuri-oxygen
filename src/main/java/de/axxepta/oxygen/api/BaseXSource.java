@@ -12,10 +12,10 @@ public enum BaseXSource {
      * Database.
      */
     DATABASE,
-    /**
-     * RESTXQ.
-     */
-    RESTXQ,
+//    /**
+//     * RESTXQ.
+//     */
+//    RESTXQ,
     /**
      * Repository.
      */

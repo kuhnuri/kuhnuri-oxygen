@@ -93,7 +93,8 @@ public class ImageUtils {
         iconMap.put("sql", ro.sync.ui.Icons.getIcon(Icons.SQL_TEMPLATE));
         iconMap.put("php", ro.sync.ui.Icons.getIcon(Icons.PHP_TEMPLATE));
         iconMap.put("xspec", ro.sync.ui.Icons.getIcon(Icons.XSPEC_TEMPLATE));
-        iconMap.put("tpl", ImageUtils.createImageIcon("/images/TPL16.png"));
+//        iconMap.put("tpl", ImageUtils.createImageIcon("/images/TPL16.png"));
+        iconMap.put("tpl", ImageUtils.createImageIcon("/images/FolderClosed16.png"));
         iconMap.put("file", ImageUtils.createImageIcon("/images/file16.png"));
         iconMap.put(DB_CONNECTION, ImageUtils.createImageIcon("/images/DbConnection16.gif"));
         iconMap.put(DB_CATALOG, ImageUtils.createImageIcon("/images/DbCatalog16.gif"));

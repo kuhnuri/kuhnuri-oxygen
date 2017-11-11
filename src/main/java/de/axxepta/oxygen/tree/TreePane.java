@@ -132,10 +132,11 @@ public class TreePane extends JPanel {
             TreePath pathToChild = path.pathByAddingChild(child);
             setTreeState(tree, pathToChild, expanded);
         }
-        if (expanded)
+        if (expanded) {
             tree.expandPath(path);
-        else
+        } else {
             tree.collapsePath(path);
+        }
     }
 
     private class SearchAction extends AbstractAction {

@@ -39,9 +39,9 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
             case ArgonConst.ARGON:
                 handler = new ArgonProtocolHandler(BaseXSource.DATABASE);
                 return handler;
-            case ArgonConst.ARGON_XQ:
-                handler = new ArgonProtocolHandler(BaseXSource.RESTXQ);
-                return handler;
+//            case ArgonConst.ARGON_XQ:
+//                handler = new ArgonProtocolHandler(BaseXSource.RESTXQ);
+//                return handler;
             case ArgonConst.ARGON_REPO:
                 handler = new ArgonProtocolHandler(BaseXSource.REPO);
                 return handler;
@@ -114,17 +114,18 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
 
     public static String pathFromURLString(String urlString) {
         String[] urlComponents = urlString.split(":/*");
-        if (urlComponents.length < 2)
+        if (urlComponents.length < 2) {
             return "";
             // ToDo: exception handling
-        else
+        } else {
             return urlComponents[1];
+        }
     }
 
     public static String protocolFromSource(BaseXSource source) {
         switch (source) {
-            case RESTXQ:
-                return ArgonConst.ARGON_XQ;
+//            case RESTXQ:
+//                return ArgonConst.ARGON_XQ;
             case REPO:
                 return ArgonConst.ARGON_REPO;
             default:
@@ -134,10 +135,12 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
 
     public static String protocolFromURL(URL url) {
         String urlString = url.toString().toLowerCase();
-        if (urlString.startsWith(ArgonConst.ARGON_XQ))
+        if (urlString.startsWith(ArgonConst.ARGON_XQ)) {
             return ArgonConst.ARGON_XQ;
-        if (urlString.startsWith(ArgonConst.ARGON_REPO))
+        }
+        if (urlString.startsWith(ArgonConst.ARGON_REPO)) {
             return ArgonConst.ARGON_REPO;
+        }
         return ArgonConst.ARGON;
     }
 
@@ -149,13 +152,14 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
     public static BaseXSource sourceFromURLString(String urlString) {
         String protocol;
         int ind1 = urlString.indexOf(":");
-        if (ind1 == -1)     // no proper URL string, but used someplace
+        if (ind1 == -1) {    // no proper URL string, but used someplace
             protocol = urlString;
-        else
+        } else {
             protocol = urlString.substring(0, ind1);
+        }
         switch (protocol) {
-            case ArgonConst.ARGON_XQ:
-                return BaseXSource.RESTXQ;
+//            case ArgonConst.ARGON_XQ:
+//                return BaseXSource.RESTXQ;
             case ArgonConst.ARGON_REPO:
                 return BaseXSource.REPO;
             case ArgonConst.ARGON:
