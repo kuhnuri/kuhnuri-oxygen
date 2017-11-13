@@ -211,13 +211,12 @@ public final class ConnectionWrapper {
     }
 
     public static boolean isLockedByUser(BaseXSource source, String path) {
-        boolean isLockedByUser = false;
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
-            isLockedByUser = connection.lockedByUser(source, path);
+            return connection.lockedByUser(source, path);
         } catch (Throwable ioe) {
             logger.debug(ioe);
         }
-        return isLockedByUser;
+        return false;
     }
 
     public static void lock(BaseXSource source, String path) {

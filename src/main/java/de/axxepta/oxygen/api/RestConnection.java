@@ -2,6 +2,15 @@ package de.axxepta.oxygen.api;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import de.axxepta.oxygen.versioncontrol.VersionHistoryEntry;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.basex.io.IOStream;
@@ -11,19 +20,15 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.basex.util.http.HttpMethod;
 
 import javax.ws.rs.PUT;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URISyntaxException;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 import static de.axxepta.oxygen.api.ConnectionUtils.*;
 import static org.basex.util.http.HttpMethod.GET;
@@ -38,6 +43,7 @@ public class RestConnection implements Connection {
      * URI.
      */
     protected final URL url;
+    protected final URI uri;
     protected final String basicAuth;
     private static final Logger logger = LogManager.getLogger(RestConnection.class);
 
@@ -53,6 +59,11 @@ public class RestConnection implements Connection {
                           final String password) throws MalformedURLException {
         basicAuth = "Basic " + Base64.encode(user + ':' + password);
         url = new URL("http://" + user + ":" + password + "@" + server);
+        try {
+            uri = url.toURI();
+        } catch (URISyntaxException e) {
+            throw new MalformedURLException(e.getMessage());
+        }
     }
 
     @Override
@@ -201,28 +212,92 @@ public class RestConnection implements Connection {
     @Override
     public void lock(final BaseXSource source, final String path) throws IOException {
 //        request(getQuery("lock"), SOURCE, source.toString(), PATH, path);
-        request("lock/" + path, HttpMethod.PUT);
+        final String action = "lock";
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            final HttpPut putRequest = new HttpPut(uri.resolve(action + "/" + path));
+            logger.info("Lock " + putRequest.getURI());
+            final HttpResponse response = httpClient.execute(putRequest);
+            if (response.getStatusLine().getStatusCode() == 200) { // 204
+                logger.info("Locking successful");
+            } else {
+                logger.info("Locking failed");
+                final HttpEntity entity = response.getEntity();
+//                try (InputStream error = entity.getContent()) {
+//                    final ObjectMapper mapper = new ObjectMapper();
+//                    mapper.readValue(error, Map.class);
+//                    throw new IOException("Got " + response.getStatusLine().getStatusCode());
+//                }
+                try (BufferedReader error = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+                    error.lines().forEach(line -> logger.error(line));
+                }
+            }
+//            request("lock/" + path, HttpMethod.PUT);
+        }
     }
 
     @Override
     public void unlock(final BaseXSource source, final String path) throws IOException {
 //        request(getQuery("unlock"), SOURCE, source.toString(), PATH, path);
-        request("lock/" + path, HttpMethod.DELETE);
+        final String action = "lock";
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            final HttpDelete putRequest = new HttpDelete(uri.resolve(action + "/" + path));
+            logger.info("Unlock " + putRequest.getURI());
+            final HttpResponse response = httpClient.execute(putRequest);
+            if (response.getStatusLine().getStatusCode() == 200) { // 204
+                logger.info("Unlocking successful");
+            } else {
+                logger.info("Unlocking failed");
+                final HttpEntity entity = response.getEntity();
+//                try (InputStream error = entity.getContent()) {
+//                    final ObjectMapper mapper = new ObjectMapper();
+//                    mapper.readValue(error, Map.class);
+//                    throw new IOException("Got " + response.getStatusLine().getStatusCode());
+//                }
+                try (BufferedReader error = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+                    error.lines().forEach(line -> logger.error(line));
+                }
+            }
+        }
+//        request("lock/" + path, HttpMethod.DELETE);
     }
 
     @Override
     public boolean locked(final BaseXSource source, final String path) throws IOException {
-        final ObjectMapper mapper = new ObjectMapper();
-        final byte[] request = request("list/" + path);
-        return mapper.readValue(request, Resource.class).locked;
+//        final ObjectMapper mapper = new ObjectMapper();
+//        final byte[] request = request("list/" + path);
+//        return mapper.readValue(request, Resource.class).locked;
+        return lockedByUser(source, path);
     }
 
     @Override
     public boolean lockedByUser(final BaseXSource source, final String path) throws IOException {
-        // FIXME
 //        final byte[] result = request(getQuery("lockedByUser"), SOURCE, source.toString(), PATH, path);
 //        return Token.string(result).equals("true");
-        return false;
+        final String action = "lock";
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            final HttpGet putRequest = new HttpGet(uri.resolve(action + "/" + path));
+            logger.info("Check lock " + putRequest.getURI());
+            final HttpResponse response = httpClient.execute(putRequest);
+            if (response.getStatusLine().getStatusCode() == 200) { // 204
+                logger.info("Found lock");
+                // FIXME this really should get info who has the lock
+//                try (InputStream error = entity.getContent()) {
+//                    final ObjectMapper mapper = new ObjectMapper();
+//                    mapper.readValue(error, Map.class);
+//                    throw new IOException("Got " + response.getStatusLine().getStatusCode());
+//                }
+                return true;
+            } else if (response.getStatusLine().getStatusCode() == 404) {
+                return false;
+            } else {
+                logger.info("Checking lock failed");
+                final HttpEntity entity = response.getEntity();
+                try (BufferedReader error = new BufferedReader(new InputStreamReader(entity.getContent()))) {
+                    error.lines().forEach(line -> logger.error(line));
+                }
+                return true;
+            }
+        }
     }
 
     @Override

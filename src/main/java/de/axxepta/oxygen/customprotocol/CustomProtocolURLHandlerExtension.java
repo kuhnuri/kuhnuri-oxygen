@@ -83,9 +83,10 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
      */
     public boolean canCheckReadOnly(String protocol) {
         //return false;
-        return (protocol.toLowerCase().equals(ArgonConst.ARGON) ||
-                protocol.toLowerCase().equals(ArgonConst.ARGON_XQ) ||
-                protocol.toLowerCase().equals(ArgonConst.ARGON_REPO));
+        return (protocol.toLowerCase().equals(ArgonConst.ARGON) //||
+//                protocol.toLowerCase().equals(ArgonConst.ARGON_XQ) ||
+//                protocol.toLowerCase().equals(ArgonConst.ARGON_REPO)
+        );
     }
 
     /**
@@ -97,9 +98,9 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
     }
 
     private static boolean isInHiddenDB(URL url) {
-        String path = pathFromURL(url);
-        int firstCharOfPath = (path.charAt(0) == '/') ? 1 : 0;
-        return (path.charAt(firstCharOfPath) == '~');
+        final String path = pathFromURL(url);
+        final int firstCharOfPath = path.charAt(0) == '/' ? 1 : 0;
+        return path.charAt(firstCharOfPath) == '~';
     }
 
     public static String pathFromURL(URL url) {
@@ -126,8 +127,8 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
         switch (source) {
 //            case RESTXQ:
 //                return ArgonConst.ARGON_XQ;
-            case REPO:
-                return ArgonConst.ARGON_REPO;
+//            case REPO:
+//                return ArgonConst.ARGON_REPO;
             default:
                 return ArgonConst.ARGON;
         }

@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
  */
 public class TreeUtils {
 
-
     private static final Logger logger = LogManager.getLogger(TreeUtils.class);
 
     static final int DEPTH_ROOT = 1;
@@ -235,13 +234,13 @@ public class TreeUtils {
     }
 
     public static boolean isFile(TreePath path) {
-        logger.info("isFile " + path);
+//        logger.info("isFile " + path);
         final DefaultMutableTreeNode node = (DefaultMutableTreeNode) path.getLastPathComponent();
         return (!node.getAllowsChildren());
     }
 
     public static boolean isDir(TreePath path) {
-        logger.info("isDir " + path);
+//        logger.info("isDir " + path);
         final DefaultMutableTreeNode clickedNode = (DefaultMutableTreeNode) path.getLastPathComponent();
         final int pathCount = path.getPathCount();
         return (clickedNode.getAllowsChildren() &&
@@ -252,14 +251,14 @@ public class TreeUtils {
     }
 
     public static boolean isDB(TreePath path) {
-        logger.info("isDB " + path);
+//        logger.info("isDB " + path);
         final int pathCount = path.getPathCount();
         return (pathCount == DEPTH_DB) &&
                 (path.getPathComponent(DEPTH_ROOT).toString().equals(Lang.get(Lang.Keys.tree_DB)));
     }
 
     public static boolean isInDB(TreePath path) {
-        logger.info("isInDB " + path);
+//        logger.info("isInDB " + path);
         final int pathCount = path.getPathCount();
         return (pathCount > DEPTH_DB) &&
                 (path.getPathComponent(DEPTH_ROOT).toString().equals(Lang.get(Lang.Keys.tree_DB)));
@@ -278,25 +277,25 @@ public class TreeUtils {
 //    }
 
     public static boolean isSource(TreePath path) {
-        logger.info("isSource " + path);
+//        logger.info("isSource " + path);
         final int pathCount = path.getPathCount();
         return (pathCount == DEPTH_SOURCE);
     }
 
     public static boolean isRoot(TreePath path) {
-        logger.info("isRoot " + path);
+//        logger.info("isRoot " + path);
         final int pathCount = path.getPathCount();
         return (pathCount == DEPTH_ROOT);
     }
 
     public static boolean isDbSource(TreePath path) {
-        logger.info("isDBSource " + path);
+//        logger.info("isDBSource " + path);
         final int pathCount = path.getPathCount();
         return ((pathCount == DEPTH_SOURCE) && path.getPathComponent(DEPTH_ROOT).toString().equals(Lang.get(Lang.Keys.tree_DB)));
     }
 
     public static boolean isFileSource(TreePath path) {
-        logger.info("isFileSource " + path);
+//        logger.info("isFileSource " + path);
         return (TreeUtils.isSource(path) && !path.getPathComponent(DEPTH_ROOT).toString().equals(Lang.get(Lang.Keys.tree_DB)));
     }
 

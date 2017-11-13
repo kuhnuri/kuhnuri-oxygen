@@ -75,7 +75,7 @@ public class CheckedOutFilesAction extends AbstractAction {
     }
 
     private static List<BaseXResource> getCheckedOutFiles() {
-        List<BaseXResource> fileList = new ArrayList<>();
+        final List<BaseXResource> fileList = new ArrayList<>();
         String checkedOut;
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             checkedOut = connection.xquery(ConnectionUtils.getQuery("checked-out-files"));
