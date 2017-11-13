@@ -7,6 +7,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -74,10 +75,8 @@ public class RestConnection implements Connection {
     @Override
     public List<Resource> list(final BaseXSource source, final String path) throws IOException {
         logger.info("list " + source + " [" +  path + "]");
-        final ObjectMapper mapper = new ObjectMapper();
-        final byte[] request = request("list/" + path);
-//        final List<Resource> list = Arrays.asList(mapper.readValue(request, Resource[].class));
-        final List<Resource> list = mapper.readValue(request, Resource.class).children;
+        final Resource resource = getResourceMetadata(path);
+        final List<Resource> list = resource.children;
 //        final String result = Token.string(request);
 //        final ArrayList<BaseXResource> list = new ArrayList<>();
 //        if (!result.isEmpty()) {
@@ -87,6 +86,12 @@ public class RestConnection implements Connection {
 //            }
 //        }
         return list;
+    }
+
+    private Resource getResourceMetadata(String path) throws IOException {
+        final ObjectMapper mapper = new ObjectMapper();
+        final byte[] request = request("list/" + path);
+        return mapper.readValue(request, Resource.class);
     }
 
     @Override
@@ -132,13 +137,41 @@ public class RestConnection implements Connection {
     public void put(final BaseXSource source, final String inPath, final byte[] resource, boolean binary, String encoding,
                     String owner, String versionize, String versionUp)
             throws IOException {
-        String path;
-        if (inPath.startsWith("/"))
-            path = inPath.substring(1);
-        else
-            path = inPath;
-        request(getQuery("put-" + source), PATH, path, RESOURCE, prepare(resource, binary), BINARY, Boolean.toString(binary),
-                ENCODING, encoding, OWNER, owner, VERSIONIZE, versionize, VERSION_UP, versionUp);
+        final String path = inPath.startsWith("/") ? inPath.substring(1) : inPath;
+//        request(getQuery("put-" + source),
+//                PATH, path,
+//                RESOURCE, prepare(resource, binary),
+//                BINARY, Boolean.toString(binary),
+//                ENCODING, encoding,
+//                OWNER, owner,
+//                VERSIONIZE, versionize,
+//                VERSION_UP, versionUp);
+        final String action = "file";
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            final HttpEntity entity = new ByteArrayEntity(resource);
+            final HttpPut putRequest = new HttpPut(uri.resolve(action + "/" + path));
+            putRequest.setEntity(entity);
+            logger.info("Update " + putRequest.getURI());
+            final HttpResponse response = httpClient.execute(putRequest);
+            final int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == 200 || statusCode == 204) {
+                logger.info("Update successful");
+            } else {
+                logger.info("Update failed");
+                readError(response);
+            }
+        }
+    }
+
+    private void readError(HttpResponse response) throws IOException {
+//        try (InputStream error = response.getEntity().getContent()) {
+//            final ObjectMapper mapper = new ObjectMapper();
+//            mapper.readValue(error, Map.class);
+//            throw new IOException("Got " + response.getStatusLine().getStatusCode());
+//        }
+        try (BufferedReader error = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
+            error.lines().forEach(line -> logger.error(line));
+        }
     }
 
     @Override
@@ -150,12 +183,41 @@ public class RestConnection implements Connection {
     @Override
     public void delete(final BaseXSource source, final String path) throws IOException {
         request(getQuery("delete-" + source), PATH, path);
+        final String action = "file";
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            final HttpDelete putRequest = new HttpDelete(uri.resolve(action + "/" + path));
+            logger.info("Delete " + putRequest.getURI());
+            final HttpResponse response = httpClient.execute(putRequest);
+            final int statusCode = response.getStatusLine().getStatusCode();
+            if (statusCode == 200 || statusCode == 202 || statusCode == 204) {
+                logger.info("Delete successful");
+            } else {
+                logger.info("Delete failed");
+                readError(response);
+            }
+        }
     }
 
     @Override
     public boolean exists(final BaseXSource source, final String path) throws IOException {
-        final byte[] result = request(getQuery("exists-" + source), PATH, path);
-        return Token.string(result).equals("true");
+//        final byte[] result = request(getQuery("exists-" + source), PATH, path);
+//        return Token.string(result).equals("true");
+        final String action = "list";
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            final HttpGet putRequest = new HttpGet(uri.resolve(action + "/" + path));
+            logger.info("Check existence " + putRequest.getURI());
+            final HttpResponse response = httpClient.execute(putRequest);
+            if (response.getStatusLine().getStatusCode() == 200) { // 204
+                logger.info("Found metadata");
+                return true;
+            } else if (response.getStatusLine().getStatusCode() == 404) {
+                return false;
+            } else {
+                logger.info("Checking existence failed");
+                readError(response);
+                return false;
+            }
+        }
     }
 
     @Override
@@ -172,11 +234,12 @@ public class RestConnection implements Connection {
 
     @Override
     public String xquery(final String query, final String... args) throws IOException {
-        try {
-            return Token.string(request(query, args));
-        } catch (final IOException ex) {
-            throw BaseXQueryException.get(ex);
-        }
+        throw new UnsupportedOperationException();
+//        try {
+//            return Token.string(request(query, args));
+//        } catch (final IOException ex) {
+//            throw BaseXQueryException.get(ex);
+//        }
     }
 
     @Override
@@ -221,15 +284,7 @@ public class RestConnection implements Connection {
                 logger.info("Locking successful");
             } else {
                 logger.info("Locking failed");
-                final HttpEntity entity = response.getEntity();
-//                try (InputStream error = entity.getContent()) {
-//                    final ObjectMapper mapper = new ObjectMapper();
-//                    mapper.readValue(error, Map.class);
-//                    throw new IOException("Got " + response.getStatusLine().getStatusCode());
-//                }
-                try (BufferedReader error = new BufferedReader(new InputStreamReader(entity.getContent()))) {
-                    error.lines().forEach(line -> logger.error(line));
-                }
+                readError(response);
             }
 //            request("lock/" + path, HttpMethod.PUT);
         }
@@ -247,15 +302,7 @@ public class RestConnection implements Connection {
                 logger.info("Unlocking successful");
             } else {
                 logger.info("Unlocking failed");
-                final HttpEntity entity = response.getEntity();
-//                try (InputStream error = entity.getContent()) {
-//                    final ObjectMapper mapper = new ObjectMapper();
-//                    mapper.readValue(error, Map.class);
-//                    throw new IOException("Got " + response.getStatusLine().getStatusCode());
-//                }
-                try (BufferedReader error = new BufferedReader(new InputStreamReader(entity.getContent()))) {
-                    error.lines().forEach(line -> logger.error(line));
-                }
+                readError(response);
             }
         }
 //        request("lock/" + path, HttpMethod.DELETE);
@@ -291,10 +338,7 @@ public class RestConnection implements Connection {
                 return false;
             } else {
                 logger.info("Checking lock failed");
-                final HttpEntity entity = response.getEntity();
-                try (BufferedReader error = new BufferedReader(new InputStreamReader(entity.getContent()))) {
-                    error.lines().forEach(line -> logger.error(line));
-                }
+                readError(response);
                 return true;
             }
         }

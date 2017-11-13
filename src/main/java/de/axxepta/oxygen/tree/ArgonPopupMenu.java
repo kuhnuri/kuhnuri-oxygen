@@ -148,8 +148,8 @@ public class ArgonPopupMenu extends PopupMenu {
                 ImageUtils.getIcon(ImageUtils.SEARCH_PATH), tree);
         this.add(searchInPath, Lang.get(Lang.Keys.cm_find));
 
-        final Action searchInFiles = new SearchInFilesAction(Lang.get(Lang.Keys.cm_search), ImageUtils.getIcon(ImageUtils.SEARCH), tree);
-        this.add(searchInFiles, Lang.get(Lang.Keys.cm_search));
+//        final Action searchInFiles = new SearchInFilesAction(Lang.get(Lang.Keys.cm_search), ImageUtils.getIcon(ImageUtils.SEARCH), tree);
+//        this.add(searchInFiles, Lang.get(Lang.Keys.cm_search));
     }
 
     public void prepareContextMenu(TreePath path) {
