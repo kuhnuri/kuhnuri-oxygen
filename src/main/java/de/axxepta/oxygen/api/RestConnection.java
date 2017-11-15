@@ -26,11 +26,10 @@ import java.net.*;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.time.LocalDateTime;
+import java.util.*;
 
+import static de.axxepta.oxygen.api.ArgonConst.ARGON;
 import static de.axxepta.oxygen.api.ConnectionUtils.*;
 import static org.basex.util.http.HttpMethod.GET;
 
@@ -40,6 +39,12 @@ import static org.basex.util.http.HttpMethod.GET;
  * @author Christian Gruen, BaseX GmbH 2015, BSD License
  */
 public class RestConnection implements Connection {
+
+    private static final ObjectMapper mapper = new ObjectMapper();
+    static {
+        mapper.findAndRegisterModules();
+    }
+
     /**
      * URI.
      */
@@ -244,22 +249,19 @@ public class RestConnection implements Connection {
 
     @Override
     public List<VersionHistoryEntry> getHistory(final String path) throws IOException {
-        // FIXME
-//        final String result = Token.string(request(getQuery("get-history"), PATH, path));
-        final ArrayList<VersionHistoryEntry> list = new ArrayList<>();
-//        if (!result.isEmpty()) {
-//            DateFormat format = new SimpleDateFormat(ArgonConst.DATE_FORMAT);
-//            final String[] results = result.split("\r?\n");
-//            for (int r = 0, rl = results.length; r < rl; r += 4) {
-//                try {
-//                    list.add(new VersionHistoryEntry(new URL(results[r]), Integer.parseInt(results[r + 1]),
-//                            Integer.parseInt(results[r + 2]), format.parse(results[r + 3])));
-//                } catch (ParseException pe) {
-//                    throw new IOException(pe.getMessage());
-//                }
-//            }
-//        }
-        return list;
+        final String action = "history";
+        try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
+            final HttpGet putRequest = new HttpGet(uri.resolve(action + "/" + path));
+            final HttpResponse response = httpClient.execute(putRequest);
+            if (response.getStatusLine().getStatusCode() == 200) { // 204
+                return Arrays.asList(mapper.readValue(response.getEntity().getContent(), VersionHistoryEntry[].class));
+            } else if (response.getStatusLine().getStatusCode() == 404) {
+                return Collections.emptyList();
+            } else {
+                readError(response);
+                return Collections.emptyList();
+            }
+        }
     }
 
     @Override

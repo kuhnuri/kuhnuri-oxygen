@@ -15,6 +15,7 @@
         <library name="lib/jackson-annotations-2.9.2.jar" />
         <library name="lib/jackson-core-2.9.2.jar" />
         <library name="lib/jackson-databind-2.9.2.jar" />
+        <library name="lib/jackson-datatype-jsr310-2.9.2.jar" />
 <!--
         <library name="lib/argon-0.0.3.jar" />
         <library name="lib/jersey-core-1.9.jar" />

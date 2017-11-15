@@ -40,7 +40,7 @@ public class VersionHistoryUpdater implements ObserverInterface {
                 try (Connection connection = BaseXConnectionWrapper.getConnection()) {
                     historyList = connection.getHistory(resource);
                 } catch (IOException ioe) {
-                    logger.warn("Argon connection error while getting meta data from resource " + resource + ": ", ioe.getMessage());
+                    logger.error("Argon connection error while getting meta data from resource " + resource + ": " + ioe.getMessage(), ioe);
                 }
             } else {
                 historyList = new ArrayList<>();
