@@ -15,9 +15,7 @@ import java.net.URL;
  */
 public class CustomProtocolChooserExtension implements URLChooserPluginExtension2, URLChooserToolbarExtension {
 
-    /**
-     * @see ro.sync.exml.plugin.urlstreamhandler.URLChooserPluginExtension2#chooseURLs(ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace)
-     */
+    @Override
     public URL[] chooseURLs(StandalonePluginWorkspace workspaceAccess) {
         ArgonChooserDialog urlChooser = new ArgonChooserDialog((Frame) workspaceAccess.getParentFrame(),
                 Lang.get(Lang.Keys.dlg_open), ArgonChooserDialog.Type.OPEN);

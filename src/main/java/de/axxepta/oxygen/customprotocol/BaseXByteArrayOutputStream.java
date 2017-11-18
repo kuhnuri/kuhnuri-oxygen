@@ -115,20 +115,22 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
     @Override
     public void close() throws IOException {
         super.close();
-        byte[] savedBytes;
-        savedBytes = toByteArray();
+        byte[] savedBytes = toByteArray();
         // if "Save" or "Save as URL" were called check for binary and encoding
         if (!binary && encoding.equals("")) {
             encoding = ArgonEditorsWatchMap.getInstance().getEncoding(url);
             if (!URLUtils.isXML(url) && (URLUtils.isBinary(url) || !IOUtils.isXML(savedBytes))) {
                 binary = true;
             } else {
-                if (encoding.equals(""))
+                if (encoding.equals("")) {
                     XMLUtils.encodingFromBytes(savedBytes);
-                if (!encoding.equals("UTF-8") && !encoding.equals(""))
+                }
+                if (!encoding.equals("UTF-8") && !encoding.equals("")) {
                     savedBytes = IOUtils.convertToUTF8(savedBytes, encoding);
-                if (encoding.equals(""))
+                }
+                if (encoding.equals("")) {
                     encoding = "UTF-8";
+                }
             }
         }
         if (encoding.equals("UTF-8") && (savedBytes[0] == (byte) 0xEF)) {
@@ -137,25 +139,26 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
         if (encoding.startsWith("UTF-16") && ((savedBytes[0] == (byte) 0xFE) || (savedBytes[0] == (byte) 0xFF))) {
             savedBytes = removeBOM(savedBytes, 2);
         }
-        String useVersioning;
-        if (useGlobalVersioning)
+        final String useVersioning;
+        if (useGlobalVersioning) {
             useVersioning = ArgonOptionPage.getOption(ArgonOptionPage.KEY_BASEX_VERSIONING, false);
-        else
+        } else {
             useVersioning = "false";
-        String path = CustomProtocolURLHandlerExtension.pathFromURL(this.url);
+        }
+        final String path = CustomProtocolURLHandlerExtension.pathFromURL(this.url);
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             connection.put(this.source, path, savedBytes, binary, encoding, owner, useVersioning, String.valueOf(versionUp));
             versionUp = false;
             //inform any interested party in save operation
             TopicHolder.saveFile.postMessage(this.url.toString());
-        } catch (IOException ex) {
-            logger.error(ex);
-            throw (ex);
+        } catch (final IOException e) {
+            logger.error(e);
+            throw e;
         }
     }
 
-    private static byte[] removeBOM(byte[] savedBytes, int BOMlength) {
-        byte[] tempArray = new byte[savedBytes.length - BOMlength];
+    private static byte[] removeBOM(final byte[] savedBytes, final int BOMlength) {
+        final byte[] tempArray = new byte[savedBytes.length - BOMlength];
         System.arraycopy(savedBytes, BOMlength, tempArray, 0, savedBytes.length - BOMlength);
         return tempArray;
     }

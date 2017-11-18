@@ -27,7 +27,7 @@ public class ArgonWorkspaceAccessPluginExtension implements WorkspaceAccessPlugi
     private ToolbarButton saveToArgonButton;
     private ToolbarButton replyCommentButton;
 
-    @java.lang.Override
+    @Override
     public void applicationStarted(final StandalonePluginWorkspace wsa) {
         wsa.setGlobalObjectProperty("can.edit.read.only.files", Boolean.FALSE);
 
@@ -65,7 +65,7 @@ public class ArgonWorkspaceAccessPluginExtension implements WorkspaceAccessPlugi
         wsa.addInputURLChooserCustomizer(new ArgonInputURLChooserCustomizer());
     }
 
-    @java.lang.Override
+    @Override
     public boolean applicationClosing() {
         new CheckedOutFilesAction().actionPerformed(null);
         return true;

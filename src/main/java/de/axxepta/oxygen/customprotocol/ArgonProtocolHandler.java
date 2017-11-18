@@ -69,8 +69,4 @@ public class ArgonProtocolHandler extends URLStreamHandler {
         return new ArgonConnection(url, this.source);
     }
 
-    public URLConnection provideConnection(URL url) throws IOException {
-        return new ArgonConnection(url, this.source);
-    }
-
 }

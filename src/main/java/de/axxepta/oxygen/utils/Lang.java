@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -13,27 +14,27 @@ import java.util.Properties;
 
 /**
  * @author Markus on 03.11.2015.
- * Note: Couldn't use class ResourceBundle because ResourceBundle.getBundle searches for property files in the Oxygen.jar,
- * so had to implement a Bundle class which mimics ResouceBundle behavior
  */
 public class Lang {
 
     private static final Logger logger = LogManager.getLogger(Lang.class);
 
     private static final String PATH = "/Argon";
-    private static final Map<Locale, Bundle> availableResourceBundles = new HashMap<>();
-    private static final String MISSING_KEY = "?";
-    private static final String MISSING_RESOURCE = "??";
+    private static final String MISSING_KEY = "missing_key:";
+    private static final String MISSING_RESOURCE = "missing_resource:";
 
-    private static Bundle currentBundle = null;
+    private static final Map<Locale, Bundle> availableResourceBundles = new HashMap<>();
+    static {
+        loadBundle(Locale.GERMANY);
+        loadBundle(Locale.UK);
+    }
+    private static Bundle currentBundle = availableResourceBundles.get(Locale.UK);
 
     public static void init() {
         init(Locale.UK);
     }
 
     public static void init(Locale locale) {
-        loadBundle(Locale.GERMANY);
-        loadBundle(Locale.UK);
         setLocale(locale);
     }
 
@@ -49,20 +50,32 @@ public class Lang {
     }
 
     public static void setLocale(Locale locale) {
-        if (locale.equals(Locale.GERMANY) || locale.equals(Locale.GERMAN))
+        if (locale.equals(Locale.GERMANY) || locale.equals(Locale.GERMAN)) {
             currentBundle = availableResourceBundles.get(Locale.GERMANY);
-        else
+        } else {
             currentBundle = availableResourceBundles.get(Locale.UK);
+        }
     }
 
     public static String get(Keys key) {
         if (currentBundle != null) {
             String val = currentBundle.getString(key.name());
-            if (val != null)
+            if (val != null) {
                 return val;
-            else
+            } else {
+                try {
+                    throw new RuntimeException();
+                } catch (RuntimeException e) {
+                    logger.error("Missing key", e);
+                }
                 return MISSING_KEY + key;
+            }
         } else {
+            try {
+                throw new RuntimeException();
+            } catch (RuntimeException e) {
+                logger.error("Missing bundle", e);
+            }
             return MISSING_RESOURCE + key;
         }
     }
@@ -98,15 +111,20 @@ public class Lang {
 
 }
 
+/**
+ * Couldn't use class ResourceBundle because ResourceBundle.getBundle searches for property files in the Oxygen.jar,
+ * so had to implement a Bundle class which mimics ResouceBundle behavior
+ */
 class Bundle {
     private Properties bundleMap;
 
     public Bundle(String path, Locale locale) throws IOException {
         StringBuilder propFile = new StringBuilder(path);
-        if (locale.equals(Locale.GERMANY))
+        if (locale.equals(Locale.GERMANY)) {
             propFile.append("_de_DE");
-        else
+        } else {
             propFile.append("_en_GB");
+        }
         propFile.append(".properties");
         Reader inReader = new InputStreamReader(getClass().getResourceAsStream(propFile.toString()));
         bundleMap = new Properties();
