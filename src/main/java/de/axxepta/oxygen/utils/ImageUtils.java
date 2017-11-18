@@ -97,7 +97,7 @@ public class ImageUtils {
         iconMap.put("tpl", ImageUtils.createImageIcon("/images/FolderClosed16.png"));
         iconMap.put("file", ImageUtils.createImageIcon("/images/file16.png"));
         iconMap.put(DB_CONNECTION, ImageUtils.createImageIcon("/images/DbConnection16.gif"));
-        iconMap.put(DB_CATALOG, ImageUtils.createImageIcon("/images/DbCatalog16.gif"));
+        iconMap.put(DB_CATALOG, ImageUtils.createImageIcon("/images/DbCatalog16.png"));
         iconMap.put(DB_HTTP, ImageUtils.createImageIcon("/images/DBHttp16.png"));
         iconMap.put(DB_FOLDER, ImageUtils.createImageIcon("/images/DbFolder16.png"));
         iconMap.put(FOLDER, ImageUtils.createImageIcon("/images/FolderClosed16.png"));

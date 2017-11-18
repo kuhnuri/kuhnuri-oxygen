@@ -24,7 +24,7 @@ public final class IOUtils {
         try (ByteArrayOutputStream boStream = new ByteArrayOutputStream()) {
             int nRead;
             int bufferSize = 1024;
-            byte[] readData = new byte[bufferSize];
+            final byte[] readData = new byte[bufferSize];
             while ((nRead = stream.read(readData, 0, bufferSize)) != -1) {
                 boStream.write(readData, 0, nRead);
             }
@@ -79,8 +79,9 @@ public final class IOUtils {
             } else {
                 return checkXML(bytes, "UTF-8");
             }
-        } else
+        } else {
             return false;
+        }
     }
 
     private static boolean isXML(String wannabe) {

@@ -152,9 +152,10 @@ public class RestConnection implements Connection {
 //                VERSIONIZE, versionize,
 //                VERSION_UP, versionUp);
         final String action = "file";
+        final URI uri = addParameter(this.uri.resolve(action + "/" + path), "version=" + versionUp);
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             final HttpEntity entity = new ByteArrayEntity(resource);
-            final HttpPut putRequest = new HttpPut(uri.resolve(action + "/" + path));
+            final HttpPut putRequest = new HttpPut(uri);
             putRequest.setEntity(entity);
             logger.info("Update " + putRequest.getURI());
             final HttpResponse response = httpClient.execute(putRequest);
@@ -165,6 +166,15 @@ public class RestConnection implements Connection {
                 logger.info("Update failed");
                 readError(response);
             }
+        }
+    }
+
+    private URI addParameter(final URI base, final String query) {
+        try {
+            return new URI(base.getScheme(), base.getUserInfo(), base.getHost(), base.getPort(), base.getPath(),
+                    query, base.getFragment());
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException(e);
         }
     }
 
