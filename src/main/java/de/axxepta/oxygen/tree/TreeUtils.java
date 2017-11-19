@@ -51,7 +51,7 @@ public class TreeUtils {
         boolean inserted = false;
         for (int i = 0; i < parent.getChildCount(); i++) {
             final DefaultMutableTreeNode currNode = (DefaultMutableTreeNode) parent.getChildAt(i);
-            final AtomicReference<Boolean> nextIsFile = new AtomicReference<Boolean>();
+            final AtomicReference<Boolean> nextIsFile = new AtomicReference<>();
             nextIsFile.set(!currNode.getAllowsChildren());
             if (((currNode.getUserObject().toString().compareTo(child) > 0) && (nextIsFile.get().compareTo(childIsFile) == 0)) ||
                     (nextIsFile.get().compareTo(childIsFile) > 0)) {    // dirs before files
