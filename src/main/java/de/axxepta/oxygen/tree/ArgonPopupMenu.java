@@ -14,11 +14,14 @@ import javax.swing.tree.TreePath;
 import java.awt.*;
 import java.util.ArrayList;
 
+import static de.axxepta.oxygen.utils.ImageUtils.getIcon;
+import static de.axxepta.oxygen.utils.Lang.Keys.*;
+
 /**
  * PopupMenu class which holds extra ArrayLists for MenuItems and their names, providing access methods
  * for enabling the items via name keys.
  */
-@SuppressWarnings("all")  // CAVE: keep access modifiers public because class is subject to modification by AspectJ
+//@SuppressWarnings("all")  // CAVE: keep access modifiers public because class is subject to modification by AspectJ
 public class ArgonPopupMenu extends PopupMenu {
 
     private static final Logger logger = LogManager.getLogger(ArgonPopupMenu.class);
@@ -107,49 +110,53 @@ public class ArgonPopupMenu extends PopupMenu {
 
     public void init(final TreeListener tListener) {
         // Populate context menu
-        Action open = new OpenFileAction(Lang.get(Lang.Keys.cm_open), ImageUtils.getIcon(ImageUtils.BASEX_LOCKED),
+        final Action open = new OpenFileAction(Lang.get(cm_open), getIcon(ImageUtils.BASEX_LOCKED),
                 tListener);
-        this.add(open, Lang.get(Lang.Keys.cm_open));
+        this.add(open, Lang.get(cm_open));
 
-        Action checkOut = new CheckOutAction(Lang.get(Lang.Keys.cm_checkout), ImageUtils.getIcon(ImageUtils.BASEX),
+        final Action checkOut = new CheckOutAction(Lang.get(cm_checkout), getIcon(ImageUtils.BASEX),
                 tListener);
-        this.add(checkOut, Lang.get(Lang.Keys.cm_checkout));
+        this.add(checkOut, Lang.get(cm_checkout));
+
+        final Action checkIn = new CheckInAction(Lang.get(cm_checkin), getIcon(ImageUtils.BASEX),
+                tListener);
+        this.add(checkIn, Lang.get(cm_checkin));
 
         this.addSeparator();
 
-        Action newDatabase = new AddDatabaseAction(Lang.get(Lang.Keys.cm_adddb), ImageUtils.getIcon(ImageUtils.DB_ADD));
-        this.add(newDatabase, Lang.get(Lang.Keys.cm_adddb));
+        final Action newDatabase = new AddDatabaseAction(Lang.get(cm_adddb), getIcon(ImageUtils.DB_ADD));
+        this.add(newDatabase, Lang.get(cm_adddb));
 
-        Action delete = new DeleteAction(Lang.get(Lang.Keys.cm_delete), ImageUtils.getIcon(ImageUtils.REMOVE), tree);
-        this.add(delete, Lang.get(Lang.Keys.cm_delete));
+        final Action delete = new DeleteAction(Lang.get(cm_delete), getIcon(ImageUtils.REMOVE), tree);
+        this.add(delete, Lang.get(cm_delete));
 
-        Action rename = new RenameAction(Lang.get(Lang.Keys.cm_rename), ImageUtils.getIcon(ImageUtils.RENAME),
+        final Action rename = new RenameAction(Lang.get(cm_rename), getIcon(ImageUtils.RENAME),
                 tree, tListener);
-        this.add(rename, Lang.get(Lang.Keys.cm_rename));
+        this.add(rename, Lang.get(cm_rename));
 
-        Action export = new ExportAction(Lang.get(Lang.Keys.cm_export), ImageUtils.getIcon(ImageUtils.EXPORT),
+        final Action export = new ExportAction(Lang.get(cm_export), getIcon(ImageUtils.EXPORT),
                 tListener);
-        this.add(export, Lang.get(Lang.Keys.cm_export));
+        this.add(export, Lang.get(cm_export));
 
-        Action add = new AddNewFileAction(Lang.get(Lang.Keys.cm_add), ImageUtils.getIcon(ImageUtils.FILE_ADD),
+        final Action add = new AddNewFileAction(Lang.get(cm_add), getIcon(ImageUtils.FILE_ADD),
                 tree);
-        this.add(add, Lang.get(Lang.Keys.cm_add));
+        this.add(add, Lang.get(cm_add));
 
-        Action newDir = new NewDirectoryAction(Lang.get(Lang.Keys.cm_newdir), ImageUtils.getIcon(ImageUtils.ADD_DIR),
+        final Action newDir = new NewDirectoryAction(Lang.get(cm_newdir), getIcon(ImageUtils.ADD_DIR),
                 tree);
-        this.add(newDir, Lang.get(Lang.Keys.cm_newdir));
+        this.add(newDir, Lang.get(cm_newdir));
 
-        final Action refresh = new RefreshTreeAction(Lang.get(Lang.Keys.cm_refresh), ImageUtils.getIcon(ImageUtils.REFRESH), tree);
-        this.add(refresh, Lang.get(Lang.Keys.cm_refresh));
+        final Action refresh = new RefreshTreeAction(Lang.get(cm_refresh), getIcon(ImageUtils.REFRESH), tree);
+        this.add(refresh, Lang.get(cm_refresh));
 
         this.addSeparator();
 
-        final Action searchInPath = ClassFactory.getInstance().getSearchInPathAction(Lang.get(Lang.Keys.cm_find),
-                ImageUtils.getIcon(ImageUtils.SEARCH_PATH), tree);
-        this.add(searchInPath, Lang.get(Lang.Keys.cm_find));
+        final Action searchInPath = ClassFactory.getInstance().getSearchInPathAction(Lang.get(cm_find),
+                getIcon(ImageUtils.SEARCH_PATH), tree);
+        this.add(searchInPath, Lang.get(cm_find));
 
-//        final Action searchInFiles = new SearchInFilesAction(Lang.get(Lang.Keys.cm_search), ImageUtils.getIcon(ImageUtils.SEARCH), tree);
-//        this.add(searchInFiles, Lang.get(Lang.Keys.cm_search));
+//        final Action searchInFiles = new SearchInFilesAction(Lang.get(cm_search), ImageUtils.getIcon(ImageUtils.SEARCH), tree);
+//        this.add(searchInFiles, Lang.get(cm_search));
     }
 
     public void prepareContextMenu(TreePath path) {
@@ -166,28 +173,28 @@ public class ArgonPopupMenu extends PopupMenu {
         int itemCount = this.getItemCount();
         for (int i = 0; i < itemCount; i++) {
             final String itemName = this.getItemName(i);
-            if (itemName.equals(Lang.get(Lang.Keys.cm_open))) {
+            if (itemName.equals(Lang.get(cm_open))) {
                 this.setItemEnabled(i, isFile ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_checkout))) {
+            } else if (itemName.equals(Lang.get(cm_checkout))) {
                 this.setItemEnabled(i, isFile ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_adddb))) {
+            } else if (itemName.equals(Lang.get(cm_adddb))) {
                 this.setItemEnabled(i, TreeUtils.isDbSource(path) ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_delete))) {
+            } else if (itemName.equals(Lang.get(cm_delete))) {
                 this.setItemEnabled(i, isFile || isDir || isDB ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_rename))) {
+            } else if (itemName.equals(Lang.get(cm_rename))) {
                 // never! try to change the name of a WEB-INF folder
                 this.setItemEnabled(i, isFile || (isDir && !TreeUtils.isWEBINF(path)) ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_export))) {
+            } else if (itemName.equals(Lang.get(cm_export))) {
                 this.setItemEnabled(i, !isRoot && !isDbSource ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_add))) {
+            } else if (itemName.equals(Lang.get(cm_add))) {
                 this.setItemEnabled(i, isDir || isDB || isFileSource ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_newdir))) {
+            } else if (itemName.equals(Lang.get(cm_newdir))) {
                 this.setItemEnabled(i, isDir || isDB || isFileSource ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_showversion))) {
+            } else if (itemName.equals(Lang.get(cm_showversion))) {
                 this.setItemEnabled(i, isFile ? true : false);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_find))) {
+            } else if (itemName.equals(Lang.get(cm_find))) {
                 this.setItemEnabled(i, isFile ? false : true);
-            } else if (itemName.equals(Lang.get(Lang.Keys.cm_search))) {
+            } else if (itemName.equals(Lang.get(cm_search))) {
                 this.setItemEnabled(i, (isDB || isInDB) ? true : false);
             }
         }

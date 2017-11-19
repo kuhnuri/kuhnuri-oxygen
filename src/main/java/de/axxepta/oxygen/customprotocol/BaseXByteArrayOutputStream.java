@@ -80,37 +80,37 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
         this.versionUp = versionUp;
     }
 
-    /**
-     * allows to explicitly override the global versioning (switch off only) for read-only databases
-     *
-     * @param useGlobalVersioning set to false if no versioning should be used for the current data transfer
-     * @param url                 resource url to store to
-     * @param encoding            encoding of the byte array
-     */
-    public BaseXByteArrayOutputStream(boolean useGlobalVersioning, URL url, String encoding) {
-        super();
-        this.url = url;
-        this.encoding = encoding;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
-        this.useGlobalVersioning = useGlobalVersioning;
-    }
-
-    /**
-     * allows to explicitly override the global versioning (switch off only) for read-only databases
-     *
-     * @param owner               file owner
-     * @param useGlobalVersioning set to false if no versioning should be used for the current data transfer
-     * @param url                 resource url to store to
-     * @param encoding            encoding of the byte array
-     */
-    public BaseXByteArrayOutputStream(String owner, boolean useGlobalVersioning, URL url, String encoding) {
-        super();
-        this.url = url;
-        this.encoding = encoding;
-        this.owner = owner;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
-        this.useGlobalVersioning = useGlobalVersioning;
-    }
+//    /**
+//     * allows to explicitly override the global versioning (switch off only) for read-only databases
+//     *
+//     * @param useGlobalVersioning set to false if no versioning should be used for the current data transfer
+//     * @param url                 resource url to store to
+//     * @param encoding            encoding of the byte array
+//     */
+//    public BaseXByteArrayOutputStream(boolean useGlobalVersioning, URL url, String encoding) {
+//        super();
+//        this.url = url;
+//        this.encoding = encoding;
+//        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+//        this.useGlobalVersioning = useGlobalVersioning;
+//    }
+//
+//    /**
+//     * allows to explicitly override the global versioning (switch off only) for read-only databases
+//     *
+//     * @param owner               file owner
+//     * @param useGlobalVersioning set to false if no versioning should be used for the current data transfer
+//     * @param url                 resource url to store to
+//     * @param encoding            encoding of the byte array
+//     */
+//    public BaseXByteArrayOutputStream(String owner, boolean useGlobalVersioning, URL url, String encoding) {
+//        super();
+//        this.url = url;
+//        this.encoding = encoding;
+//        this.owner = owner;
+//        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+//        this.useGlobalVersioning = useGlobalVersioning;
+//    }
 
     @Override
     public void close() throws IOException {

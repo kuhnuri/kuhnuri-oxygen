@@ -47,23 +47,27 @@ public class ArgonEditorsWatchMap implements ObserverInterface {
     }
 
     public void addURL(URL url) {
-        if (!isURLInMap(url))
+        if (!isURLInMap(url)) {
             editorMap.put(url, new EditorInfo(false));
+        }
     }
 
     public void addURL(URL url, boolean checkedOut) {
-        if (isURLInMap(url))
+        if (isURLInMap(url)) {
             editorMap.get(url).setCheckedOut(checkedOut);
-        else
+        } else {
             editorMap.put(url, new EditorInfo(checkedOut));
-        if (checkedOut)
+        }
+        if (checkedOut) {
             lockMap.put(url, true);
+        }
     }
 
     public void removeURL(URL url) {
         editorMap.remove(url);
-        if (isLockInMap(url) && lockMap.get(url))
+        if (isLockInMap(url) && lockMap.get(url)) {
             lockMap.remove(url);
+        }
     }
 
     private boolean isURLInMap(URL url) {
@@ -71,22 +75,25 @@ public class ArgonEditorsWatchMap implements ObserverInterface {
     }
 
     public String getEncoding(URL url) {
-        if (isURLInMap(url))
+        if (isURLInMap(url)) {
             return "UTF-8";
-        else
+        } else {
             return "";
+        }
     }
 
     public boolean askedForCheckIn(URL url) {
-        if (isURLInMap(url))
+        if (isURLInMap(url)) {
             return editorMap.get(url).isAskedForCheckIn();
-        else
+        } else {
             return true;
+        }
     }
 
     public void setAskedForCheckIn(URL url, boolean asked) {
-        if (isURLInMap(url))
+        if (isURLInMap(url)) {
             editorMap.get(url).setAskedForCheckIn(asked);
+        }
     }
 
     @Override
