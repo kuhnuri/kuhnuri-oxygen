@@ -32,7 +32,7 @@ public class AddNewFileAction extends AbstractAction {
 
     private static final Logger logger = LogManager.getLogger(AddNewFileAction.class);
 
-    private ArgonTree tree;
+    private final ArgonTree tree;
     private JDialog newFileDialog;
 
     private JTextField newFileNameTextField;
@@ -97,8 +97,8 @@ public class AddNewFileAction extends AbstractAction {
 
     private class AddNewSpecFileAction extends AbstractAction {
 
-        TreePath path;
-        String db_path;
+        final TreePath path;
+        final String db_path;
 
         AddNewSpecFileAction(String name, TreePath path, String db_path) {
             super(name);

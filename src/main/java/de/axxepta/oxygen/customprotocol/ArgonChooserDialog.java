@@ -36,11 +36,11 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
     private boolean singleClick = true;
     private Timer timer;
 
-    private Type type;
+    private final Type type;
     private int depth = 0;
-    private List<ArgonChooserListModel.Element> path = new ArrayList<>();
+    private final List<ArgonChooserListModel.Element> path = new ArrayList<>();
     private String pathString;
-    private SelectionAction selectionAction;
+    private final SelectionAction selectionAction;
 
     private boolean canceled = true;
 

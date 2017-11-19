@@ -29,7 +29,7 @@ import java.util.Scanner;
 public class RollbackVersionAction extends AbstractAction {
 
     private static final Logger logger = LogManager.getLogger(RollbackVersionAction.class);
-    private JTable table;
+    private final JTable table;
     private WSEditor editorAccess;
 
     public RollbackVersionAction(String name, JTable table) {

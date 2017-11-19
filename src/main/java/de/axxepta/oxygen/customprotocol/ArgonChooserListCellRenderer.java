@@ -14,7 +14,7 @@ import java.awt.*;
 public class ArgonChooserListCellRenderer implements ListCellRenderer {
 
     private static final Logger logger = LogManager.getLogger(ArgonChooserListCellRenderer.class);
-    private static DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
+    private static final DefaultListCellRenderer defaultRenderer = new DefaultListCellRenderer();
 
     @Override
     public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected,

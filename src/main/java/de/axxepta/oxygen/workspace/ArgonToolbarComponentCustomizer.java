@@ -13,10 +13,10 @@ class ArgonToolbarComponentCustomizer implements ToolbarComponentsCustomizer {
 
     private static final String ARGON_WORKSPACE_ACCESS_TOOLBAR_ID = "ArgonWorkspaceAccessToolbarID";
 
-    private ToolbarButton runQueryButton;
-    private ToolbarButton newVersionButton;
-    private ToolbarButton saveToArgonButton;
-    private ToolbarButton replyCommentButton;
+    private final ToolbarButton runQueryButton;
+    private final ToolbarButton newVersionButton;
+    private final ToolbarButton saveToArgonButton;
+    private final ToolbarButton replyCommentButton;
 
     ArgonToolbarComponentCustomizer(ToolbarButton runQueryButton, ToolbarButton newVersionButton,
                                     ToolbarButton saveToArgonButton, ToolbarButton replyCommentButton) {

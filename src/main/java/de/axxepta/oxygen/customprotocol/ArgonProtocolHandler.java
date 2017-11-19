@@ -19,7 +19,7 @@ import java.net.URLStreamHandler;
  */
 public class ArgonProtocolHandler extends URLStreamHandler {
 
-    private BaseXSource source;
+    private final BaseXSource source;
     private static final Logger logger = LogManager.getLogger(ArgonProtocolHandler.class);
 
     public ArgonProtocolHandler(BaseXSource source) {
@@ -28,7 +28,7 @@ public class ArgonProtocolHandler extends URLStreamHandler {
 
     private static class ArgonConnection extends URLConnection {
 
-        BaseXSource source;
+        final BaseXSource source;
 
         ArgonConnection(URL url, BaseXSource source) {
             super(url);

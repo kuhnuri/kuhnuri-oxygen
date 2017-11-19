@@ -12,7 +12,7 @@ import java.util.List;
 public class ArgonChooserListModel extends AbstractListModel {
 
 
-    private List<Element> data;
+    private final List<Element> data;
 
     ArgonChooserListModel(List<Element> data) {
         this.data = new ArrayList<>();
@@ -76,8 +76,8 @@ public class ArgonChooserListModel extends AbstractListModel {
 
     public static class Element {
 
-        private ArgonEntity type;
-        private String name;
+        private final ArgonEntity type;
+        private final String name;
 
         Element(ArgonEntity type, String name) {
             this.type = type;

@@ -13,13 +13,13 @@ import java.util.Map;
  */
 public class ArgonEditorsWatchMap implements ObserverInterface {
 
-    private static ArgonEditorsWatchMap instance = new ArgonEditorsWatchMap();
+    private static final ArgonEditorsWatchMap instance = new ArgonEditorsWatchMap();
 
-    private Map<URL, EditorInfo> editorMap = new HashMap<>();
+    private final Map<URL, EditorInfo> editorMap = new HashMap<>();
     /**
      * contains all Argon resources with locks, locks owned by current user marked with true value
      */
-    private Map<URL, Boolean> lockMap = new HashMap<>();
+    private final Map<URL, Boolean> lockMap = new HashMap<>();
 
 
     private ArgonEditorsWatchMap() {

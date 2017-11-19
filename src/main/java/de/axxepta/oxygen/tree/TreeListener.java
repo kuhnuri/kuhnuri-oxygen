@@ -41,8 +41,8 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
     private static final Logger logger = LogManager.getLogger(TreeListener.class);
     private static final PluginWorkspace workspace = PluginWorkspaceProvider.getPluginWorkspace();
 
-    private ArgonTree tree;
-    private DefaultTreeModel treeModel;
+    private final ArgonTree tree;
+    private final DefaultTreeModel treeModel;
     private TreePath path;
     private TreeNode node;
     private boolean showErrorMessages = true;

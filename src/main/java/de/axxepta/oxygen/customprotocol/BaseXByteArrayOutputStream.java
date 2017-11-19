@@ -21,9 +21,9 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
     private static final Logger logger = LogManager.getLogger(BaseXByteArrayOutputStream.class);
 
     private final URL url;
-    private BaseXSource source;
+    private final BaseXSource source;
     private String encoding = "";
-    private boolean useGlobalVersioning = true;
+    private final boolean useGlobalVersioning = true;
     private boolean versionUp = false;
     private boolean binary = false;
     private String owner = ArgonOptionPage.getOption(ArgonOptionPage.KEY_BASEX_USERNAME, false);

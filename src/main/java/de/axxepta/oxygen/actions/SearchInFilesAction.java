@@ -25,7 +25,7 @@ public class SearchInFilesAction extends AbstractAction {
 
     private static final PluginWorkspace workspace = PluginWorkspaceProvider.getPluginWorkspace();
 
-    private JTree tree;
+    private final JTree tree;
     private String path = "";
 
     private JDialog searchDialog;

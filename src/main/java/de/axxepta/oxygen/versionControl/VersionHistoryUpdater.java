@@ -24,7 +24,7 @@ public class VersionHistoryUpdater implements ObserverInterface {
     private final Logger logger = LogManager.getLogger(VersionHistoryUpdater.class);
 
     private List<VersionHistoryEntry> historyList = new ArrayList<>();
-    private JTable versionHistoryTable;
+    private final JTable versionHistoryTable;
 
     VersionHistoryUpdater(JTable versionHistoryTable) {
         this.versionHistoryTable = versionHistoryTable;

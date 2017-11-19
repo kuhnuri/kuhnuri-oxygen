@@ -26,7 +26,7 @@ public class CheckOutAction extends AbstractAction {
 
     private static final Logger logger = LogManager.getLogger(CheckOutAction.class);
 
-    private TreeListener treeListener;
+    private final TreeListener treeListener;
     private String urlString = null;
 
     public CheckOutAction(String name, Icon icon, String urlString, TreeListener treeListener) {

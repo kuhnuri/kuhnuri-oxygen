@@ -39,7 +39,7 @@ public class ArgonTreeTransferHandler extends TransferHandler {
     private final ArgonTree tree;
     private final TreeModel model;
 
-    private DataFlavor treePathFlavor;
+    private final DataFlavor treePathFlavor;
 
     public ArgonTreeTransferHandler(ArgonTree tree) {
         super();
@@ -318,9 +318,9 @@ public class ArgonTreeTransferHandler extends TransferHandler {
 
     private class TransferRunnable implements Runnable {
 
-        private ArrayList<File> transferData;
-        private TreePath path;
-        private String pathURLString;
+        private final ArrayList<File> transferData;
+        private final TreePath path;
+        private final String pathURLString;
 
         TransferRunnable(ArrayList<File> transferData, TreePath path, String pathURLString) {
             this.transferData = transferData;

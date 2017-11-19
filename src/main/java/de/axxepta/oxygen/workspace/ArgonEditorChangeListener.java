@@ -36,7 +36,7 @@ class ArgonEditorChangeListener extends WSEditorChangeListener {
 
     private static final Logger logger = LogManager.getLogger(ArgonEditorChangeListener.class);
 
-    private StandalonePluginWorkspace pluginWorkspaceAccess;
+    private final StandalonePluginWorkspace pluginWorkspaceAccess;
 
     private final Action snippetAction = new StoreSnippetSelectionAction();
     private final Action checkInAction = new CheckInAction(Lang.get(Lang.Keys.cm_checkin), ImageUtils.getIcon(ImageUtils.UNLOCK));
@@ -47,9 +47,9 @@ class ArgonEditorChangeListener extends WSEditorChangeListener {
     private AuthorPopupMenuCustomizer authorPopupMenuCustomizer;
     private TextPopupMenuCustomizer textPopupMenuCustomizer;
 
-    private ToolbarButton runQueryButton;
-    private ToolbarButton newVersionButton;
-    private ToolbarButton saveToArgonButton;
+    private final ToolbarButton runQueryButton;
+    private final ToolbarButton newVersionButton;
+    private final ToolbarButton saveToArgonButton;
 
     ArgonEditorChangeListener(StandalonePluginWorkspace pluginWorkspace, final ToolbarButton runQueryButton,
                               final ToolbarButton newVersionButton, final ToolbarButton saveToArgonButton) {

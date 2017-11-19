@@ -33,7 +33,7 @@ class DitaMapManagerChangeListener extends WSEditorChangeListener {
 
 
     private static final Logger logger = LogManager.getLogger(DitaMapManagerChangeListener.class);
-    private StandalonePluginWorkspace pluginWorkspaceAccess;
+    private final StandalonePluginWorkspace pluginWorkspaceAccess;
 
     DitaMapManagerChangeListener(StandalonePluginWorkspace pluginWorkspace) {
         super();
@@ -121,7 +121,7 @@ class DitaMapManagerChangeListener extends WSEditorChangeListener {
 
     private class ArgonDitaPopupMenuCustomizer implements DITAMapPopupMenuCustomizer {
 
-        private WSDITAMapEditorPage ditaMapEditorPage;
+        private final WSDITAMapEditorPage ditaMapEditorPage;
 
         ArgonDitaPopupMenuCustomizer(WSDITAMapEditorPage editorPage) {
             ditaMapEditorPage = editorPage;

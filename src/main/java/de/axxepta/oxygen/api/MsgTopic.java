@@ -12,9 +12,9 @@ import java.util.List;
 
 public class MsgTopic implements SubjectInterface {
 
-    private List<ObserverInterface> observers;
+    private final List<ObserverInterface> observers;
     private Object[] message;
-    private String type;
+    private final String type;
     private boolean changed;
     private final Object MUTEX = new Object();
 

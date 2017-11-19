@@ -22,8 +22,8 @@ import java.awt.event.ActionEvent;
  */
 public class DeleteAction extends AbstractAction {
 
-    private ArgonTree tree;
-    private TreeModel treeModel;
+    private final ArgonTree tree;
+    private final TreeModel treeModel;
 
     public DeleteAction(String name, Icon icon, ArgonTree tree) {
         super(name, icon);

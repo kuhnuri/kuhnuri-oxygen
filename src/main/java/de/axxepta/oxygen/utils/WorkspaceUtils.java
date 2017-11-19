@@ -27,7 +27,7 @@ public class WorkspaceUtils {
     @SuppressWarnings("all")   // keep public for access by AspectJ
     public static final Logger logger = LogManager.getLogger(WorkspaceUtils.class);
 
-    private static PluginWorkspace workspaceAccess = PluginWorkspaceProvider.getPluginWorkspace();
+    private static final PluginWorkspace workspaceAccess = PluginWorkspaceProvider.getPluginWorkspace();
 
     private static final int OVERWRITE_ALL = 2;
     private static final int OVERWRITE_YES = 1;
@@ -37,8 +37,8 @@ public class WorkspaceUtils {
 
     private static JPanel treePanel;
 
-    public static Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
-    public static Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
+    public static final Cursor WAIT_CURSOR = Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR);
+    public static final Cursor DEFAULT_CURSOR = Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR);
 
     private WorkspaceUtils() {
     }

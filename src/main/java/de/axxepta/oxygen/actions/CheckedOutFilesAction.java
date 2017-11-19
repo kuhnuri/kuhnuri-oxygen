@@ -98,7 +98,7 @@ public class CheckedOutFilesAction extends AbstractAction {
 
     private class ResourceListModel extends AbstractListModel {
 
-        private List<BaseXResource> data;
+        private final List<BaseXResource> data;
 
         ResourceListModel(List<BaseXResource> data) {
             this.data = data;

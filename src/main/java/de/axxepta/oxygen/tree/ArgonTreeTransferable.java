@@ -23,10 +23,10 @@ import static de.axxepta.oxygen.tree.TreeUtils.DEPTH_DB;
 class ArgonTreeTransferable implements Transferable {
 
     private static final Logger logger = LogManager.getLogger(ArgonTreeTransferable.class);
-    private static DataFlavor treePathFlavor = getTreePathFlavor();
-    private static DataFlavor uriListFlavor = getURIListFlavor();
-    private static DataFlavor[] flavors = initFlavors();
-    private TreePath path;
+    private static final DataFlavor treePathFlavor = getTreePathFlavor();
+    private static final DataFlavor uriListFlavor = getURIListFlavor();
+    private static final DataFlavor[] flavors = initFlavors();
+    private final TreePath path;
 
     ArgonTreeTransferable(TreePath path) {
         this.path = path;

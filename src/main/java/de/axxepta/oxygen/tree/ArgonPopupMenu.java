@@ -26,11 +26,11 @@ public class ArgonPopupMenu extends PopupMenu {
 
     private static final Logger logger = LogManager.getLogger(ArgonPopupMenu.class);
 
-    private ArgonTree tree;
+    private final ArgonTree tree;
     private final TreeModel treeModel;
 
-    private ArrayList<String> itemNames;
-    private ArrayList<JMenuItem> items;
+    private final ArrayList<String> itemNames;
+    private final ArrayList<JMenuItem> items;
 
     public ArgonPopupMenu(final ArgonTree tree, final TreeModel treeModel) {
         super();

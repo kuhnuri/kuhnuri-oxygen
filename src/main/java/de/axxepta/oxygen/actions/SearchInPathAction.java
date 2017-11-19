@@ -34,8 +34,8 @@ public class SearchInPathAction extends AbstractAction {
     private static final Logger logger = LogManager.getLogger(SearchInPathAction.class);
     private static final PluginWorkspace workspace = PluginWorkspaceProvider.getPluginWorkspace();
 
-    private JTree tree;
-    private TreePath rootPath;
+    private final JTree tree;
+    private final TreePath rootPath;
 
     private static final int SEARCH_DB = 1;
     private static final int SEARCH_ALL_DBS = 2;

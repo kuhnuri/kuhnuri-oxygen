@@ -10,10 +10,10 @@ import java.time.LocalDateTime;
  */
 public class VersionHistoryEntry {
 
-    private URL url;
-    private int version;
-    private int revision;
-    private LocalDateTime changeDate;
+    private final URL url;
+    private final int version;
+    private final int revision;
+    private final LocalDateTime changeDate;
 
     public VersionHistoryEntry(@JsonProperty("url") URL url,
                                @JsonProperty("version") int version,

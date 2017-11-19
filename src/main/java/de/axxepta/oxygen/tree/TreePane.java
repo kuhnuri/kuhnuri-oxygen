@@ -141,11 +141,11 @@ public class TreePane extends JPanel {
 
     private class SearchAction extends AbstractAction {
 
-        private JTextField filterField;
-        private TreePath rootPath;
-        private DefaultTreeModel model;
-        private ArgonTree tree;
-        private TreeListener treeListener;
+        private final JTextField filterField;
+        private final TreePath rootPath;
+        private final DefaultTreeModel model;
+        private final ArgonTree tree;
+        private final TreeListener treeListener;
         private DefaultMutableTreeNode newRoot;
 
         SearchAction(String name, Icon icon, DefaultTreeModel model, ArgonTree tree, TreeListener treeListener,
@@ -195,10 +195,10 @@ public class TreePane extends JPanel {
 
     private class ResetAction extends AbstractAction {
 
-        private JTextField filterField;
-        private DefaultTreeModel model;
-        private ArgonTree tree;
-        private TreeListener treeListener;
+        private final JTextField filterField;
+        private final DefaultTreeModel model;
+        private final ArgonTree tree;
+        private final TreeListener treeListener;
 
         ResetAction(String name, Icon icon, DefaultTreeModel model, ArgonTree tree, TreeListener treeListener,
                     JTextField filterField) {

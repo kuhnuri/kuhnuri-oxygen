@@ -18,7 +18,7 @@ import java.net.MalformedURLException;
  * functionality. All instances of the respected classes that are used in Argon are (supposed to be) created here.
  */
 public class ClassFactory {
-    private static ClassFactory ourInstance = new ClassFactory();
+    private static final ClassFactory ourInstance = new ClassFactory();
 
     public static ClassFactory getInstance() {
         return ourInstance;

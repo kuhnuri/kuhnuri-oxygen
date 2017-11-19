@@ -16,8 +16,8 @@ import java.util.ArrayList;
  */
 public class RefreshTreeAction extends AbstractAction {
 
-    private ArgonTree tree;
-    private TreeModel model;
+    private final ArgonTree tree;
+    private final TreeModel model;
 
     public RefreshTreeAction(String name, Icon icon, ArgonTree tree) {
         super(name, icon);
@@ -80,9 +80,9 @@ public class RefreshTreeAction extends AbstractAction {
     }
 
     private class DummyNode {
-        String name;
-        ArrayList<DummyNode> children;
-        boolean expanded;
+        final String name;
+        final ArrayList<DummyNode> children;
+        final boolean expanded;
 
         private DummyNode(String name, boolean expanded) {
             this.name = name;

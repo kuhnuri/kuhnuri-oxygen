@@ -116,7 +116,7 @@ public class Lang {
  * so had to implement a Bundle class which mimics ResouceBundle behavior
  */
 class Bundle {
-    private Properties bundleMap;
+    private final Properties bundleMap;
 
     public Bundle(String path, Locale locale) throws IOException {
         StringBuilder propFile = new StringBuilder(path);

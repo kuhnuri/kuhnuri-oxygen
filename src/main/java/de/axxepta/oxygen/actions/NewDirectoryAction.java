@@ -27,7 +27,7 @@ import java.util.List;
  */
 public class NewDirectoryAction extends AbstractAction {
 
-    private ArgonTree tree;
+    private final ArgonTree tree;
     private List<ArgonChooserListModel.Element> chooserPath;
     private JDialog newDirectoryDialog;
     private JTextField newDirectoryNameTextField;
@@ -114,9 +114,9 @@ public class NewDirectoryAction extends AbstractAction {
 
     private class MakeNewDirectoryAction extends AbstractAction {
 
-        private String path;
-        private BaseXSource source;
-        private String urlString;
+        private final String path;
+        private final BaseXSource source;
+        private final String urlString;
 
         MakeNewDirectoryAction(String name, BaseXSource source, String path, String urlString) {
             super(name);
