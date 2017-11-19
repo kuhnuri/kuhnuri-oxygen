@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * @author Markus on 27.07.2016.
  */
-public class ArgonChooserDialog extends JDialog implements MouseListener, ObserverInterface, DocumentListener {
+public class ArgonChooserDialog extends JDialog implements MouseListener, ObserverInterface<MsgTopic>, DocumentListener {
 
     private static final Logger logger = LogManager.getLogger(ArgonChooserDialog.class);
 
@@ -318,7 +318,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
      * method for interface ObserverInterface
      */
     @Override
-    public void update(String type, Object... message) {
+    public void update(MsgTopic type, Object... message) {
     }
 
 

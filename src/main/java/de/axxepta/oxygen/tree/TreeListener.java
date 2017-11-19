@@ -6,7 +6,10 @@ import de.axxepta.oxygen.actions.DeleteAction;
 import de.axxepta.oxygen.actions.RefreshTreeAction;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.BaseXType;
+import de.axxepta.oxygen.api.MsgTopic;
 import de.axxepta.oxygen.api.Resource;
+import de.axxepta.oxygen.api.event.NewDirEvent;
+import de.axxepta.oxygen.api.event.SaveFileEvent;
 import de.axxepta.oxygen.core.ClassFactory;
 import de.axxepta.oxygen.core.ObserverInterface;
 import de.axxepta.oxygen.utils.ConnectionWrapper;
@@ -35,7 +38,7 @@ import java.util.stream.Collectors;
  * Listener class observing all tree-related events
  */
 public class TreeListener extends MouseAdapter implements TreeSelectionListener, TreeWillExpandListener,
-        KeyListener, ObserverInterface {
+        KeyListener, ObserverInterface<MsgTopic> {
 
     private static final Logger logger = LogManager.getLogger(TreeListener.class);
     private static final PluginWorkspace workspace = PluginWorkspaceProvider.getPluginWorkspace();
@@ -225,7 +228,7 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
      */
 
     @Override
-    public void update(String type, Object... message) {
+    public void update(MsgTopic type, Object... message) {
         // is notified as observer when changes have been made to the database file structure
         // updates the tree if necessary
         TreeNode currNode;
@@ -233,7 +236,7 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
 
         logger.info("Tree needs to update: " + message[0]);
 
-        if (type.equals("SAVE_FILE") || type.equals("NEW_DIR")) {
+        if (type instanceof SaveFileEvent || type instanceof NewDirEvent) {
             String[] protocol = ((String) message[0]).split(":/*");
             String[] path = protocol[1].split("/");
             currPath = new TreePath(treeModel.getRoot());
@@ -254,7 +257,7 @@ public class TreeListener extends MouseAdapter implements TreeSelectionListener,
                 if (tree.isExpanded(currPath)) expanded = true;
                 if (expanded || (i == path.length - 1)) { // update tree now only if file is in visible path
                     if (TreeUtils.isNodeAsStrChild(currNode, path[i]) == -1) {
-                        isFile = (i + 1 == path.length) && type.equals("SAVE_FILE");
+                        isFile = (i + 1 == path.length) && type instanceof SaveFileEvent;
                         TreeUtils.insertStrAsNodeLexi(treeModel, path[i], (DefaultMutableTreeNode) currNode, isFile);
                         treeModel.reload(currNode);
                     }

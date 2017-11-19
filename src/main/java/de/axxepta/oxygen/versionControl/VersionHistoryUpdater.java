@@ -3,6 +3,7 @@ package de.axxepta.oxygen.versioncontrol;
 import de.axxepta.oxygen.api.ArgonConst;
 import de.axxepta.oxygen.api.BaseXConnectionWrapper;
 import de.axxepta.oxygen.api.Connection;
+import de.axxepta.oxygen.api.MsgTopic;
 import de.axxepta.oxygen.core.ObserverInterface;
 import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
 import de.axxepta.oxygen.utils.URLUtils;
@@ -19,7 +20,7 @@ import java.util.List;
  * @author Markus on 31.01.2016.
  */
 
-public class VersionHistoryUpdater implements ObserverInterface {
+public class VersionHistoryUpdater implements ObserverInterface<MsgTopic> {
 
     private final Logger logger = LogManager.getLogger(VersionHistoryUpdater.class);
 
@@ -30,7 +31,7 @@ public class VersionHistoryUpdater implements ObserverInterface {
         this.versionHistoryTable = versionHistoryTable;
     }
 
-    public void update(String type, Object... msg) {
+    public void update(MsgTopic type, Object... msg) {
         // ToDo: store data permanently in editor watch map to avoid repeated traffic--refresh historyList if editor is saved
         if ((msg[0] instanceof String) && !(msg[0]).equals("")) {
             String urlString = (String) msg[0];

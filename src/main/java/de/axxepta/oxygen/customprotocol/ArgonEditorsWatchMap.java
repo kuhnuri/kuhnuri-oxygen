@@ -1,17 +1,20 @@
 package de.axxepta.oxygen.customprotocol;
 
 import de.axxepta.oxygen.api.TopicHolder;
+import de.axxepta.oxygen.api.event.ListDirEvent;
 import de.axxepta.oxygen.core.ObserverInterface;
 
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
+import static de.axxepta.oxygen.api.TopicHolder.listDir;
+
 /**
  * @author Markus on 28.10.2015.
  * The enwraped map contains information about which Argon URLs are opened in editors
  */
-public class ArgonEditorsWatchMap implements ObserverInterface {
+public class ArgonEditorsWatchMap implements ObserverInterface<ListDirEvent> {
 
     private static final ArgonEditorsWatchMap instance = new ArgonEditorsWatchMap();
 
@@ -31,7 +34,7 @@ public class ArgonEditorsWatchMap implements ObserverInterface {
 
     public void init() {
         TopicHolder.newDir.register(this);
-        update("LIST_DIR", "");
+        update(listDir, "");
     }
 
     private boolean isLockInMap(URL url) {
@@ -97,7 +100,7 @@ public class ArgonEditorsWatchMap implements ObserverInterface {
     }
 
     @Override
-    public void update(String type, Object... message) {
+    public void update(ListDirEvent type, Object... message) {
         //
     }
 

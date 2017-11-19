@@ -18,7 +18,7 @@ public class MsgTopic implements SubjectInterface {
     private boolean changed;
     private final Object MUTEX = new Object();
 
-    MsgTopic(String msgType) {
+    public MsgTopic(String msgType) {
         this.observers = new ArrayList<>();
         this.type = msgType;
     }
@@ -43,13 +43,14 @@ public class MsgTopic implements SubjectInterface {
         List<ObserverInterface> observersLocal;
         //synchronization is used to make sure any observer registered after message is received is not notified
         synchronized (MUTEX) {
-            if (!changed)
+            if (!changed) {
                 return;
+            }
             observersLocal = new ArrayList<>(this.observers);
             this.changed = false;
         }
         for (ObserverInterface obj : observersLocal) {
-            obj.update(this.type, this.message);
+            obj.update(this, this.message);
         }
 
     }

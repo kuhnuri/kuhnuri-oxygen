@@ -176,7 +176,7 @@ public class RestConnection implements Connection {
 //            throw new IOException("Got " + response.getStatusLine().getStatusCode());
 //        }
         try (BufferedReader error = new BufferedReader(new InputStreamReader(response.getEntity().getContent()))) {
-            error.lines().forEach(line -> logger.error(line));
+            error.lines().forEach(logger::error);
         }
     }
 
