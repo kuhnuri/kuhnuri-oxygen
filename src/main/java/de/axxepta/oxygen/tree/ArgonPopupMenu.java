@@ -174,28 +174,28 @@ public class ArgonPopupMenu extends PopupMenu {
         for (int i = 0; i < itemCount; i++) {
             final String itemName = this.getItemName(i);
             if (itemName.equals(Lang.get(cm_open))) {
-                this.setItemEnabled(i, isFile ? true : false);
+                this.setItemEnabled(i, isFile);
             } else if (itemName.equals(Lang.get(cm_checkout))) {
-                this.setItemEnabled(i, isFile ? true : false);
+                this.setItemEnabled(i, isFile);
             } else if (itemName.equals(Lang.get(cm_adddb))) {
-                this.setItemEnabled(i, TreeUtils.isDbSource(path) ? true : false);
+                this.setItemEnabled(i, TreeUtils.isDbSource(path));
             } else if (itemName.equals(Lang.get(cm_delete))) {
-                this.setItemEnabled(i, isFile || isDir || isDB ? true : false);
+                this.setItemEnabled(i, isFile || isDir || isDB);
             } else if (itemName.equals(Lang.get(cm_rename))) {
                 // never! try to change the name of a WEB-INF folder
-                this.setItemEnabled(i, isFile || (isDir && !TreeUtils.isWEBINF(path)) ? true : false);
+                this.setItemEnabled(i, isFile || (isDir && !TreeUtils.isWEBINF(path)));
             } else if (itemName.equals(Lang.get(cm_export))) {
-                this.setItemEnabled(i, !isRoot && !isDbSource ? true : false);
+                this.setItemEnabled(i, !isRoot && !isDbSource);
             } else if (itemName.equals(Lang.get(cm_add))) {
-                this.setItemEnabled(i, isDir || isDB || isFileSource ? true : false);
+                this.setItemEnabled(i, isDir || isDB || isFileSource);
             } else if (itemName.equals(Lang.get(cm_newdir))) {
-                this.setItemEnabled(i, isDir || isDB || isFileSource ? true : false);
+                this.setItemEnabled(i, isDir || isDB || isFileSource);
             } else if (itemName.equals(Lang.get(cm_showversion))) {
-                this.setItemEnabled(i, isFile ? true : false);
+                this.setItemEnabled(i, isFile);
             } else if (itemName.equals(Lang.get(cm_find))) {
-                this.setItemEnabled(i, isFile ? false : true);
+                this.setItemEnabled(i, !isFile);
             } else if (itemName.equals(Lang.get(cm_search))) {
-                this.setItemEnabled(i, (isDB || isInDB) ? true : false);
+                this.setItemEnabled(i, isDB || isInDB);
             }
         }
     }
