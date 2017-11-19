@@ -4,7 +4,6 @@ import de.axxepta.oxygen.actions.AddDatabaseAction;
 import de.axxepta.oxygen.actions.AddNewFileAction;
 import de.axxepta.oxygen.actions.DeleteAction;
 import de.axxepta.oxygen.actions.RefreshTreeAction;
-import de.axxepta.oxygen.api.BaseXResource;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.BaseXType;
 import de.axxepta.oxygen.api.Resource;

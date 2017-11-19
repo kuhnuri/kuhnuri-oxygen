@@ -1,6 +1,5 @@
 package de.axxepta.oxygen.api;
 
-import com.fasterxml.jackson.core.type.TypeReference;
 import de.axxepta.oxygen.versioncontrol.VersionHistoryEntry;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -8,9 +7,7 @@ import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -20,16 +17,10 @@ import org.basex.util.Token;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.basex.util.http.HttpMethod;
 
-import javax.ws.rs.PUT;
 import java.io.*;
 import java.net.*;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.*;
 
-import static de.axxepta.oxygen.api.ArgonConst.ARGON;
 import static de.axxepta.oxygen.api.ConnectionUtils.*;
 import static org.basex.util.http.HttpMethod.GET;
 

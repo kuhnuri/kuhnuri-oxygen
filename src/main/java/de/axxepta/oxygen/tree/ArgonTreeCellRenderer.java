@@ -7,10 +7,7 @@ import ro.sync.exml.workspace.api.standalone.ui.TreeCellRenderer;
 
 import javax.swing.*;
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.TreeNode;
 import java.awt.*;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 
 public class ArgonTreeCellRenderer extends TreeCellRenderer {
 
