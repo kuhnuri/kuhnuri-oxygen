@@ -24,6 +24,8 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 
+import static de.axxepta.oxygen.utils.WorkspaceUtils.booleanDialog;
+
 /**
  * @author Markus on 05.11.2016.
  */
@@ -63,11 +65,11 @@ class DitaMapManagerChangeListener extends WSEditorChangeListener {
                 String path = CustomProtocolURLHandlerExtension.pathFromURL(editorLocation);
                 if (connection.lockedByUser(source, path) && !ArgonEditorsWatchMap.getInstance().askedForCheckIn(editorLocation)) {
 
-                    int checkInFile = pluginWorkspaceAccess.showConfirmDialog(
+                    int checkInFile = booleanDialog(pluginWorkspaceAccess,
                             "Closed checked out file",
                             "You just closed a checked out file. Do you want to check it in?",
-                            new String[]{"Yes", "No"},
-                            new int[]{0, 1}, 0);
+                            "Yes", 0,
+                            "No", 1, 0);
                     if (checkInFile == 0) {
                         connection.unlock(source, path);
                     }

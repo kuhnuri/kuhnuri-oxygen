@@ -121,9 +121,27 @@ public class WorkspaceUtils {
             treePanel.setCursor(cursor);
     }
 
+    public static int booleanDialog(PluginWorkspace pluginWorkspace,
+                                    String title,
+                                    String msg,
+                                    String trueButton, int trueValue, String falseButton,
+                                    int falseValue,
+                                    int initial) {
+        return pluginWorkspace.showConfirmDialog(
+                title,
+                msg,
+                new String[]{trueButton, falseButton},
+                new int[]{trueValue, falseValue},
+                initial);
+    }
+
     private static boolean checkOverwrite() {
-        int save = workspaceAccess.showConfirmDialog(Lang.get(Lang.Keys.dlg_overwrite), Lang.get(Lang.Keys.lbl_overwrite),
-                new String[]{Lang.get(Lang.Keys.cm_yes), Lang.get(Lang.Keys.cm_no)}, new int[]{OVERWRITE_YES, OVERWRITE_NO}, 0);
+        int save = booleanDialog(workspaceAccess,
+                Lang.get(Lang.Keys.dlg_overwrite),
+                Lang.get(Lang.Keys.lbl_overwrite),
+                Lang.get(Lang.Keys.cm_yes), OVERWRITE_YES,
+                Lang.get(Lang.Keys.cm_no), OVERWRITE_NO,
+                0);
         return (save == OVERWRITE_YES);
     }
 

@@ -29,6 +29,8 @@ import javax.swing.*;
 import java.io.IOException;
 import java.net.URL;
 
+import static de.axxepta.oxygen.utils.WorkspaceUtils.booleanDialog;
+
 
 class ArgonEditorChangeListener extends WSEditorChangeListener {
 
@@ -86,11 +88,12 @@ class ArgonEditorChangeListener extends WSEditorChangeListener {
                 String path = CustomProtocolURLHandlerExtension.pathFromURL(editorLocation);
                 if (connection.lockedByUser(source, path) && !ArgonEditorsWatchMap.getInstance().askedForCheckIn(editorLocation)) {
 
-                    int checkInFile = pluginWorkspaceAccess.showConfirmDialog(
+                    int checkInFile = booleanDialog(pluginWorkspaceAccess,
                             Lang.get(Lang.Keys.dlg_closed),
                             Lang.get(Lang.Keys.lbl_closed),
-                            new String[]{Lang.get(Lang.Keys.cm_yes), Lang.get(Lang.Keys.cm_no)},
-                            new int[]{0, 1}, 0);
+                            Lang.get(Lang.Keys.cm_yes), 0,
+                            Lang.get(Lang.Keys.cm_no), 1,
+                            0);
                     if (checkInFile == 0) {
                         connection.unlock(source, path);
                     }

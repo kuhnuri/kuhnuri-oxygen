@@ -5,7 +5,7 @@
 			<PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</Console>
     <!-- <File name="File" fileName="${env:ARGON_HOME}/argon.log"> -->
-		<File name="File" fileName="/Users/jelovirt/Work/project-argon/argon.log">
+		<File name="File" fileName="/Volumes/tmp/argon.log">
 			<PatternLayout pattern="%d{yyyy-mm-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
 		</File>
 	</appenders>

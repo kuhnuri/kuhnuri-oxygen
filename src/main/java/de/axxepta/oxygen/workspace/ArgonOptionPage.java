@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import static de.axxepta.oxygen.utils.WorkspaceUtils.booleanDialog;
+
 /**
  * Plugin option page extension Custom Workspace Access Plugin Extension.
  */
@@ -684,10 +686,12 @@ public class ArgonOptionPage extends OptionPagePluginExtension {
                     if (index == 0) {
                         overwrite = 1;
                     } else {
-                        overwrite = PluginWorkspaceProvider.getPluginWorkspace().showConfirmDialog(Lang.get(Lang.Keys.dlg_overwritesetting),
+                        overwrite = booleanDialog(PluginWorkspaceProvider.getPluginWorkspace(),
+                                Lang.get(Lang.Keys.dlg_overwritesetting),
                                 Lang.get(Lang.Keys.msg_settingsexists),
-                                new String[]{Lang.get(Lang.Keys.cm_overwrite), Lang.get(Lang.Keys.cm_rename)},
-                                new int[]{0, 1}, 0);
+                                Lang.get(Lang.Keys.cm_overwrite), 0,
+                                Lang.get(Lang.Keys.cm_rename), 1,
+                                0);
                     }
                     if (overwrite == 0) {
                         storeConnectionSettings();
