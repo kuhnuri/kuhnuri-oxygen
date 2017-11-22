@@ -20,18 +20,22 @@ import java.net.URLStreamHandler;
  */
 public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLockPluginExtension, URLHandlerReadOnlyCheckerExtension {
 
-    /**
-     * The custom protocol name is defined in ArgonConst.
-     */
-    /*public static final String ARGON = "argon";
-    public static final String ARGON_XQ = "argonquery";
-    public static final String ARGON_REPO = "argonrepo";*/
-
     private static final Logger logger = LogManager.getLogger(CustomProtocolURLHandlerExtension.class);
+
+    private final LockHandler lockHandler = new LockHandler() {
+        @Override
+        public void unlock(URL url) throws LockException {
+        }
+
+        @Override
+        public void updateLock(URL url, int i) throws LockException {
+        }
+    };
 
     /**
      * Gets the handler for the custom protocol
      */
+    @Override
     public URLStreamHandler getURLStreamHandler(String protocol) {
         //BaseXConnectionWrapper.refreshDefaults();
         URLStreamHandler handler;
@@ -50,48 +54,22 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
         }
     }
 
-    /**
-     * @see ro.sync.exml.plugin.urlstreamhandler.URLStreamHandlerWithLockPluginExtension#getLockHandler()
-     */
+    @Override
     public LockHandler getLockHandler() {
-
-        return (new LockHandler() {
-
-            @Override
-            public void unlock(URL url) throws LockException {
-            }
-
-            @Override
-            public void updateLock(URL url, int i) throws LockException {
-            }
-
-        });
+        return lockHandler;
     }
 
-    /**
-     * @see ro.sync.exml.plugin.urlstreamhandler.URLStreamHandlerWithLockPluginExtension#isLockingSupported(java.lang.String)
-     */
+    @Override
     public boolean isLockingSupported(String protocol) {
-        //return false;
-        return (protocol.toLowerCase().equals(ArgonConst.ARGON) ||
-                protocol.toLowerCase().equals(ArgonConst.ARGON_XQ) ||
-                protocol.toLowerCase().equals(ArgonConst.ARGON_REPO));
+        return protocol.toLowerCase().equals(ArgonConst.ARGON);
     }
 
-    /**
-     * @see ro.sync.exml.plugin.urlstreamhandler.URLHandlerReadOnlyCheckerExtension#canCheckReadOnly(java.lang.String)
-     */
+    @Override
     public boolean canCheckReadOnly(String protocol) {
-        //return false;
-        return (protocol.toLowerCase().equals(ArgonConst.ARGON) //||
-//                protocol.toLowerCase().equals(ArgonConst.ARGON_XQ) ||
-//                protocol.toLowerCase().equals(ArgonConst.ARGON_REPO)
-        );
+        return protocol.toLowerCase().equals(ArgonConst.ARGON);
     }
 
-    /**
-     * @see ro.sync.exml.plugin.urlstreamhandler.URLHandlerReadOnlyCheckerExtension#isReadOnly(java.net.URL)
-     */
+    @Override
     public boolean isReadOnly(URL url) {
         //return false;
         return isInHiddenDB(url) || !ConnectionWrapper.isLockedByUser(sourceFromURL(url), pathFromURL(url));

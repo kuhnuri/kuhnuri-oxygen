@@ -64,7 +64,7 @@ task dist(type: Zip, dependsOn: jar) {
     }
     from (configurations.runtime) {
         into "lib"
-        exclude "oxygen.jar"
+        exclude "oxygen-*.jar"
     }
     from (".") {
         include "LICENSE"
