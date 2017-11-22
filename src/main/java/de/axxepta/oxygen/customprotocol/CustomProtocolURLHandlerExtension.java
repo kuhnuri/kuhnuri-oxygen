@@ -1,5 +1,7 @@
 package de.axxepta.oxygen.customprotocol;
 
+import com.google.common.cache.Cache;
+import com.google.common.cache.CacheBuilder;
 import de.axxepta.oxygen.api.ArgonConst;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.utils.ConnectionWrapper;
@@ -13,6 +15,8 @@ import ro.sync.exml.plugin.urlstreamhandler.URLStreamHandlerWithLockPluginExtens
 import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLStreamHandler;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 
 /**
@@ -21,6 +25,10 @@ import java.net.URLStreamHandler;
 public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLockPluginExtension, URLHandlerReadOnlyCheckerExtension {
 
     private static final Logger logger = LogManager.getLogger(CustomProtocolURLHandlerExtension.class);
+    private final Cache<URL, Boolean> readOnlyCache = CacheBuilder.newBuilder()
+            .maximumSize(1000)
+            .expireAfterWrite(10, TimeUnit.SECONDS)
+            .build();
 
     private final LockHandler lockHandler = new LockHandler() {
         @Override
@@ -71,8 +79,13 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
 
     @Override
     public boolean isReadOnly(URL url) {
-        //return false;
-        return isInHiddenDB(url) || !ConnectionWrapper.isLockedByUser(sourceFromURL(url), pathFromURL(url));
+        // FIXME there should be a way to put/remove from cache on checkout/checkin operations
+        try {
+            return readOnlyCache.get(url, () -> isInHiddenDB(url) || !ConnectionWrapper.isLockedByUser(sourceFromURL(url), pathFromURL(url)));
+        } catch (ExecutionException e) {
+            logger.error("Failed to get read-only status from cache: " + e.getMessage(), e);
+            return true;
+        }
     }
 
     private static boolean isInHiddenDB(URL url) {

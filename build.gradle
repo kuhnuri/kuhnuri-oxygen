@@ -38,6 +38,7 @@ dependencies {
     compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.3'
     compile group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.3'
     compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.3'
+    compile group: 'com.google.guava', name: 'guava', version: '23.4-jre'
     compile group: 'com.oxygenxml', name: 'oxygen', version: '19.1.0.1'
     compile group: 'com.oxygenxml', name: 'oxygen-sdk', version: '19.1.0.1'
 
