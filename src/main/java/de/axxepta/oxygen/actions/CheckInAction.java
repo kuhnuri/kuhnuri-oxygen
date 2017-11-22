@@ -10,6 +10,7 @@ import de.axxepta.oxygen.tree.TreeUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
+import ro.sync.exml.workspace.api.editor.WSEditor;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -28,22 +29,37 @@ public class CheckInAction extends AbstractAction {
     private static final Logger logger = LogManager.getLogger(CheckInAction.class);
 
     private final TreeListener treeListener;
+    private URL urlString = null;
 
-    public CheckInAction(String name, Icon icon, TreeListener treeListener) {
+    public CheckInAction(String name, Icon icon, String urlString, TreeListener treeListener) {
         super(name, icon);
+
+        try {
+            this.urlString = urlString != null ? new URL(urlString) : null;
+        } catch (MalformedURLException e) {
+            logger.error(e.getMessage());
+            throw new IllegalArgumentException(e.getMessage(), e);
+        }
         this.treeListener = treeListener;
     }
 
+    public CheckInAction(String name, Icon icon, TreeListener treeListener) {
+        this(name, icon, null, treeListener);
+    }
+
+    public CheckInAction(String name, Icon icon, String urlString) {
+        this(name, icon, urlString, null);
+    }
+
     public CheckInAction(String name, Icon icon) {
-        this(name, icon, null);
+        this(name, icon, null, null);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-//        if (this.urlString != null) {
-//            checkOut(this.urlString);
-//        } else
-        if (treeListener == null) {
+        if (this.urlString != null) {
+            checkIn(this.urlString);
+        } else if (treeListener == null) {
             final URL url = PluginWorkspaceProvider.getPluginWorkspace().
                     getCurrentEditorAccess(MAIN_EDITING_AREA).getEditorLocation();
             checkIn(url);
@@ -63,11 +79,13 @@ public class CheckInAction extends AbstractAction {
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             if (connection.lockedByUser(source, path)) {
                 ArgonEditorsWatchMap.getInstance().setAskedForCheckIn(url, true);
-//                final WSEditor editorAccess = PluginWorkspaceProvider.getPluginWorkspace().
-//                        getEditorAccess(url, MAIN_EDITING_AREA);
-//                if (editorAccess != null) {
-//                    editorAccess.close(true);
-//                }
+                if (false) {
+                    final WSEditor editorAccess = PluginWorkspaceProvider.getPluginWorkspace().
+                            getEditorAccess(url, MAIN_EDITING_AREA);
+                    if (editorAccess != null) {
+                        editorAccess.close(true);
+                    }
+                }
                 connection.unlock(source, path);
             }
         } catch (IOException ex) {

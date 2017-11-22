@@ -1,5 +1,6 @@
 package de.axxepta.oxygen.workspace;
 
+import de.axxepta.oxygen.actions.CheckInAction;
 import de.axxepta.oxygen.actions.CheckOutAction;
 import de.axxepta.oxygen.api.*;
 import de.axxepta.oxygen.customprotocol.ArgonEditorsWatchMap;
@@ -94,7 +95,11 @@ class DitaMapManagerChangeListener extends WSEditorChangeListener {
     }
 
     private JMenuItem createCheckOutEditorPopUpAddition(String urlString) {
-        return new JMenuItem(new CheckOutAction(Lang.get(Lang.Keys.cm_checkout), ImageUtils.getIcon(ImageUtils.BASEX), urlString));
+        return new JMenuItem(new CheckOutAction(Lang.get(Lang.Keys.cm_checkout), ImageUtils.getIcon(ImageUtils.UNLOCK), urlString));
+    }
+
+    private JMenuItem createCheckInEditorPopUpAddition(String urlString) {
+        return new JMenuItem(new CheckInAction(Lang.get(Lang.Keys.cm_checkin), ImageUtils.getIcon(ImageUtils.BASEX_LOCKED), urlString));
     }
 
     private static String getAbsoluteURLString(String baseURL, String refName) throws IllegalArgumentException {
@@ -102,19 +107,22 @@ class DitaMapManagerChangeListener extends WSEditorChangeListener {
         String[] refComponents = refName.split("/");
         int refUp = 0;
         for (String refComponent : refComponents) {
-            if (refComponent.equals(".."))
+            if (refComponent.equals("..")) {
                 refUp++;
+            }
         }
         if (refUp > (baseComponents.length - 2)) {
             throw new IllegalArgumentException("Cannot resolve DITAMap link URL.");
         }
         StringBuilder absoluteURL = (new StringBuilder(baseComponents[0])).append(":");
-        for (int i = 1; i < baseComponents.length - 1 - refUp; i++)
+        for (int i = 1; i < baseComponents.length - 1 - refUp; i++) {
             absoluteURL.append(baseComponents[i]).append("/");
+        }
         for (int i = refUp; i < refComponents.length; i++) {
             absoluteURL.append(refComponents[i]);
-            if (i < (refComponents.length - 1))
+            if (i < (refComponents.length - 1)) {
                 absoluteURL.append("/");
+            }
         }
         return absoluteURL.toString();
     }
@@ -143,6 +151,9 @@ class DitaMapManagerChangeListener extends WSEditorChangeListener {
                                 String urlString = getAbsoluteURLString(baseUrl, refName);
                                 JMenuItem checkOutMenuItem = createCheckOutEditorPopUpAddition(urlString);
                                 ((JPopupMenu) popUp).add(checkOutMenuItem, 0);
+
+                                JMenuItem checkInMenuItem = createCheckInEditorPopUpAddition(urlString);
+                                ((JPopupMenu) popUp).add(checkInMenuItem, 1);
                             } catch (IllegalArgumentException iae) {
                                 logger.debug("Cannot resolve DITAMap link URL.");
                             }
