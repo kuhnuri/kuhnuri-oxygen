@@ -236,7 +236,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
         if (depth == 0) {
             pathString = "";
         } else {
-            pathString = CustomProtocolURLHandlerExtension.protocolFromSource(getSourceFromElement(path.get(0))) +
+            pathString = CustomProtocolURLUtils.protocolFromSource(getSourceFromElement(path.get(0))) +
                     ":" + getResourceString(path) + "/" + selectedFileTextField.getText();
         }
         pathString = pathString.replace(":/", ":");

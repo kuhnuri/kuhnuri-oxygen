@@ -4,7 +4,7 @@ import de.axxepta.oxygen.api.BaseXConnectionWrapper;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.Connection;
 import de.axxepta.oxygen.customprotocol.ArgonEditorsWatchMap;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.tree.TreeListener;
 import de.axxepta.oxygen.tree.TreeUtils;
 import org.apache.logging.log4j.LogManager;
@@ -74,8 +74,8 @@ public class CheckInAction extends AbstractAction {
     }
 
     static void checkIn(URL url) {
-        final BaseXSource source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
-        final String path = CustomProtocolURLHandlerExtension.pathFromURL(url);
+        final BaseXSource source = CustomProtocolURLUtils.sourceFromURL(url);
+        final String path = CustomProtocolURLUtils.pathFromURL(url);
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             if (connection.lockedByUser(source, path)) {
                 ArgonEditorsWatchMap.getInstance().setAskedForCheckIn(url, true);

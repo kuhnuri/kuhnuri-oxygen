@@ -43,7 +43,7 @@ public class ArgonProtocolHandler extends URLStreamHandler {
             try (Connection connection = BaseXConnectionWrapper.getConnection()) {
                 logger.info("Requested new InputStream: " + this.url.toString());
                 inputStream = new ByteArrayInputStream(connection.get(source,
-                        CustomProtocolURLHandlerExtension.pathFromURL(this.url), false));
+                        CustomProtocolURLUtils.pathFromURL(this.url), false));
                 // ToDo: try to call OptionPage -> if not accessible, not in editor context (e.g., publishing process), don't add URL to watch map
                 ArgonEditorsWatchMap.getInstance().addURL(url);
             } catch (IOException io) {

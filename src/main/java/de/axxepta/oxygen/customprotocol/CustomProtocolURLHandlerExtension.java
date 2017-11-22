@@ -12,7 +12,6 @@ import ro.sync.exml.plugin.lock.LockHandler;
 import ro.sync.exml.plugin.urlstreamhandler.URLHandlerReadOnlyCheckerExtension;
 import ro.sync.exml.plugin.urlstreamhandler.URLStreamHandlerWithLockPluginExtension;
 
-import java.io.UnsupportedEncodingException;
 import java.net.URL;
 import java.net.URLStreamHandler;
 import java.util.concurrent.ExecutionException;
@@ -81,83 +80,10 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
     public boolean isReadOnly(URL url) {
         // FIXME there should be a way to put/remove from cache on checkout/checkin operations
         try {
-            return readOnlyCache.get(url, () -> isInHiddenDB(url) || !ConnectionWrapper.isLockedByUser(sourceFromURL(url), pathFromURL(url)));
+            return readOnlyCache.get(url, () -> CustomProtocolURLUtils.isInHiddenDB(url) || !ConnectionWrapper.isLockedByUser(CustomProtocolURLUtils.sourceFromURL(url), CustomProtocolURLUtils.pathFromURL(url)));
         } catch (ExecutionException e) {
             logger.error("Failed to get read-only status from cache: " + e.getMessage(), e);
             return true;
-        }
-    }
-
-    private static boolean isInHiddenDB(URL url) {
-        final String path = pathFromURL(url);
-        final int firstCharOfPath = path.charAt(0) == '/' ? 1 : 0;
-        return path.charAt(firstCharOfPath) == '~';
-    }
-
-    public static String pathFromURL(URL url) {
-        String urlString = "";
-        try {
-            urlString = java.net.URLDecoder.decode(url.toString(), "UTF-8");
-        } catch (UnsupportedEncodingException | IllegalArgumentException ex) {
-            logger.error("URLDecoder error decoding " + url.toString(), ex.getMessage());
-        }
-        return pathFromURLString(urlString);
-    }
-
-    public static String pathFromURLString(String urlString) {
-        String[] urlComponents = urlString.split(":/*");
-        if (urlComponents.length < 2) {
-            return "";
-            // ToDo: exception handling
-        } else {
-            return urlComponents[1];
-        }
-    }
-
-    public static String protocolFromSource(BaseXSource source) {
-        switch (source) {
-//            case RESTXQ:
-//                return ArgonConst.ARGON_XQ;
-//            case REPO:
-//                return ArgonConst.ARGON_REPO;
-            default:
-                return ArgonConst.ARGON;
-        }
-    }
-
-    public static String protocolFromURL(URL url) {
-        String urlString = url.toString().toLowerCase();
-        if (urlString.startsWith(ArgonConst.ARGON_XQ)) {
-            return ArgonConst.ARGON_XQ;
-        }
-        if (urlString.startsWith(ArgonConst.ARGON_REPO)) {
-            return ArgonConst.ARGON_REPO;
-        }
-        return ArgonConst.ARGON;
-    }
-
-    public static BaseXSource sourceFromURL(URL url) {
-        return sourceFromURLString(url.toString());
-
-    }
-
-    public static BaseXSource sourceFromURLString(String urlString) {
-        String protocol;
-        int ind1 = urlString.indexOf(":");
-        if (ind1 == -1) {    // no proper URL string, but used someplace
-            protocol = urlString;
-        } else {
-            protocol = urlString.substring(0, ind1);
-        }
-        switch (protocol) {
-//            case ArgonConst.ARGON_XQ:
-//                return BaseXSource.RESTXQ;
-            case ArgonConst.ARGON_REPO:
-                return BaseXSource.REPO;
-            case ArgonConst.ARGON:
-                return BaseXSource.DATABASE;
-            default:
-                return null;
         }
     }
 

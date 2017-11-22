@@ -4,7 +4,7 @@ import de.axxepta.oxygen.actions.ExportAction;
 import de.axxepta.oxygen.api.BaseXResource;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.BaseXType;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -92,7 +92,7 @@ class ArgonTreeTransferable implements Transferable {
         for (BaseXResource resource : resourceList) {
             if (resource.getType().equals(BaseXType.RESOURCE)) {
                 String fullResourceName = ExportAction.getFullResource(path, source, resource);
-                String resourceURL = CustomProtocolURLHandlerExtension.protocolFromSource(source) + ":" +
+                String resourceURL = CustomProtocolURLUtils.protocolFromSource(source) + ":" +
                         fullResourceName;
                 uriListBuilder.append(resourceURL).append("\n");
             }

@@ -4,7 +4,7 @@ import de.axxepta.oxygen.actions.CheckInAction;
 import de.axxepta.oxygen.actions.CheckOutAction;
 import de.axxepta.oxygen.api.*;
 import de.axxepta.oxygen.customprotocol.ArgonEditorsWatchMap;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.utils.ImageUtils;
 import de.axxepta.oxygen.utils.Lang;
 import de.axxepta.oxygen.versioncontrol.VersionHistoryUpdater;
@@ -62,8 +62,8 @@ class DitaMapManagerChangeListener extends WSEditorChangeListener {
     public void editorClosed(URL editorLocation) {
         if (editorLocation.toString().startsWith(ArgonConst.ARGON)) {
             try (Connection connection = BaseXConnectionWrapper.getConnection()) {
-                BaseXSource source = CustomProtocolURLHandlerExtension.sourceFromURL(editorLocation);
-                String path = CustomProtocolURLHandlerExtension.pathFromURL(editorLocation);
+                BaseXSource source = CustomProtocolURLUtils.sourceFromURL(editorLocation);
+                String path = CustomProtocolURLUtils.pathFromURL(editorLocation);
                 if (connection.lockedByUser(source, path) && !ArgonEditorsWatchMap.getInstance().askedForCheckIn(editorLocation)) {
 
                     int checkInFile = booleanDialog(pluginWorkspaceAccess,

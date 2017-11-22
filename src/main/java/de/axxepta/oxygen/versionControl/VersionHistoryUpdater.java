@@ -5,7 +5,7 @@ import de.axxepta.oxygen.api.BaseXConnectionWrapper;
 import de.axxepta.oxygen.api.Connection;
 import de.axxepta.oxygen.api.MsgTopic;
 import de.axxepta.oxygen.core.ObserverInterface;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.utils.URLUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -35,7 +35,7 @@ public class VersionHistoryUpdater implements ObserverInterface<MsgTopic> {
         // ToDo: store data permanently in editor watch map to avoid repeated traffic--refresh historyList if editor is saved
         if ((msg[0] instanceof String) && !(msg[0]).equals("")) {
             String urlString = (String) msg[0];
-            String resource = CustomProtocolURLHandlerExtension.pathFromURLString(urlString);
+            String resource = CustomProtocolURLUtils.pathFromURLString(urlString);
 
             if (urlString.startsWith(ArgonConst.ARGON + ":")) {
                 try (Connection connection = BaseXConnectionWrapper.getConnection()) {

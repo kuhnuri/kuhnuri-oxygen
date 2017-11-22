@@ -2,7 +2,7 @@ package de.axxepta.oxygen.utils;
 
 import de.axxepta.oxygen.api.*;
 import de.axxepta.oxygen.customprotocol.BaseXByteArrayOutputStream;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.tree.TreeUtils;
 import de.axxepta.oxygen.workspace.ArgonOptionPage;
 import org.apache.logging.log4j.LogManager;
@@ -144,8 +144,8 @@ public final class ConnectionWrapper {
         ByteArrayInputStream inputStream;
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             logger.info("Requested new InputStream: " + url.toString());
-            inputStream = new ByteArrayInputStream(connection.get(CustomProtocolURLHandlerExtension.sourceFromURL(url),
-                    CustomProtocolURLHandlerExtension.pathFromURL(url), false));
+            inputStream = new ByteArrayInputStream(connection.get(CustomProtocolURLUtils.sourceFromURL(url),
+                    CustomProtocolURLUtils.pathFromURL(url), false));
         } catch (NullPointerException npe) {
             logger.info("Error obtaining input stream from " + url.toString() + ": no database connection");
             throw new NoDatabaseConnectionException();
@@ -383,7 +383,7 @@ public final class ConnectionWrapper {
     public static void newDir(BaseXSource source, String path) {
         if (source.equals(BaseXSource.DATABASE)) {
             String resource = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<empty/>";
-            String urlString = CustomProtocolURLHandlerExtension.protocolFromSource(source) + ":" +
+            String urlString = CustomProtocolURLUtils.protocolFromSource(source) + ":" +
                     path + "/" + ArgonConst.EMPTY_FILE;
             try {
                 URL url = new URL(urlString);

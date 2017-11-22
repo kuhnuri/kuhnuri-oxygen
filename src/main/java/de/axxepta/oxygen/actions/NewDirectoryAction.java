@@ -5,7 +5,7 @@ import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.TopicHolder;
 import de.axxepta.oxygen.customprotocol.ArgonChooserDialog;
 import de.axxepta.oxygen.customprotocol.ArgonChooserListModel;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.tree.ArgonTree;
 import de.axxepta.oxygen.tree.ArgonTreeNode;
 import de.axxepta.oxygen.tree.TreeListener;
@@ -60,7 +60,7 @@ public class NewDirectoryAction extends AbstractAction {
                     source = BaseXSource.DATABASE;
             }
             resource = ArgonChooserDialog.getResourceString(chooserPath);
-            urlString = CustomProtocolURLHandlerExtension.protocolFromSource(source) + ":" + resource;
+            urlString = CustomProtocolURLUtils.protocolFromSource(source) + ":" + resource;
             ArgonEntity element = chooserPath.get(chooserPath.size() - 1).getType();
             if (element.equals(ArgonEntity.DIR)
                     || element.equals(ArgonEntity.DB)

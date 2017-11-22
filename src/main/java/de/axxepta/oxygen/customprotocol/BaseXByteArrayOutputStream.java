@@ -31,14 +31,14 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
     public BaseXByteArrayOutputStream(URL url) {
         super();
         this.url = url;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+        this.source = CustomProtocolURLUtils.sourceFromURL(url);
     }
 
     public BaseXByteArrayOutputStream(URL url, String encoding) {
         super();
         this.url = url;
         this.encoding = encoding;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+        this.source = CustomProtocolURLUtils.sourceFromURL(url);
     }
 
     public BaseXByteArrayOutputStream(String owner, boolean binary, URL url) {
@@ -46,14 +46,14 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
         this.url = url;
         this.binary = binary;
         this.owner = owner;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+        this.source = CustomProtocolURLUtils.sourceFromURL(url);
     }
 
     public BaseXByteArrayOutputStream(boolean binary, URL url) {
         super();
         this.url = url;
         this.binary = binary;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+        this.source = CustomProtocolURLUtils.sourceFromURL(url);
     }
 
     public BaseXByteArrayOutputStream(boolean binary, URL url, boolean versionUp) {
@@ -61,7 +61,7 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
         this.url = url;
         this.binary = binary;
         this.versionUp = versionUp;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+        this.source = CustomProtocolURLUtils.sourceFromURL(url);
     }
 
     public BaseXByteArrayOutputStream(String owner, URL url, String encoding) {
@@ -69,14 +69,14 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
         this.url = url;
         this.encoding = encoding;
         this.owner = owner;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+        this.source = CustomProtocolURLUtils.sourceFromURL(url);
     }
 
     public BaseXByteArrayOutputStream(URL url, String encoding, boolean versionUp) {
         super();
         this.url = url;
         this.encoding = encoding;
-        this.source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
+        this.source = CustomProtocolURLUtils.sourceFromURL(url);
         this.versionUp = versionUp;
     }
 
@@ -145,7 +145,7 @@ public class BaseXByteArrayOutputStream extends ByteArrayOutputStream {
         } else {
             useVersioning = "false";
         }
-        final String path = CustomProtocolURLHandlerExtension.pathFromURL(this.url);
+        final String path = CustomProtocolURLUtils.pathFromURL(this.url);
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             connection.put(this.source, path, savedBytes, binary, encoding, owner, useVersioning, String.valueOf(versionUp));
             versionUp = false;

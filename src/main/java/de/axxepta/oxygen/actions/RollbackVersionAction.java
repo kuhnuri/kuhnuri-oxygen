@@ -3,7 +3,7 @@ package de.axxepta.oxygen.actions;
 import de.axxepta.oxygen.api.BaseXConnectionWrapper;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.Connection;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.utils.WorkspaceUtils;
 import de.axxepta.oxygen.versioncontrol.VersionHistoryTableModel;
 import org.apache.logging.log4j.LogManager;
@@ -65,7 +65,7 @@ public class RollbackVersionAction extends AbstractAction {
         String oldDocumentString = null;
         try (Connection connection = BaseXConnectionWrapper.getConnection()) {
             InputStream oldRevisionStream = new ByteArrayInputStream(connection.get(BaseXSource.DATABASE,
-                    CustomProtocolURLHandlerExtension.pathFromURL(url), false));
+                    CustomProtocolURLUtils.pathFromURL(url), false));
             oldDocumentString = new Scanner(oldRevisionStream, "UTF-8").useDelimiter("\\A").next();
         } catch (IOException ex) {
             logger.error("Couldn't access old file revision during Reset To");

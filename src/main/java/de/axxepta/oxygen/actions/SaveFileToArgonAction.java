@@ -2,7 +2,7 @@ package de.axxepta.oxygen.actions;
 
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.customprotocol.ArgonChooserDialog;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.utils.ConnectionWrapper;
 import de.axxepta.oxygen.utils.Lang;
 import de.axxepta.oxygen.utils.WorkspaceUtils;
@@ -37,8 +37,8 @@ public class SaveFileToArgonAction extends AbstractAction {
         WSEditor editorAccess = workspace.getCurrentEditorAccess(PluginWorkspace.MAIN_EDITING_AREA);
 
         if (url != null) {
-            BaseXSource source = CustomProtocolURLHandlerExtension.sourceFromURL(url[0]);
-            String path = CustomProtocolURLHandlerExtension.pathFromURL(url[0]);
+            BaseXSource source = CustomProtocolURLUtils.sourceFromURL(url[0]);
+            String path = CustomProtocolURLUtils.pathFromURL(url[0]);
             if (WorkspaceUtils.newResourceOrOverwrite(source, path)) {
                 if (!ConnectionWrapper.isLocked(source, path)) {
                     try {

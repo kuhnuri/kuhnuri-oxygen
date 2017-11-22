@@ -3,7 +3,7 @@ package de.axxepta.oxygen.tree;
 import de.axxepta.oxygen.api.ArgonConst;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.core.ClassFactory;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.utils.Lang;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -99,7 +99,7 @@ public class TreeUtils {
 
     public static TreePath pathFromURLString(String urlString) {
         TreePath path = new TreePath(model.getRoot());
-        final BaseXSource source = CustomProtocolURLHandlerExtension.sourceFromURLString(urlString);
+        final BaseXSource source = CustomProtocolURLUtils.sourceFromURLString(urlString);
         switch (source) {
 //            case REPO:
 //                path = pathByAddingChildAsStr(path, Lang.get(Lang.Keys.tree_repo));

@@ -6,7 +6,7 @@ import de.axxepta.oxygen.api.BaseXResource;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.BaseXType;
 import de.axxepta.oxygen.customprotocol.BaseXByteArrayOutputStream;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.utils.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -132,7 +132,7 @@ public class ArgonTreeTransferHandler extends TransferHandler {
                         copyInTree(source, db_path, sourcePath, pathURLString);
                     } else {
                         String newName = sourcePath.getLastPathComponent().toString();
-                        String newPathString = CustomProtocolURLHandlerExtension.pathFromURLString(pathURLString) + "/" + newName;
+                        String newPathString = CustomProtocolURLUtils.pathFromURLString(pathURLString) + "/" + newName;
                         RenameAction.rename(model, sourcePath, source, db_path, newPathString, newName, workspace);
                     }
                 } catch (Exception ex) {
@@ -168,7 +168,7 @@ public class ArgonTreeTransferHandler extends TransferHandler {
         for (BaseXResource resource : resourceList) {
             if (resource.getType().equals(BaseXType.RESOURCE)) {
                 String fullResourceName = ExportAction.getFullResource(sourcePath, source, resource);
-                String resourceURL = CustomProtocolURLHandlerExtension.protocolFromSource(source) + ":" +
+                String resourceURL = CustomProtocolURLUtils.protocolFromSource(source) + ":" +
                         fullResourceName;
                 String relativePath = ExportAction.getRelativePath(source, db_path, fullResourceName);
                 URL sourceURL = new URL(resourceURL);
@@ -227,7 +227,7 @@ public class ArgonTreeTransferHandler extends TransferHandler {
                 URL url;
                 try {
                     url = new URL(pathList.get(i));
-                    String newPath = CustomProtocolURLHandlerExtension.pathFromURL(url);
+                    String newPath = CustomProtocolURLUtils.pathFromURL(url);
 
                     isLocked = ConnectionWrapper.isLocked(source, newPath);
                     if (isLocked) {

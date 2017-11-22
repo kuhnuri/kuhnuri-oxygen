@@ -2,7 +2,7 @@ package de.axxepta.oxygen.actions;
 
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.customprotocol.ArgonChooserDialog;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.utils.ConnectionWrapper;
 import de.axxepta.oxygen.utils.IOUtils;
 import de.axxepta.oxygen.utils.Lang;
@@ -84,8 +84,8 @@ public class StoreSnippetSelectionAction extends AbstractAction {
         URL[] urls = urlChooser.selectURLs();
         if (urls != null) {
             URL url = urls[0];
-            BaseXSource source = CustomProtocolURLHandlerExtension.sourceFromURL(url);
-            String path = CustomProtocolURLHandlerExtension.pathFromURL(url);
+            BaseXSource source = CustomProtocolURLUtils.sourceFromURL(url);
+            String path = CustomProtocolURLUtils.pathFromURL(url);
             if (ConnectionWrapper.isLocked(source, path)) {
                 workspace.showInformationMessage(Lang.get(Lang.Keys.warn_resource) + " " + Lang.get(Lang.Keys.warn_locked));
             } else {
