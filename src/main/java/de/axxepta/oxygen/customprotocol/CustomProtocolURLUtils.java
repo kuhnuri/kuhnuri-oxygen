@@ -6,17 +6,12 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
 import java.net.URL;
 
 public class CustomProtocolURLUtils {
 
     private static final Logger logger = LogManager.getLogger(CustomProtocolURLUtils.class);
-
-    static boolean isInHiddenDB(URL url) {
-        final String path = pathFromURL(url);
-        final int firstCharOfPath = path.charAt(0) == '/' ? 1 : 0;
-        return path.charAt(firstCharOfPath) == '~';
-    }
 
     public static String pathFromURL(URL url) {
         String urlString = "";
@@ -43,14 +38,11 @@ public class CustomProtocolURLUtils {
     }
 
     public static BaseXSource sourceFromURLString(String urlString) {
-        String protocol;
-        int ind1 = urlString.indexOf(":");
-        if (ind1 == -1) {    // no proper URL string, but used someplace
-            protocol = urlString;
-        } else {
-            protocol = urlString.substring(0, ind1);
+        final URI uri = URI.create(urlString);
+        if (uri.getScheme() == null) {
+            return null;
         }
-        switch (protocol) {
+        switch (uri.getScheme()) {
 //            case ArgonConst.ARGON_XQ:
 //                return BaseXSource.RESTXQ;
             case ArgonConst.ARGON_REPO:

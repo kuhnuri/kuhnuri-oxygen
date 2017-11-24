@@ -80,7 +80,7 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
     public boolean isReadOnly(URL url) {
         // FIXME there should be a way to put/remove from cache on checkout/checkin operations
         try {
-            return readOnlyCache.get(url, () -> CustomProtocolURLUtils.isInHiddenDB(url) || !ConnectionWrapper.isLockedByUser(CustomProtocolURLUtils.sourceFromURL(url), CustomProtocolURLUtils.pathFromURL(url)));
+            return readOnlyCache.get(url, () -> !ConnectionWrapper.isLockedByUser(CustomProtocolURLUtils.sourceFromURL(url), CustomProtocolURLUtils.pathFromURL(url)));
         } catch (ExecutionException e) {
             logger.error("Failed to get read-only status from cache: " + e.getMessage(), e);
             return true;

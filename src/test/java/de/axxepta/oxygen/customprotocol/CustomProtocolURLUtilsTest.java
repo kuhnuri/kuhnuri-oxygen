@@ -40,11 +40,6 @@ public class CustomProtocolURLUtilsTest {
     }
 
     @Test
-    public void isInHiddenDB() throws Exception {
-//        assertTrue(isInHiddenDB(new URL()))
-    }
-
-    @Test
     public void pathFromURL() throws Exception {
         assertEquals("foo", CustomProtocolURLUtils.pathFromURL(new URL(ARGON + ":foo")));
         assertEquals("foo/bar", CustomProtocolURLUtils.pathFromURL(new URL(ARGON + ":foo/bar")));
@@ -56,6 +51,8 @@ public class CustomProtocolURLUtilsTest {
         assertEquals("foo", CustomProtocolURLUtils.pathFromURLString(ARGON + ":foo"));
         assertEquals("foo/bar", CustomProtocolURLUtils.pathFromURLString(ARGON + ":foo/bar"));
         assertEquals("foo/bar", CustomProtocolURLUtils.pathFromURLString(ARGON + ":/foo/bar"));
+        assertEquals("", CustomProtocolURLUtils.pathFromURLString("/foo/bar"));
+        assertEquals("", CustomProtocolURLUtils.pathFromURLString("foo/bar"));
     }
 
     @Test
@@ -68,6 +65,7 @@ public class CustomProtocolURLUtilsTest {
     public void sourceFromURLString() throws Exception {
         assertEquals(BaseXSource.DATABASE, CustomProtocolURLUtils.sourceFromURLString(ARGON + ":foo/bar"));
         assertEquals(null, CustomProtocolURLUtils.sourceFromURLString( "http://foo/bar"));
+        assertEquals(null, CustomProtocolURLUtils.sourceFromURLString("foo/bar"));
     }
 
 }
