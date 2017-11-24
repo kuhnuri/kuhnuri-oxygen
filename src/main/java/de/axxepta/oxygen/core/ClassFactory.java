@@ -5,6 +5,8 @@ import de.axxepta.oxygen.api.Connection;
 import de.axxepta.oxygen.api.RestConnection;
 import de.axxepta.oxygen.customprotocol.ArgonChooserListCellRenderer;
 import de.axxepta.oxygen.tree.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ro.sync.exml.workspace.api.standalone.ui.TreeCellRenderer;
 
 import javax.swing.*;
@@ -18,6 +20,8 @@ import java.net.MalformedURLException;
  * functionality. All instances of the respected classes that are used in Argon are (supposed to be) created here.
  */
 public class ClassFactory {
+
+    private static final Logger logger = LogManager.getLogger(ClassFactory.class);
     private static final ClassFactory ourInstance = new ClassFactory();
 
     public static ClassFactory getInstance() {

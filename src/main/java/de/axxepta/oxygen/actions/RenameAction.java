@@ -4,7 +4,6 @@ import de.axxepta.oxygen.api.BaseXConnectionWrapper;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.Connection;
 import de.axxepta.oxygen.api.TopicHolder;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.tree.ArgonTree;
 import de.axxepta.oxygen.tree.TreeListener;
 import de.axxepta.oxygen.tree.TreeUtils;
@@ -102,7 +101,7 @@ public class RenameAction extends AbstractAction {
             if (writable) {
                 try (Connection connection = BaseXConnectionWrapper.getConnection()) {
                     connection.rename(source, db_path, newPathString);
-                    String newURLString = CustomProtocolURLUtils.protocolFromSource(source) + ":" + newPathString;
+                    String newURLString = source.getProtocol() + ":" + newPathString;
                     int endPosNewBase = Math.max(newURLString.lastIndexOf("/"), newURLString.indexOf(":"));
                     TreePath newBasePath = TreeUtils.pathFromURLString(newURLString.substring(0, endPosNewBase));
                     TreeUtils.insertStrAsNodeLexi(treeModel, newName,

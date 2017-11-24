@@ -38,31 +38,8 @@ public class CustomProtocolURLUtils {
         }
     }
 
-    public static String protocolFromSource(BaseXSource source) {
-        switch (source) {
-//            case RESTXQ:
-//                return ArgonConst.ARGON_XQ;
-//            case REPO:
-//                return ArgonConst.ARGON_REPO;
-            default:
-                return ArgonConst.ARGON;
-        }
-    }
-
-    public static String protocolFromURL(URL url) {
-        String urlString = url.toString().toLowerCase();
-        if (urlString.startsWith(ArgonConst.ARGON_XQ)) {
-            return ArgonConst.ARGON_XQ;
-        }
-        if (urlString.startsWith(ArgonConst.ARGON_REPO)) {
-            return ArgonConst.ARGON_REPO;
-        }
-        return ArgonConst.ARGON;
-    }
-
     public static BaseXSource sourceFromURL(URL url) {
         return sourceFromURLString(url.toString());
-
     }
 
     public static BaseXSource sourceFromURLString(String urlString) {

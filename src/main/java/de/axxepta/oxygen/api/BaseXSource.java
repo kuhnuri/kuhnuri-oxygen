@@ -8,18 +8,30 @@ import java.util.Locale;
  * @author Christian Gruen, BaseX GmbH 2015, BSD License
  */
 public enum BaseXSource {
+
     /**
      * Database.
      */
-    DATABASE,
+    DATABASE("argon"),
 //    /**
 //     * RESTXQ.
 //     */
-//    RESTXQ,
+//    RESTXQ("argonquery"),
     /**
      * Repository.
      */
-    REPO;
+    REPO("argonrepo");
+
+    private final String protocol;
+
+    BaseXSource(String protocol) {
+
+        this.protocol = protocol;
+    }
+
+    public String getProtocol() {
+        return protocol;
+    }
 
     /**
      * Returns a source.

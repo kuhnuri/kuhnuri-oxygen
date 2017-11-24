@@ -4,7 +4,6 @@ import de.axxepta.oxygen.api.ArgonConst;
 import de.axxepta.oxygen.api.BaseXResource;
 import de.axxepta.oxygen.api.BaseXSource;
 import de.axxepta.oxygen.api.BaseXType;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.tree.TreeListener;
 import de.axxepta.oxygen.tree.TreeUtils;
 import de.axxepta.oxygen.utils.ConnectionWrapper;
@@ -61,7 +60,7 @@ public class ExportAction extends AbstractAction {
                             if (!newFile.getParentFile().exists())
                                 createdDir = newFile.getParentFile().mkdirs();
                             if (!fullResource.endsWith("/" + ArgonConst.EMPTY_FILE)) {
-                                FileUtils.copyFromBaseXToFile(CustomProtocolURLUtils.protocolFromSource(source) +
+                                FileUtils.copyFromBaseXToFile(source.getProtocol() +
                                         ":" + fullResource, newFileName);
                             }
                         }
@@ -124,7 +123,7 @@ public class ExportAction extends AbstractAction {
         String[] resourceComponents = fullResource.split("/");
         StringJoiner joiner = new StringJoiner("/");
         if (!source.equals(BaseXSource.DATABASE) && db_path.equals(""))
-            joiner.add(CustomProtocolURLUtils.protocolFromSource(source));
+            joiner.add(source.getProtocol());
         for (int i = resourceDepth - 1; i < resourceComponents.length; i++) {
             joiner.add(resourceComponents[i]);
         }

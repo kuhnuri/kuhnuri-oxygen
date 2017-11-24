@@ -168,7 +168,7 @@ public class ArgonTreeTransferHandler extends TransferHandler {
         for (BaseXResource resource : resourceList) {
             if (resource.getType().equals(BaseXType.RESOURCE)) {
                 String fullResourceName = ExportAction.getFullResource(sourcePath, source, resource);
-                String resourceURL = CustomProtocolURLUtils.protocolFromSource(source) + ":" +
+                String resourceURL = source.getProtocol() + ":" +
                         fullResourceName;
                 String relativePath = ExportAction.getRelativePath(source, db_path, fullResourceName);
                 URL sourceURL = new URL(resourceURL);

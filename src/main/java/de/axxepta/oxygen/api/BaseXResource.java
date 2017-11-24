@@ -1,7 +1,5 @@
 package de.axxepta.oxygen.api;
 
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
-
 /**
  * BaseX resource.
  *
@@ -48,6 +46,6 @@ public final class BaseXResource {
     }
 
     public String getURLString() {
-        return CustomProtocolURLUtils.protocolFromSource(source) + ":" + name;
+        return source.getProtocol() + ":" + name;
     }
 }

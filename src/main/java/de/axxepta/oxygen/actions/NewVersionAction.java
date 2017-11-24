@@ -4,7 +4,6 @@ import de.axxepta.oxygen.api.ArgonConst;
 import de.axxepta.oxygen.api.TopicHolder;
 import de.axxepta.oxygen.customprotocol.ArgonEditorsWatchMap;
 import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
-import de.axxepta.oxygen.customprotocol.CustomProtocolURLUtils;
 import de.axxepta.oxygen.utils.ConnectionWrapper;
 import de.axxepta.oxygen.utils.IOUtils;
 import de.axxepta.oxygen.utils.Lang;
@@ -42,7 +41,7 @@ public class NewVersionAction extends AbstractAction {
         final WSEditor editorAccess = workspace.getCurrentEditorAccess(StandalonePluginWorkspace.MAIN_EDITING_AREA);
         final URL url = editorAccess.getEditorLocation();
         if (url.toString().startsWith(ArgonConst.ARGON)) {
-            final String protocol = CustomProtocolURLUtils.protocolFromURL(url);
+            final String protocol = url.getProtocol();
             final CustomProtocolURLHandlerExtension handlerExtension = new CustomProtocolURLHandlerExtension();
             if (handlerExtension.canCheckReadOnly(protocol) && !handlerExtension.isReadOnly(url)) {
                 WorkspaceUtils.setCursor(WorkspaceUtils.WAIT_CURSOR);
