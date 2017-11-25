@@ -76,5 +76,8 @@ task dist(type: Zip, dependsOn: jar) {
     from ("src/main/resources") {
         include "images/**"
     }
+    from ("src/main/resources") {
+        include "i18n/**"
+    }
     archiveName "${project.name}-${project.version}.zip"
 }

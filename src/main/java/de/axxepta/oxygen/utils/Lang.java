@@ -2,6 +2,10 @@ package de.axxepta.oxygen.utils;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ro.sync.exml.workspace.api.PluginResourceBundle;
+import ro.sync.exml.workspace.api.PluginWorkspace;
+import ro.sync.exml.workspace.api.PluginWorkspaceProvider;
+import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -21,6 +25,7 @@ public class Lang {
     private static final String PATH = "/Argon";
     private static final String MISSING_KEY = "missing_key:";
     private static final String MISSING_RESOURCE = "missing_resource:";
+    private static PluginResourceBundle bundle = null;
 
     private static final Map<Locale, Bundle> availableResourceBundles = new HashMap<>();
     static {
@@ -55,8 +60,15 @@ public class Lang {
             currentBundle = availableResourceBundles.get(Locale.UK);
         }
     }
+    
+    public static void init(StandalonePluginWorkspace wsa) {
+        bundle = wsa.getResourceBundle();
+    }
 
     public static String get(Keys key) {
+        if (bundle != null) {
+            return bundle.getMessage(key.name());
+        }
         if (currentBundle != null) {
             String val = currentBundle.getString(key.name());
             if (val != null) {

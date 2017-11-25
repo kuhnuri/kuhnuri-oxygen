@@ -24,7 +24,6 @@ import java.nio.charset.StandardCharsets;
  */
 public class WorkspaceUtils {
 
-    @SuppressWarnings("all")   // keep public for access by AspectJ
     public static final Logger logger = LogManager.getLogger(WorkspaceUtils.class);
 
     private static final PluginWorkspace workspaceAccess = PluginWorkspaceProvider.getPluginWorkspace();

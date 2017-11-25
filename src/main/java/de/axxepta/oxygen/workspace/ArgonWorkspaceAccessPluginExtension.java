@@ -9,12 +9,12 @@ import de.axxepta.oxygen.utils.Lang;
 import de.axxepta.oxygen.versioncontrol.VersionHistoryPanel;
 import ro.sync.exml.plugin.workspace.WorkspaceAccessPluginExtension;
 import ro.sync.exml.workspace.api.PluginWorkspace;
-import ro.sync.exml.workspace.api.standalone.StandalonePluginWorkspace;
-import ro.sync.exml.workspace.api.standalone.ViewComponentCustomizer;
-import ro.sync.exml.workspace.api.standalone.ViewInfo;
+import ro.sync.exml.workspace.api.options.WSOptionsStorage;
+import ro.sync.exml.workspace.api.standalone.*;
 import ro.sync.exml.workspace.api.standalone.ui.ToolbarButton;
 
 import javax.swing.*;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -31,23 +31,17 @@ public class ArgonWorkspaceAccessPluginExtension implements WorkspaceAccessPlugi
     public void applicationStarted(final StandalonePluginWorkspace wsa) {
         wsa.setGlobalObjectProperty("can.edit.read.only.files", Boolean.FALSE);
 
-        // init language pack
-        if (wsa.getUserInterfaceLanguage().equals("de_DE")) {
-            Lang.init(Locale.GERMAN);
-        } else {
-            Lang.init(Locale.UK);
-        }
-
-        // init icon map
+        Lang.init(wsa);
         ImageUtils.init();
 
-        wsa.getOptionsStorage().addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_HOST));
-        wsa.getOptionsStorage().addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_HTTP_PORT));
-        wsa.getOptionsStorage().addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_TCP_PORT));
-        wsa.getOptionsStorage().addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_USERNAME));
-        wsa.getOptionsStorage().addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_PASSWORD));
-        wsa.getOptionsStorage().addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_CONNECTION));
-        wsa.getOptionsStorage().addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_LOGFILE));
+        final WSOptionsStorage optionsStorage = wsa.getOptionsStorage();
+        optionsStorage.addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_HOST));
+        optionsStorage.addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_HTTP_PORT));
+        optionsStorage.addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_TCP_PORT));
+        optionsStorage.addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_USERNAME));
+        optionsStorage.addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_PASSWORD));
+        optionsStorage.addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_CONNECTION));
+        optionsStorage.addOptionListener(new ArgonOptionListener(ArgonOptionPage.KEY_BASEX_LOGFILE));
 
         ArgonEditorsWatchMap.getInstance().init();
 
@@ -91,13 +85,17 @@ public class ArgonWorkspaceAccessPluginExtension implements WorkspaceAccessPlugi
     }
 
     private class BaseXViewComponentCustomizer implements ViewComponentCustomizer {
+
+        static final String ARGON_WORKSPACE_A_CCESS_ID = "ArgonWorkspaceAccessID";
+        static final String ARGON_WORKSPACE_ACCESS_OUTPUT_ID = "ArgonWorkspaceAccessOutputID";
+
         @Override
         public void customizeView(ViewInfo viewInfo) {
-            if ("ArgonWorkspaceAccessID".equals(viewInfo.getViewID())) {
-                //The view ID defined in the "plugin.xml"
+            final String viewID = viewInfo.getViewID();
+            if (ARGON_WORKSPACE_A_CCESS_ID.equals(viewID)) {
                 viewInfo.setComponent(new TreePane());
                 viewInfo.setTitle(Lang.get(Lang.Keys.title_connection));
-            } else if ("ArgonWorkspaceAccessOutputID".equals(viewInfo.getViewID())) {
+            } else if (ARGON_WORKSPACE_ACCESS_OUTPUT_ID.equals(viewID)) {
                 viewInfo.setComponent(new VersionHistoryPanel());
                 viewInfo.setTitle(Lang.get(Lang.Keys.title_history));
             }
