@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLockPluginExtension, URLHandlerReadOnlyCheckerExtension {
 
     private static final Logger logger = LogManager.getLogger(CustomProtocolURLHandlerExtension.class);
-    private final Cache<URL, Boolean> readOnlyCache = CacheBuilder.newBuilder()
+    public static final Cache<URL, Boolean> readOnlyCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
             .expireAfterWrite(10, TimeUnit.SECONDS)
             .build();
@@ -87,4 +87,11 @@ public class CustomProtocolURLHandlerExtension implements URLStreamHandlerWithLo
         }
     }
 
+    public void lock(URL url) {
+        readOnlyCache.put(url, Boolean.FALSE);
+    }
+
+    public void unlock(URL url) {
+        readOnlyCache.put(url, Boolean.TRUE);
+    }
 }

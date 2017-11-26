@@ -1,5 +1,6 @@
 package de.axxepta.oxygen.api;
 
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
 import de.axxepta.oxygen.versioncontrol.VersionHistoryEntry;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -29,18 +30,18 @@ import static org.basex.util.http.HttpMethod.GET;
  */
 public class RestConnection implements Connection {
 
+    private static final Logger logger = LogManager.getLogger(RestConnection.class);
     private static final ObjectMapper mapper = new ObjectMapper();
     static {
         mapper.findAndRegisterModules();
     }
-
     /**
      * URI.
      */
     protected final URL url;
     protected final URI uri;
     protected final String basicAuth;
-    private static final Logger logger = LogManager.getLogger(RestConnection.class);
+    private final CustomProtocolURLHandlerExtension lockCache = new CustomProtocolURLHandlerExtension();
 
     /**
      * Constructor.
@@ -275,7 +276,6 @@ public class RestConnection implements Connection {
 
     @Override
     public void lock(final BaseXSource source, final String path) throws IOException {
-//        request(getQuery("lock"), SOURCE, source.toString(), PATH, path);
         final String action = "lock";
         try (CloseableHttpClient httpClient = HttpClients.createDefault()) {
             final HttpPut putRequest = new HttpPut(uri.resolve(action + "/" + path));
@@ -283,6 +283,7 @@ public class RestConnection implements Connection {
             final HttpResponse response = httpClient.execute(putRequest);
             if (response.getStatusLine().getStatusCode() == 200) { // 204
                 logger.info("Locking successful");
+                lockCache.lock(new URL(source.getProtocol() + ":" + path));
             } else {
                 logger.info("Locking failed");
                 readError(response);
@@ -301,6 +302,7 @@ public class RestConnection implements Connection {
             final HttpResponse response = httpClient.execute(putRequest);
             if (response.getStatusLine().getStatusCode() == 200) { // 204
                 logger.info("Unlocking successful");
+                lockCache.unlock(new URL(source.getProtocol() + ":" + path));
             } else {
                 logger.info("Unlocking failed");
                 readError(response);

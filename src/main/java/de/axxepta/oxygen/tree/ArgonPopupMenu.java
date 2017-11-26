@@ -2,6 +2,7 @@ package de.axxepta.oxygen.tree;
 
 import de.axxepta.oxygen.actions.*;
 import de.axxepta.oxygen.core.ClassFactory;
+import de.axxepta.oxygen.customprotocol.CustomProtocolURLHandlerExtension;
 import de.axxepta.oxygen.utils.ImageUtils;
 import de.axxepta.oxygen.utils.Lang;
 import org.apache.logging.log4j.LogManager;
@@ -12,6 +13,8 @@ import javax.swing.*;
 import javax.swing.tree.TreeModel;
 import javax.swing.tree.TreePath;
 import java.awt.*;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 
 import static de.axxepta.oxygen.utils.ImageUtils.getIcon;
@@ -102,24 +105,15 @@ public class ArgonPopupMenu extends PopupMenu {
         }
     }
 
-/*    public void setItemEnabled(String name, boolean b) {
-        if (this.itemNames.contains(name)) {
-            items.get(this.itemNames.indexOf(name)).setEnabled(b);
-        }
-    }*/
-
     public void init(final TreeListener tListener) {
         // Populate context menu
-        final Action open = new OpenFileAction(Lang.get(cm_open), getIcon(ImageUtils.BASEX_LOCKED),
-                tListener);
+        final Action open = new OpenFileAction(Lang.get(cm_open), getIcon(ImageUtils.BASEX_LOCKED), tListener);
         this.add(open, Lang.get(cm_open));
 
-        final Action checkOut = new CheckOutAction(Lang.get(cm_checkout), getIcon(ImageUtils.BASEX),
-                tListener);
+        final Action checkOut = new CheckOutAction(Lang.get(cm_checkout), getIcon(ImageUtils.BASEX), tListener);
         this.add(checkOut, Lang.get(cm_checkout));
 
-        final Action checkIn = new CheckInAction(Lang.get(cm_checkin), getIcon(ImageUtils.BASEX),
-                tListener);
+        final Action checkIn = new CheckInAction(Lang.get(cm_checkin), getIcon(ImageUtils.BASEX), tListener);
         this.add(checkIn, Lang.get(cm_checkin));
 
         this.addSeparator();
@@ -168,6 +162,14 @@ public class ArgonPopupMenu extends PopupMenu {
         boolean isRoot = TreeUtils.isRoot(path);
         boolean isDbSource = TreeUtils.isDbSource(path);
         boolean isFileSource = TreeUtils.isFileSource(path);
+        final URL url;
+        try {
+            url = new URL(TreeUtils.urlStringFromTreePath(path));
+        } catch (MalformedURLException e) {
+            throw new IllegalArgumentException(e);
+        }
+        final CustomProtocolURLHandlerExtension handlerExtension = new CustomProtocolURLHandlerExtension();
+        boolean isLocked = handlerExtension.canCheckReadOnly(url.getProtocol()) && !handlerExtension.isReadOnly(url);
 
         // check whether items apply to node
         int itemCount = this.getItemCount();
@@ -176,7 +178,9 @@ public class ArgonPopupMenu extends PopupMenu {
             if (itemName.equals(Lang.get(cm_open))) {
                 this.setItemEnabled(i, isFile);
             } else if (itemName.equals(Lang.get(cm_checkout))) {
-                this.setItemEnabled(i, isFile);
+                this.setItemEnabled(i, isFile && !isLocked);
+            } else if (itemName.equals(Lang.get(cm_checkin))) {
+                this.setItemEnabled(i, isFile && isLocked);
             } else if (itemName.equals(Lang.get(cm_adddb))) {
                 this.setItemEnabled(i, TreeUtils.isDbSource(path));
             } else if (itemName.equals(Lang.get(cm_delete))) {

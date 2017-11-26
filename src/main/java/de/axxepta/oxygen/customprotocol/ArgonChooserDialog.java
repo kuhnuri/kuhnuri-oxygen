@@ -219,8 +219,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
         if (path.size() < 2) {
             return "";
         }
-        return path.subList(1, path.size()).stream()
-                .map(ArgonChooserListModel.Element::getName)
+        return path.subList(1, path.size()).stream().map(ArgonChooserListModel.Element::getName)
                 .collect(Collectors.joining("/"));
     }
 
@@ -271,7 +270,9 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
     public URL[] selectURLs() {
         canceled = true;
         setVisible(true);
-        if (!canceled) {
+        if (canceled) {
+            return null;
+        } else {
             try {
                 return new URL[] {new URL(pathString)};
             } catch (MalformedURLException mue) {
@@ -279,6 +280,7 @@ public class ArgonChooserDialog extends JDialog implements MouseListener, Observ
             }
         }
         return null;
+
     }
 
     /*
